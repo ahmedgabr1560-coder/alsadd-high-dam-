@@ -80,6 +80,11 @@ export default function Home() {
       <main id="top">
         <section className="hero">
           <div className="hero-inner">
+            <div className="student-signature" aria-label="اسم الطالب">
+              <span>إعداد الطالب</span>
+              <strong>أحـمد حـمدي عـبد الونـيس جـبر</strong>
+              <small>Ahmed Hamdy Abd Elwennes Gabr</small>
+            </div>
             <div className="institution-strip" aria-label="الجهات المشرفة على البحث">
               <div className="institution-logo"><img src="/assets/logo-defense.png" alt="شعار الدفاع الشعبي والعسكري" /><span>الدفاع الشعبي والعسكري</span><small className="institution-subtitle">التربية العسكرية</small></div>
               <div className="institution-logo"><img src="/assets/logo-education.png" alt="شعار وزارة التعليم العالي والبحث العلمي والمعهد العالي للحاسبات والمعلومات والتكنولوجيا إدارة-طنطا" /><strong>وزارة التعليم العالي والبحث العلمي</strong><span>المعهد العالي للحاسبات والمعلومات والتكنولوجيا إدارة-طنطا</span></div>

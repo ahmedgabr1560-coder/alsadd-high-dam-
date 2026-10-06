@@ -60,6 +60,11 @@ button { font: inherit; }
 .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,28,42,.96) 0%, rgba(8,28,42,.74) 40%, rgba(8,28,42,.24) 100%), url('/assets/aswan-dam.jpg') center/cover; opacity: .98; }
 .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 160px; background: linear-gradient(transparent, var(--paper)); opacity: .22; pointer-events: none; }
 .hero-inner { position: relative; z-index: 1; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 150px 0 88px; }
+.student-signature { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: fit-content; margin-bottom: 22px; padding: 10px 16px 11px 22px; border-right: 2px solid var(--gold); background: linear-gradient(90deg, rgba(255,255,255,.02), rgba(255,255,255,.1)); color: rgba(255,255,255,.9); }
+.student-signature span { color: var(--gold); font-size: .67rem; letter-spacing: .12em; }
+.student-signature strong { font-size: 1rem; font-weight: 600; line-height: 1.35; }
+.student-signature small { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,.88); direction: ltr; font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .08em; }
+.student-signature small::before, .student-signature small::after { content: "✦"; color: var(--gold); font-size: .58rem; letter-spacing: 0; }
 .hero-kicker { display: flex; align-items: center; gap: 12px; color: var(--gold); font-size: .86rem; font-weight: 600; margin-bottom: 22px; }
 .hero-kicker span { width: 44px; height: 1px; background: currentColor; }
 .institution-strip { display: flex; align-items: stretch; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
@@ -231,6 +236,9 @@ button { font: inherit; }
   .section-heading p { margin-top: 16px; }
   .hero h1 { font-size: clamp(3.2rem, 17vw, 5.8rem); }
   .hero-inner { padding-top: 130px; }
+  .student-signature { margin-bottom: 16px; padding: 8px 12px 9px 15px; }
+  .student-signature strong { font-size: .75rem; }
+  .student-signature small { font-size: .56rem; }
   .hero-lede { font-size: 1rem; }
   .institution-strip { gap: 8px; margin-bottom: 24px; }
   .institution-logo { min-width: 0; width: calc(33.333% - 6px); min-height: 104px; padding: 8px 5px 7px; gap: 5px; border-radius: .85rem; }
