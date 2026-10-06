@@ -81,7 +81,7 @@ export default function Home() {
         <section className="hero">
           <div className="hero-inner">
             <div className="institution-strip" aria-label="الجهات المشرفة على البحث">
-              <div className="institution-logo"><img src="/assets/logo-defense.png" alt="شعار الدفاع الشعبي والعسكري" /><span>الدفاع الشعبي والعسكري</span></div>
+              <div className="institution-logo"><img src="/assets/logo-defense.png" alt="شعار الدفاع الشعبي والعسكري" /><span>الدفاع الشعبي والعسكري</span><small className="institution-subtitle">التربية العسكرية</small></div>
               <div className="institution-logo"><img src="/assets/logo-education.png" alt="شعار وزارة التعليم العالي والبحث العلمي والمعهد العالي للحاسبات والمعلومات والتكنولوجيا إدارة-طنطا" /><strong>وزارة التعليم العالي والبحث العلمي</strong><span>المعهد العالي للحاسبات والمعلومات والتكنولوجيا إدارة-طنطا</span></div>
               <div className="institution-logo"><img src="/assets/logo-armed-forces.jpg" alt="شعار القوات المسلحة المصرية" /><span>القوات المسلحة المصرية</span></div>
             </div>

@@ -67,6 +67,7 @@ button { font: inherit; }
 .institution-logo img { width: 86px; height: 86px; object-fit: contain; border-radius: 50%; background: #fff; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,.18); }
 .institution-logo strong { color: var(--gold); font-size: .72rem; line-height: 1.35; text-align: center; white-space: nowrap; }
 .institution-logo span { font-size: .78rem; line-height: 1.35; text-align: center; white-space: nowrap; }
+.institution-logo .institution-subtitle { color: var(--gold); font-size: .66rem; line-height: 1.2; }
 .hero h1 { max-width: 760px; margin: 0; font-size: clamp(3.5rem, 8.7vw, 7.8rem); line-height: .99; font-weight: 700; }
 .hero h1 em { color: var(--gold); font-style: normal; }
 .hero-lede { max-width: 540px; color: rgba(255,255,255,.76); font-size: 1.15rem; line-height: 1.95; margin: 28px 0 34px; }
@@ -235,6 +236,7 @@ button { font: inherit; }
   .institution-logo img { width: 58px; height: 58px; }
   .institution-logo strong { font-size: .5rem; white-space: normal; }
   .institution-logo span { font-size: .58rem; white-space: normal; }
+  .institution-logo .institution-subtitle { font-size: .5rem; }
   .hero-foot { gap: 14px; flex-wrap: wrap; margin-top: 42px; }
   .hero-foot .divider { display: none; }
   .hero::before { background: linear-gradient(90deg, rgba(8,28,42,.96), rgba(8,28,42,.46)), url('/assets/aswan-dam.jpg') 60% center/cover; }
