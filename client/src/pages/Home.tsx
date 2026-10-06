@@ -80,6 +80,11 @@ export default function Home() {
       <main id="top">
         <section className="hero">
           <div className="hero-inner">
+            <div className="quran-hero-verse" aria-label="آيات قرآنية عن الماء">
+              <div className="quran-hero-item"><p>﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾ <span>٣٠</span></p><small>سورة الأنبياء</small></div>
+              <span className="quran-hero-divider" aria-hidden="true">۞</span>
+              <div className="quran-hero-item"><p>﴿وَأَنزَلْنَا مِنَ السَّمَاءِ مَاءً طَهُورًا﴾ <span>٤٨</span></p><small>سورة الفرقان</small></div>
+            </div>
             <div className="student-signature" aria-label="اسم الطالب">
               <span>إعداد الطالب</span>
               <strong>أحـمد حـمدي عـبد الونـيس جـبر</strong>
@@ -104,14 +109,6 @@ export default function Home() {
               <span className="divider" />
               <div><strong>2030</strong> إرث يتطلب إدارة جديدة</div>
             </div>
-          </div>
-        </section>
-
-        <section className="quran-verse" aria-label="آية قرآنية عن الماء">
-          <div className="container quran-inner">
-            <span className="quran-ornament" aria-hidden="true">۞</span>
-            <p className="quran-text">﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾ <span>٣٠</span></p>
-            <p className="quran-reference">سورة الأنبياء · الآية ٣٠</p>
           </div>
         </section>
 

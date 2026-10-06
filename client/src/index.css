@@ -87,15 +87,11 @@ button { font: inherit; }
 .hero-foot strong { color: var(--gold); font-size: 1rem; display: block; }
 .hero-foot .divider { height: 30px; width: 1px; background: rgba(255,255,255,.22); }
 
-.quran-verse { position: relative; padding: 48px 0 44px; background: var(--sand); border-bottom: 1px solid rgba(16,47,69,.1); text-align: center; }
-.quran-inner { position: relative; }
-.quran-inner::before, .quran-inner::after { content: ""; position: absolute; top: 50%; width: min(18vw, 190px); height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
-.quran-inner::before { right: 0; }
-.quran-inner::after { left: 0; transform: rotate(180deg); }
-.quran-ornament { display: block; color: var(--gold); font-family: "Amiri", Georgia, serif; font-size: 1.6rem; line-height: 1; }
-.quran-text { margin: 12px 0 5px; color: var(--ink); font-family: "Amiri", Georgia, serif; font-size: clamp(1.65rem, 3.5vw, 2.6rem); line-height: 1.6; }
-.quran-text span { color: var(--clay); font-size: .72em; margin-right: 8px; }
-.quran-reference { margin: 0; color: var(--muted); font-size: .78rem; letter-spacing: .04em; }
+.quran-hero-verse { display: flex; align-items: center; gap: 25px; width: fit-content; margin: 0 0 22px auto; padding: 10px 18px; border-right: 1px solid rgba(216,170,97,.75); border-left: 1px solid rgba(216,170,97,.22); background: rgba(8,28,42,.28); text-align: center; }
+.quran-hero-item p { margin: 0; color: rgba(255,255,255,.92); font-family: "Amiri", Georgia, serif; font-size: 1.05rem; line-height: 1.5; }
+.quran-hero-item p span { color: var(--gold); font-size: .72em; margin-right: 4px; }
+.quran-hero-item small { display: block; margin-top: 2px; color: var(--gold); font-size: .67rem; }
+.quran-hero-divider { color: var(--gold); font-family: "Amiri", Georgia, serif; font-size: 1.1rem; }
 
 .intro { background: var(--paper); }
 .intro-grid { display: grid; grid-template-columns: 1fr 1.65fr; gap: 80px; align-items: start; }
@@ -246,6 +242,10 @@ button { font: inherit; }
   .section-heading p { margin-top: 16px; }
   .hero h1 { font-size: clamp(3.2rem, 17vw, 5.8rem); }
   .hero-inner { padding-top: 130px; }
+  .quran-hero-verse { width: 100%; justify-content: center; gap: 10px; margin-bottom: 15px; padding: 8px 6px; }
+  .quran-hero-item p { font-size: .76rem; }
+  .quran-hero-item small { font-size: .56rem; }
+  .quran-hero-divider { font-size: .85rem; }
   .student-signature { margin-bottom: 16px; padding: 8px 12px 9px 15px; }
   .student-signature strong { font-size: .75rem; }
   .student-signature small { font-size: .8rem; }
