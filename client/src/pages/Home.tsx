@@ -81,6 +81,11 @@ export default function Home() {
         <section className="hero">
           <div className="hero-inner">
             <div className="hero-kicker"><span /> بحث بصري في مشروع غيّر مصر</div>
+            <div className="institution-strip" aria-label="الجهات المشرفة على البحث">
+              <div className="institution-logo"><img src="/assets/logo-defense.png" alt="شعار الدفاع الشعبي والعسكري" /><span>الدفاع الشعبي والعسكري</span></div>
+              <div className="institution-logo"><img src="/assets/logo-education.png" alt="شعار وزارة التربية والتعليم" /><span>وزارة التربية والتعليم</span></div>
+              <div className="institution-logo"><img src="/assets/logo-armed-forces.jpg" alt="شعار القوات المسلحة المصرية" /><span>القوات المسلحة المصرية</span></div>
+            </div>
             <h1 className="display">مشروع واحد،<br /><em>وادي كامل يتنفس.</em></h1>
             <p className="hero-lede">من فكرة لتنظيم الفيضان إلى رصيد استراتيجي يحمي الماء والكهرباء والذاكرة. تعرّف إلى السد العالي من الداخل — بالأرقام، وبالحكايات التي صنعت أثره.</p>
             <div className="hero-actions">
