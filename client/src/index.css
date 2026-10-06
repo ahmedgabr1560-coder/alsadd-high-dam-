@@ -87,6 +87,16 @@ button { font: inherit; }
 .hero-foot strong { color: var(--gold); font-size: 1rem; display: block; }
 .hero-foot .divider { height: 30px; width: 1px; background: rgba(255,255,255,.22); }
 
+.quran-verse { position: relative; padding: 48px 0 44px; background: var(--sand); border-bottom: 1px solid rgba(16,47,69,.1); text-align: center; }
+.quran-inner { position: relative; }
+.quran-inner::before, .quran-inner::after { content: ""; position: absolute; top: 50%; width: min(18vw, 190px); height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+.quran-inner::before { right: 0; }
+.quran-inner::after { left: 0; transform: rotate(180deg); }
+.quran-ornament { display: block; color: var(--gold); font-family: "Amiri", Georgia, serif; font-size: 1.6rem; line-height: 1; }
+.quran-text { margin: 12px 0 5px; color: var(--ink); font-family: "Amiri", Georgia, serif; font-size: clamp(1.65rem, 3.5vw, 2.6rem); line-height: 1.6; }
+.quran-text span { color: var(--clay); font-size: .72em; margin-right: 8px; }
+.quran-reference { margin: 0; color: var(--muted); font-size: .78rem; letter-spacing: .04em; }
+
 .intro { background: var(--paper); }
 .intro-grid { display: grid; grid-template-columns: 1fr 1.65fr; gap: 80px; align-items: start; }
 .intro-aside { position: sticky; top: 105px; }

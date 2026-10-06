@@ -107,6 +107,14 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="quran-verse" aria-label="آية قرآنية عن الماء">
+          <div className="container quran-inner">
+            <span className="quran-ornament" aria-hidden="true">۞</span>
+            <p className="quran-text">﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾ <span>٣٠</span></p>
+            <p className="quran-reference">سورة الأنبياء · الآية ٣٠</p>
+          </div>
+        </section>
+
         <section className="section intro" id="story">
           <div className="container intro-grid">
             <aside className="intro-aside">
