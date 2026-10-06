@@ -62,10 +62,10 @@ button { font: inherit; }
 .hero-inner { position: relative; z-index: 1; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 180px 0 88px; }
 .hero-kicker { display: flex; align-items: center; gap: 12px; color: var(--gold); font-size: .86rem; font-weight: 600; margin-bottom: 22px; }
 .hero-kicker span { width: 44px; height: 1px; background: currentColor; }
-.institution-strip { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; }
-.institution-logo { display: inline-flex; align-items: center; gap: 9px; min-height: 48px; padding: 6px 11px 6px 14px; color: rgba(255,255,255,.82); background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0,0,0,.08); }
-.institution-logo img { width: 34px; height: 34px; object-fit: contain; border-radius: 50%; background: #fff; padding: 2px; }
-.institution-logo span { font-size: .72rem; white-space: nowrap; }
+.institution-strip { display: flex; align-items: stretch; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
+.institution-logo { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-width: 142px; min-height: 142px; padding: 13px 14px 11px; color: rgba(255,255,255,.88); background: rgba(255,255,255,.11); border: 1px solid rgba(255,255,255,.2); border-radius: 1.15rem; backdrop-filter: blur(9px); box-shadow: 0 10px 24px rgba(0,0,0,.1); }
+.institution-logo img { width: 86px; height: 86px; object-fit: contain; border-radius: 50%; background: #fff; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+.institution-logo span { font-size: .78rem; line-height: 1.35; text-align: center; white-space: nowrap; }
 .hero h1 { max-width: 760px; margin: 0; font-size: clamp(3.5rem, 8.7vw, 7.8rem); line-height: .99; font-weight: 700; }
 .hero h1 em { color: var(--gold); font-style: normal; }
 .hero-lede { max-width: 540px; color: rgba(255,255,255,.76); font-size: 1.15rem; line-height: 1.95; margin: 28px 0 34px; }
@@ -228,10 +228,10 @@ button { font: inherit; }
   .section-heading p { margin-top: 16px; }
   .hero h1 { font-size: clamp(3.2rem, 17vw, 5.8rem); }
   .hero-lede { font-size: 1rem; }
-  .institution-strip { gap: 7px; }
-  .institution-logo { min-height: 42px; padding: 4px 8px 4px 10px; }
-  .institution-logo img { width: 27px; height: 27px; }
-  .institution-logo span { font-size: .62rem; }
+  .institution-strip { gap: 8px; margin-bottom: 24px; }
+  .institution-logo { min-width: 0; width: calc(33.333% - 6px); min-height: 104px; padding: 8px 5px 7px; gap: 5px; border-radius: .85rem; }
+  .institution-logo img { width: 58px; height: 58px; }
+  .institution-logo span { font-size: .58rem; white-space: normal; }
   .hero-foot { gap: 14px; flex-wrap: wrap; margin-top: 42px; }
   .hero-foot .divider { display: none; }
   .hero::before { background: linear-gradient(90deg, rgba(8,28,42,.96), rgba(8,28,42,.46)), url('/assets/aswan-dam.jpg') 60% center/cover; }
