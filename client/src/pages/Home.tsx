@@ -71,7 +71,7 @@ export default function Home() {
     const key = "alsadd-visit-session";
     const sessionId = sessionStorage.getItem(key) || crypto.randomUUID();
     sessionStorage.setItem(key, sessionId);
-    const details = { sessionId, page: window.location.pathname, referrer: document.referrer, language: navigator.language, screen: `${window.innerWidth}x${window.innerHeight}` };
+    const details = { sessionId, page: window.location.pathname, referrer: document.referrer, language: navigator.language, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, screen: `${window.innerWidth}x${window.innerHeight}` };
     fetch("/api/telegram/visit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...details, event: "visit" }), keepalive: true }).catch(() => undefined);
     const notifyLeave = () => {
       const body = JSON.stringify({ ...details, event: "leave" });
