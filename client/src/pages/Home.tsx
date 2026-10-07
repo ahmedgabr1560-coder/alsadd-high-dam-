@@ -67,6 +67,20 @@ export default function Home() {
     audio.play().then(() => setMusicOn(true)).catch(() => setMusicOn(false));
   }, []);
 
+  useEffect(() => {
+    const key = "alsadd-visit-session";
+    const sessionId = sessionStorage.getItem(key) || crypto.randomUUID();
+    sessionStorage.setItem(key, sessionId);
+    const details = { sessionId, page: window.location.pathname, referrer: document.referrer, language: navigator.language, screen: `${window.innerWidth}x${window.innerHeight}` };
+    fetch("/api/telegram/visit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...details, event: "visit" }), keepalive: true }).catch(() => undefined);
+    const notifyLeave = () => {
+      const body = JSON.stringify({ ...details, event: "leave" });
+      if (navigator.sendBeacon) navigator.sendBeacon("/api/telegram/visit", new Blob([body], { type: "application/json" }));
+    };
+    window.addEventListener("pagehide", notifyLeave);
+    return () => window.removeEventListener("pagehide", notifyLeave);
+  }, []);
+
   const toggleMusic = () => {
     const audio = audioRef.current;
     if (!audio) return;
