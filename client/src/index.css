@@ -54,6 +54,8 @@ button { font: inherit; }
 .nav-links a { transition: color .2s ease; }
 .nav-links a:hover { color: var(--gold); }
 .nav-cta { display: inline-flex; align-items: center; gap: 7px; color: var(--gold) !important; padding: 10px 14px; border: 1px solid rgba(216,170,97,.45); border-radius: 999px; }
+.music-btn { display: inline-grid; place-items: center; width: 38px; height: 38px; margin-right: auto; border: 1px solid rgba(216,170,97,.55); border-radius: 50%; color: var(--gold); background: rgba(216,170,97,.12); cursor: pointer; transition: transform .2s ease, background .2s ease; }
+.music-btn:hover { transform: scale(1.06); background: rgba(216,170,97,.22); }
 .menu-btn { display: none; border: 0; background: transparent; color: white; padding: 8px; }
 
 .hero { min-height: 760px; display: flex; align-items: flex-end; position: relative; color: white; background: var(--ink-deep); }
@@ -237,6 +239,7 @@ button { font: inherit; }
   .nav-links a { padding: 13px 15px; border-bottom: 1px solid rgba(255,255,255,.09); }
   .nav-links a:last-child { border-bottom: 0; }
   .nav-cta { justify-content: center; margin-top: 6px; }
+  .music-btn { margin-right: 0; margin-left: 2px; }
   .menu-btn { display: inline-flex; }
   .hero { min-height: 700px; }
   .intro-grid, .timeline-wrap, .engineering-grid, .nasser-grid, .comparison-grid, .future-grid, .sources-grid { grid-template-columns: 1fr; gap: 42px; }
