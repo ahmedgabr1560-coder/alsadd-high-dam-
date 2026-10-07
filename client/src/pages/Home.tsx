@@ -41,6 +41,12 @@ const futureItems = [
   ["الدبلوماسية المائية", "التعاون مع دول حوض النيل والتوصل إلى قواعد قانونية ملزمة للملء والتشغيل."],
 ];
 
+const videos = [
+  { id: "Rhwx3rBP1YE", title: "ملحمة إنشاء السد العالي", text: "فيلم تسجيلي عن تاريخ المشروع ومراحل تنفيذه وتحوله إلى رمز وطني." },
+  { id: "pVXf66vnvBU", title: "السد العالي وبحيرة ناصر", text: "نظرة على السد والبحيرة ودورهما في تنظيم مياه النيل وحماية الوادي." },
+  { id: "YBbtQ72MOI0", title: "السد العالي وإنقاذ المعابد", text: "رحلة بصرية إلى أثر السد في إنقاذ معابد النوبة وأبو سمبل." },
+];
+
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -68,6 +74,7 @@ export default function Home() {
             <a href="#engineering" onClick={() => setMenuOpen(false)}>الهندسة</a>
             <a href="#impact" onClick={() => setMenuOpen(false)}>الأثر</a>
             <a href="#heritage" onClick={() => setMenuOpen(false)}>الذاكرة</a>
+            <a href="#videos" onClick={() => setMenuOpen(false)}>فيديوهات</a>
             <a href="#future" onClick={() => setMenuOpen(false)}>2030</a>
             <a className="nav-cta" href="#sources" onClick={() => setMenuOpen(false)}>المراجع <ArrowLeft size={15} /></a>
           </nav>
@@ -207,6 +214,15 @@ export default function Home() {
             <div className="heritage-grid">
               <article className="heritage-card"><img src="/assets/abu-simbel.jpg" alt="الواجهة الأمامية للمعبد الكبير في أبو سمبل" /><div className="heritage-content"><span className="eyebrow">1964 — 1968</span><h3>أبو سمبل<br />في موقع جديد</h3><p>قُطّع المعبدان إلى 1,036 كتلة حجرية، ثم أعيد تركيبهما أعلى بنحو 200 متر عن النهر داخل جبل صناعي.</p><span className="heritage-note"><Landmark size={15} /> حفظت العملية ظاهرة تعامد الشمس</span></div></article>
               <article className="heritage-card"><img src="/assets/lake-nasser.jpg" alt="بحيرة ناصر في محيط آثار النوبة" /><div className="heritage-content"><span className="eyebrow">حملة دولية</span><h3>من أبو سمبل<br />إلى فيلة</h3><p>شاركت أكثر من 50 دولة في حملة اليونسكو التي مهدت لإقرار اتفاقية حماية التراث العالمي عام 1972.</p><span className="heritage-note"><BookOpen size={15} /> ذاكرة النوبة بين المكان والإنسان</span></div></article>
+            </div>
+          </div>
+        </section>
+
+        <section className="section video-gallery" id="videos">
+          <div className="container">
+            <div className="section-heading"><div><span className="eyebrow">شاهد القصة</span><h2 className="display">السد العالي في ثلاث حكايات مصوّرة.</h2></div><p>مختارات مرئية تساعدك على فهم تاريخ المشروع، وبحيرة ناصر، وإنقاذ آثار النوبة.</p></div>
+            <div className="video-grid">
+              {videos.map((video) => <article className="video-card" key={video.id}><div className="video-frame"><iframe src={`https://www.youtube-nocookie.com/embed/${video.id}`} title={video.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /></div><div className="video-content"><span className="eyebrow">فيديو مختار</span><h3>{video.title}</h3><p>{video.text}</p><a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noreferrer">فتح الفيديو على YouTube <ArrowLeft size={15} /></a></div></article>)}
             </div>
           </div>
         </section>

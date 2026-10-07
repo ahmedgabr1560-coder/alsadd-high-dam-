@@ -194,6 +194,20 @@ button { font: inherit; }
 .heritage-content p { color: rgba(255,255,255,.75); line-height: 1.75; font-size: .9rem; margin: 0; }
 .heritage-note { display: inline-flex; gap: 8px; align-items: center; color: var(--gold); margin-top: 18px; font-size: .78rem; }
 
+.video-gallery { background: var(--ink-deep); color: white; }
+.video-gallery .section-heading h2 { color: white; }
+.video-gallery .section-heading p { color: rgba(255,255,255,.62); }
+.video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.video-card { overflow: hidden; border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius); background: rgba(255,255,255,.07); box-shadow: 0 16px 34px rgba(0,0,0,.16); }
+.video-frame { aspect-ratio: 16 / 9; background: #06141e; }
+.video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+.video-content { padding: 22px 22px 24px; }
+.video-content .eyebrow { color: var(--gold); font-size: .68rem; }
+.video-content h3 { margin: 13px 0 8px; font-family: "Amiri", Georgia, serif; font-size: 1.55rem; line-height: 1.25; }
+.video-content p { min-height: 52px; margin: 0; color: rgba(255,255,255,.65); font-size: .86rem; line-height: 1.8; }
+.video-content a { display: inline-flex; align-items: center; gap: 7px; margin-top: 18px; color: var(--gold); font-size: .78rem; font-weight: 700; }
+.video-content a:hover { color: white; }
+
 .future { background: var(--sand); }
 .future-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: 70px; align-items: start; }
 .future-intro .display { font-size: clamp(2.2rem, 4vw, 4rem); line-height: 1.15; margin: 16px 0; }
@@ -265,7 +279,7 @@ button { font: inherit; }
   .stat:nth-child(even) { border-left: 0; }
   .stat-value { font-size: 2.2rem; }
   .timeline-detail { padding: 27px; }
-  .spec-list, .chapters-grid, .heritage-grid, .future-list, .recommendations { grid-template-columns: 1fr; }
+  .spec-list, .chapters-grid, .heritage-grid, .future-list, .recommendations, .video-grid { grid-template-columns: 1fr; }
   .feature-image, .feature-image img { min-height: 300px; }
   .lake-fact { font-size: .82rem; }
   .comparison-table { font-size: .73rem; }
