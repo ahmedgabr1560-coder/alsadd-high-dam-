@@ -2,8 +2,8 @@ import { z } from "zod";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
-import { getVisitorDashboard } from "./db";
+import { adminProcedure, publicProcedure, router } from "./_core/trpc";
+import { getAdminSummary, getVisitorDashboard } from "./db";
 
 export const appRouter = router({
   system: systemRouter,
@@ -18,7 +18,7 @@ export const appRouter = router({
     }),
   }),
   visitors: router({
-    dashboard: protectedProcedure
+    dashboard: adminProcedure
       .input(
         z.object({
           days: z.number().int().min(1).max(90).default(30),
@@ -28,6 +28,9 @@ export const appRouter = router({
         }),
       )
       .query(({ input }) => getVisitorDashboard(input)),
+  }),
+  admin: router({
+    summary: adminProcedure.query(() => getAdminSummary()),
   }),
 });
 

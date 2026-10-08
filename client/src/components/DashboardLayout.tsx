@@ -28,7 +28,8 @@ import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "لوحة الزوار", path: "/dashboard" },
+  { icon: LayoutDashboard, label: "الإدارة", path: "/admin" },
+  { icon: Waves, label: "إحصائيات الزوار", path: "/dashboard" },
   { icon: Waves, label: "الموقع العام", path: "/" },
 ];
 

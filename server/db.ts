@@ -54,7 +54,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     if (user.role !== undefined) {
       values.role = user.role;
       updateSet.role = user.role;
-    } else if (user.openId === ENV.ownerOpenId) {
+    } else if (user.openId === ENV.ownerOpenId || (user.email && ENV.adminEmail && user.email.toLowerCase() === ENV.adminEmail.toLowerCase())) {
       values.role = 'admin';
       updateSet.role = 'admin';
     }
@@ -92,6 +92,31 @@ export async function insertVisitorEvent(event: InsertVisitorEvent) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   await db.insert(visitorEvents).values(event);
+}
+
+export async function getAdminSummary() {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+
+  const countRows = await db.select({ value: sql<number>`count(*)` }).from(users);
+  const registeredUsers = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      role: users.role,
+      loginMethod: users.loginMethod,
+      createdAt: users.createdAt,
+      lastSignedIn: users.lastSignedIn,
+    })
+    .from(users)
+    .orderBy(desc(users.lastSignedIn))
+    .limit(100);
+
+  return {
+    totalUsers: asNumber(countRows[0]?.value),
+    registeredUsers,
+  };
 }
 
 type DashboardFilters = {

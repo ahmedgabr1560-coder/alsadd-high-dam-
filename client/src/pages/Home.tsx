@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
 import {
   ArrowDownLeft,
   ArrowLeft,
@@ -55,6 +56,7 @@ function scrollToId(id: string) {
 }
 
 export default function Home() {
+  const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
   const [menuOpen, setMenuOpen] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -62,13 +64,15 @@ export default function Home() {
   const selected = timeline[activeTimeline];
 
   useEffect(() => {
+    if (!user) return;
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = 0.18;
     audio.play().then(() => setMusicOn(true)).catch(() => setMusicOn(false));
-  }, []);
+  }, [user]);
 
   useEffect(() => {
+    if (!user) return;
     const key = "alsadd-visit-session";
     const sessionId = sessionStorage.getItem(key) || crypto.randomUUID();
     sessionStorage.setItem(key, sessionId);
@@ -80,7 +84,11 @@ export default function Home() {
     };
     window.addEventListener("pagehide", notifyLeave);
     return () => window.removeEventListener("pagehide", notifyLeave);
-  }, []);
+  }, [user]);
+
+  if (loading || !user) {
+    return <div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ تجهيز بوابة الموقع...</p></div>;
+  }
 
   const toggleMusic = () => {
     const audio = audioRef.current;

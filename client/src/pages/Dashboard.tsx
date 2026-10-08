@@ -16,6 +16,7 @@ import {
   Monitor,
   RefreshCw,
   Smartphone,
+  UserCheck,
   Users,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -84,7 +85,12 @@ function DashboardContent() {
     refetchInterval: 60_000,
     retry: false,
   });
+  const adminSummaryQuery = trpc.admin.summary.useQuery(undefined, {
+    enabled: isAuthenticated,
+    retry: false,
+  });
   const data = dashboardQuery.data;
+  const registeredUsers = adminSummaryQuery.data?.registeredUsers ?? [];
   const dailyMax = Math.max(...(data?.daily.map(item => item.visits + item.leaves) || [1]), 1);
 
   return (
@@ -113,7 +119,7 @@ function DashboardContent() {
               <Button type="button" variant="ghost" className="dashboard-refresh" onClick={() => dashboardQuery.refetch()} disabled={dashboardQuery.isFetching}><RefreshCw size={16} className={dashboardQuery.isFetching ? "dashboard-spin" : ""} /> تحديث</Button>
             </section>
 
-            {dashboardQuery.isLoading ? <div className="dashboard-loading"><Activity size={20} /> جارٍ تجهيز لوحة البيانات...</div> : dashboardQuery.error ? <div className="dashboard-error">تعذر تحميل البيانات. تأكد من تسجيل الدخول واتصال قاعدة البيانات.</div> : data ? (
+            {dashboardQuery.isLoading || adminSummaryQuery.isLoading ? <div className="dashboard-loading"><Activity size={20} /> جارٍ تجهيز لوحة البيانات...</div> : dashboardQuery.error || adminSummaryQuery.error ? <div className="dashboard-error">{dashboardQuery.error?.data?.code === "FORBIDDEN" || adminSummaryQuery.error?.data?.code === "FORBIDDEN" ? "هذه المنطقة مخصصة للمدير فقط. سجّل الدخول بالحساب الإداري المصرح له." : "تعذر تحميل البيانات. تأكد من اتصال قاعدة البيانات."}</div> : data ? (
               <>
                 <section className="dashboard-stat-grid">
                   <StatCard icon={Activity} label="إجمالي الأحداث" value={data.totalEvents} note={`خلال آخر ${days} يومًا`} tone="ink" />
@@ -121,6 +127,7 @@ function DashboardContent() {
                   <StatCard icon={Users} label="جلسات فريدة" value={data.uniqueSessions} note="معرّفات مجهولة" tone="gold" />
                   <StatCard icon={Clock3} label="نشطون الآن" value={data.activeVisitors} note="آخر 15 دقيقة تقريبًا" tone="clay" />
                   <StatCard icon={LogOut} label="أحداث الخروج" value={data.leaves} note="إشارات مغادرة تقريبية" tone="ink" />
+                  <StatCard icon={UserCheck} label="حسابات مسجلة" value={adminSummaryQuery.data?.totalUsers ?? 0} note="مستخدمو بوابة الموقع" tone="teal" />
                 </section>
 
                 <section className="dashboard-main-grid">
@@ -143,6 +150,10 @@ function DashboardContent() {
                 <section className="dashboard-panel dashboard-events-panel">
                   <div className="dashboard-panel-heading"><div><span className="dashboard-kicker"><Clock3 size={15} /> سجل حي</span><h2>آخر الأحداث</h2></div><span className="dashboard-panel-mark">50 كحد أقصى</span></div>
                   <div className="dashboard-table-wrap"><table className="dashboard-table"><thead><tr><th>الحدث</th><th>الوقت</th><th>الموقع التقريبي</th><th>المتصفح والنظام</th><th>الصفحة</th><th>الجلسة</th></tr></thead><tbody>{data.recent.length === 0 ? <tr><td colSpan={6} className="dashboard-empty">لا توجد أحداث مسجلة حتى الآن.</td></tr> : data.recent.map(item => <tr key={item.id}><td><span className={`event-badge ${item.eventType === "visit" ? "event-visit" : "event-leave"}`}>{item.eventType === "visit" ? <ArrowUpLeft size={14} /> : <ArrowDownLeft size={14} />}{item.eventType === "visit" ? "دخول" : "خروج"}</span></td><td>{formatDate(item.occurredAt)}</td><td><strong>{[item.city, item.region, item.country].filter(Boolean).join("، ") || "غير معروف"}</strong><small>{item.timezone || "منطقة زمنية غير معروفة"}</small></td><td><strong>{item.browser || "غير معروف"}</strong><small>{item.operatingSystem || "غير معروف"} · {item.screen || "—"}</small></td><td dir="ltr" className="dashboard-ltr">{item.page}</td><td dir="ltr" className="dashboard-session">{item.sessionId.slice(0, 12)}…</td></tr>)}</tbody></table></div>
+                </section>
+                <section className="dashboard-panel dashboard-events-panel admin-users-panel">
+                  <div className="dashboard-panel-heading"><div><span className="dashboard-kicker"><UserCheck size={15} /> إدارة الحسابات</span><h2>الزوار الذين سجّلوا دخولهم</h2></div><span className="dashboard-panel-mark">{formatNumber(adminSummaryQuery.data?.totalUsers ?? 0)} حساب</span></div>
+                  <div className="dashboard-table-wrap"><table className="dashboard-table"><thead><tr><th>الاسم</th><th>البريد الإلكتروني</th><th>طريقة الدخول</th><th>الدور</th><th>تاريخ التسجيل</th><th>آخر دخول</th></tr></thead><tbody>{registeredUsers.length === 0 ? <tr><td colSpan={6} className="dashboard-empty">لا توجد حسابات مسجلة بعد.</td></tr> : registeredUsers.map(item => <tr key={item.id}><td><strong>{item.name || "زائر بلا اسم"}</strong></td><td dir="ltr" className="dashboard-ltr">{item.email || "—"}</td><td>{item.loginMethod || "Manus OAuth"}</td><td><span className={`event-badge ${item.role === "admin" ? "event-visit" : "event-leave"}`}>{item.role === "admin" ? "مدير" : "زائر مسجل"}</span></td><td>{formatDate(item.createdAt)}</td><td>{formatDate(item.lastSignedIn)}</td></tr>)}</tbody></table></div>
                 </section>
                 <p className="dashboard-privacy-note"><Smartphone size={15} /> البيانات تقريبية ومجهولة: الدولة من إشارات Vercel، والمتصفح والنظام من User-Agent، ولا يتم تخزين عنوان IP.</p>
               </>
