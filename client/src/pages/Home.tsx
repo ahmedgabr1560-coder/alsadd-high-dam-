@@ -4,7 +4,6 @@ import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 
 export default function Home() {
   const { isEnglish } = useLanguage();
-  const featured = articles.slice(0, 6);
   return <main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
       <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><LanguageToggle /></div>
@@ -23,10 +22,10 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="section" id="articles-preview">
-      <div className="container"><div className="section-heading"><div><span className="eyebrow"><BookOpen size={15} /> مكتبة أُفُق</span><h2 className="display">كل قصة تستحق صفحة كاملة.</h2></div><p>مقالات مستقلة، بتصميم واحد واضح، ومحتوى يفتح لك نافذة جديدة على الموضوع.</p></div>
-        <div className="articles-grid">{featured.map(article => { const Icon = article.icon; const title = isEnglish ? (article.titleEn || article.title) : article.title; const lead = isEnglish ? (article.leadEn || article.lead) : article.lead; return <article className="article-card" key={article.slug}>{<img className="article-card-image" src={article.image || "/assets/aswan-dam.jpg"} alt={article.imageAlt || title} />}<div className="article-card-top"><span className="article-icon"><Icon size={21} /></span><span>{isEnglish ? (article.tagEn || article.tag) : article.tag}</span></div><h2>{title}</h2><p className="article-lead">{lead}</p><a href={`/articles/${article.slug}`}>{isEnglish ? "Read the full article" : "اقرأ المقال كاملًا"} <ArrowLeft size={15} /></a></article>; })}</div>
-        <div style={{ display: "flex", justifyContent: "center", marginTop: 30 }}><a className="primary-btn" href="/articles">كل المقالات <ArrowLeft size={17} /></a></div>
+    <section className="section" id="topics">
+      <div className="container"><div className="section-heading"><div><span className="eyebrow"><BookOpen size={15} /> أبواب أُفُق</span><h2 className="display">اختر موضوعًا، وافتح صفحته.</h2></div><p>لا نعرض المقال كاملًا هنا؛ كل موضوع له أيقونة ورابط يقودان إلى صفحة مستقلة مخصصة له.</p></div>
+        <div className="topic-links">{articles.map(article => { const Icon = article.icon; const title = isEnglish ? (article.titleEn || article.title) : article.title; return <a className="topic-link-card" href={`/articles/${article.slug}`} key={article.slug}><span className="topic-link-icon"><Icon size={25} /></span><span><strong>{title}</strong><small>{isEnglish ? (article.tagEn || article.tag) : article.tag}</small></span><ArrowLeft size={17} /></a>; })}</div>
+        <div className="topic-links-special"><a className="topic-link-card topic-link-featured" href="/high-dam"><span className="topic-link-icon"><Landmark size={25} /></span><span><strong>بحث السد العالي</strong><small>صفحة المشروع الكامل</small></span><ArrowLeft size={17} /></a><a className="topic-link-card topic-link-featured" href="/high-dam/articles"><span className="topic-link-icon"><BookOpen size={25} /></span><span><strong>مقالات السد العالي</strong><small>مكتبة متخصصة</small></span><ArrowLeft size={17} /></a></div>
       </div>
     </section>
 

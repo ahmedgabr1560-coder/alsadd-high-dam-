@@ -323,6 +323,16 @@ button { font: inherit; }
 .article-card p { margin: 0; color: #71818a; font-size: .79rem; line-height: 1.9; }
 .article-card .article-lead { margin-bottom: 10px; color: #405d68; font-weight: 600; }
 .article-card a { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 21px; color: #178f85; font-size: .74rem; font-weight: 700; }
+.topic-links, .topic-links-special { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.topic-links-special { margin-top: 12px; grid-template-columns: repeat(2, 1fr); }
+.topic-link-card { display: flex; align-items: center; gap: 12px; min-height: 82px; padding: 14px 16px; border: 1px solid rgba(255,255,255,.14); border-radius: 1rem; background: rgba(255,255,255,.08); color: white; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.topic-link-card:hover { transform: translateY(-3px); border-color: rgba(216,170,97,.72); background: rgba(216,170,97,.13); }
+.topic-link-icon { display: grid; flex: 0 0 auto; place-items: center; width: 44px; height: 44px; border-radius: .85rem; background: rgba(216,170,97,.16); color: var(--gold); }
+.topic-link-card span:nth-child(2) { display: grid; gap: 4px; min-width: 0; flex: 1; }
+.topic-link-card strong { color: white; font-family: "Amiri", Georgia, serif; font-size: 1.05rem; line-height: 1.25; }
+.topic-link-card small { color: rgba(255,255,255,.58); font-size: .68rem; }
+.topic-link-card > svg { color: var(--gold); }
+.topic-link-featured { border-color: rgba(216,170,97,.35); background: rgba(216,170,97,.1); }
 .articles-footer { display: flex; align-items: center; gap: 8px; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(16,47,69,.1); color: #86959a; font-size: .72rem; }
 .article-detail-page { min-height: 100vh; padding: 34px clamp(18px, 5vw, 80px) 56px; background: #f5f8f7; color: var(--ink); }
 .article-detail-page { background: var(--ink-deep); color: white; background-image: linear-gradient(125deg, rgba(8,28,42,.97), rgba(8,28,42,.8)), url('/assets/aswan-dam.jpg'); background-position: center top; background-size: cover; background-attachment: fixed; }
@@ -481,6 +491,7 @@ button { font: inherit; }
   .login-story-content { margin: 64px 0 30px; }
   .login-story h1 { font-size: clamp(3.2rem, 11vw, 5.4rem); }
   .articles-grid { grid-template-columns: 1fr 1fr; }
+  .topic-links { grid-template-columns: 1fr 1fr; }
   .ofoq-home-verses, .article-verses { grid-template-columns: 1fr 1fr; }
   .profile-grid { grid-template-columns: 1fr; }
 }
@@ -550,6 +561,7 @@ button { font: inherit; }
   .login-card { padding: 26px 21px; border-radius: 1.25rem; }
   .login-form-row, .articles-grid, .profile-details { grid-template-columns: 1fr; }
   .articles-page, .profile-page { padding-inline: 14px; }
+  .topic-links, .topic-links-special { grid-template-columns: 1fr; }
   .ofoq-home-verses, .article-verses { grid-template-columns: 1fr; }
   .articles-header h1 { font-size: clamp(2.9rem, 15vw, 4.6rem); }
   .articles-kicker, .profile-kicker { margin-top: 38px; }
