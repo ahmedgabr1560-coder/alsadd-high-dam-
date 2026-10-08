@@ -28,6 +28,6 @@ export function LanguageToggle({ className = "" }: { className?: string }) {
 }
 
 export const languageText = {
-  ar: { brand: "أُفُق", subtitle: "أفقٌ أوسع، ومعرفةٌ تصنع الأثر.", articles: "المقالات", profile: "ملفي", login: "دخول الزائر", back: "العودة للموقع", read: "قراءة المقال كاملًا", library: "مكتبة أُفُق", source: "المصدر" },
-  en: { brand: "OFOQ", subtitle: "A wider horizon, knowledge that makes an impact.", articles: "Articles", profile: "Profile", login: "Visitor login", back: "Back to site", read: "Read full article", library: "OFOQ Library", source: "Source" },
+  ar: { brand: "أُفُق", subtitle: "نفتح أفقًا أوسع للمعرفة، ونحوّل الرؤية إلى أثر.", articles: "المقالات", profile: "ملفي", login: "دخول الزائر", back: "العودة للموقع", read: "قراءة المقال كاملًا", library: "مكتبة أُفُق", source: "المصدر" },
+  en: { brand: "OFOQ", subtitle: "We open wider horizons for knowledge and turn vision into impact.", articles: "Articles", profile: "Profile", login: "Visitor login", back: "Back to site", read: "Read full article", library: "OFOQ Library", source: "Source" },
 } as const;

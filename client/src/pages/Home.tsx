@@ -100,7 +100,7 @@ export default function Home() {
         <div className="container nav-inner">
           <a className="brand" href="#top" aria-label="العودة إلى بداية الموقع" onClick={() => setMenuOpen(false)}>
             <span className="brand-mark"><span /></span>
-            <span className="brand-copy"><strong>أُفُق | OFOQ</strong><small>{isEnglish ? "A wider horizon, knowledge that makes an impact." : "أفقٌ أوسع، ومعرفةٌ تصنع الأثر."}</small></span>
+            <span className="brand-copy"><strong>أُفُق | OFOQ</strong><small>{isEnglish ? "We open wider horizons for knowledge and turn vision into impact." : "نفتح أفقًا أوسع للمعرفة، ونحوّل الرؤية إلى أثر."}</small></span>
           </a>
           <nav className={`nav-links ${menuOpen ? "open" : ""}`} aria-label="التنقل الرئيسي">
             <a href="#story" onClick={() => setMenuOpen(false)}>الحكاية</a>
