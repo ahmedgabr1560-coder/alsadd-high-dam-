@@ -1,16 +1,13 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { ArrowRight, BookOpen, Landmark } from "lucide-react";
 import { useRoute } from "wouter";
 import { getArticle } from "@/data/articles";
 import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
 
 export default function ArticleDetail() {
-  const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
   const [, params] = useRoute("/articles/:slug");
   const { isEnglish } = useLanguage();
   const text = isEnglish ? languageText.en : languageText.ar;
   const article = params?.slug ? getArticle(params.slug) : undefined;
-  if (loading || !user) return <div className="site-auth-loading" dir={isEnglish ? "ltr" : "rtl"}><span className="login-loader" /><p>{isEnglish ? "Opening the article..." : "جارٍ فتح المقال..."}</p></div>;
   if (!article) return <main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to library" : "العودة إلى المكتبة"}</a><h1>{isEnglish ? "Article not found" : "المقال غير موجود"}</h1></main>;
   const title = isEnglish ? (article.titleEn || article.title) : article.title;
   const lead = isEnglish ? (article.leadEn || article.lead) : article.lead;

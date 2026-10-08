@@ -1,13 +1,10 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { ArrowLeft, ArrowRight, BookOpen, Landmark } from "lucide-react";
 import { articles } from "@/data/articles";
 import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
 
 export default function Articles() {
-  const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
   const { isEnglish } = useLanguage();
   const text = isEnglish ? languageText.en : languageText.ar;
-  if (loading || !user) return <div className="site-auth-loading" dir={isEnglish ? "ltr" : "rtl"}><span className="login-loader" /><p>{isEnglish ? "Opening the article library..." : "جارٍ فتح مكتبة المقالات..."}</p></div>;
   return <main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
       <div className="articles-toolbar"><a href="/" className="articles-back"><ArrowRight size={16} /> {text.back}</a><LanguageToggle /></div>
