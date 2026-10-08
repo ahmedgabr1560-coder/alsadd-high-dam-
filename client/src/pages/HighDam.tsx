@@ -127,7 +127,7 @@ export default function Home() {
               <div className="institution-logo"><img src="/assets/logo-education.png" alt="شعار وزارة التعليم العالي والبحث العلمي والمعهد العالي للحاسبات والمعلومات والتكنولوجيا إدارة-طنطا" /><strong>وزارة التعليم العالي والبحث العلمي</strong><span>المعهد العالي للحاسبات والمعلومات والتكنولوجيا إدارة-طنطا</span></div>
               <div className="institution-logo"><img src="/assets/logo-armed-forces.jpg" alt="شعار القوات المسلحة المصرية" /><span>القوات المسلحة المصرية</span></div>
             </div>
-            <div className="hero-kicker"><span /> أُفُق | OFOQ · مكتبة معرفة</div>
+            <div className="hero-kicker"><span /> أُفُق | OFOQ · مساحة معرفة</div>
             <h1 className="display">نفتح أفقًا أوسع،<br /><em>لنرى العالم بوضوح.</em></h1>
             <p className="hero-lede">أُفُق مساحة معرفية تجمع المقالات والقصص والقراءات الموثقة، وتحوّل التاريخ والماء والمجتمع إلى نوافذ تساعدك على الفهم وصناعة رؤية أبعد.</p>
             <div className="hero-actions">

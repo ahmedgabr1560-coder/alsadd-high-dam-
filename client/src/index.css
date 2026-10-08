@@ -348,6 +348,18 @@ button { font: inherit; }
 .article-verses p { margin: 0; color: rgba(255,255,255,.9); font-family: "Amiri", Georgia, serif; font-size: .84rem; line-height: 1.65; }
 .article-verses small { display: block; margin-top: 4px; color: var(--gold); font-size: .62rem; }
 .article-detail-header, .article-detail-content { width: min(820px, 100%); margin-inline: auto; }
+.article-timeline, .article-gallery { width: min(980px, 100%); margin: 0 auto 34px; }
+.article-timeline { padding: 24px; border: 1px solid rgba(216,170,97,.28); border-radius: 1.1rem; background: rgba(8,28,42,.62); }
+.article-timeline h2, .article-gallery h2 { margin: 0 0 17px; color: white; font-family: "Amiri", Georgia, serif; font-size: 1.55rem; }
+.article-timeline > div { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.article-timeline article { min-height: 112px; padding: 13px; border-right: 2px solid var(--gold); background: rgba(255,255,255,.06); }
+.article-timeline strong { color: var(--gold); font-size: .78rem; }
+.article-timeline p { margin: 7px 0 0; color: rgba(255,255,255,.78); font-size: .75rem; line-height: 1.7; }
+.article-gallery > div { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.article-gallery figure { margin: 0; overflow: hidden; border: 1px solid rgba(216,170,97,.25); border-radius: 1rem; background: rgba(255,255,255,.08); }
+.article-gallery img { display: block; width: 100%; height: 220px; object-fit: cover; }
+.article-gallery figcaption { padding: 11px 13px; color: rgba(255,255,255,.7); font-size: .7rem; line-height: 1.6; }
+.article-gallery a { color: var(--gold); }
 .article-detail-header { padding: 10px 0 42px; }
 .article-detail-header h1 { margin: 24px 0 16px; font-family: "Amiri", serif; font-size: clamp(2.8rem, 7vw, 5.8rem); line-height: 1.08; }
 .article-detail-header > p { color: #405d68; font-size: 1.1rem; line-height: 2; }
@@ -499,6 +511,7 @@ button { font: inherit; }
   .articles-grid { grid-template-columns: 1fr 1fr; }
   .topic-links { grid-template-columns: 1fr 1fr; }
   .ofoq-home-verses, .article-verses { grid-template-columns: 1fr 1fr; }
+  .article-timeline > div, .article-gallery > div { grid-template-columns: 1fr 1fr; }
   .profile-grid { grid-template-columns: 1fr; }
 }
 
@@ -569,6 +582,9 @@ button { font: inherit; }
   .articles-page, .profile-page { padding-inline: 14px; }
   .topic-links, .topic-links-special { grid-template-columns: 1fr; }
   .ofoq-home-verses, .article-verses { grid-template-columns: 1fr; }
+  .article-timeline > div, .article-gallery > div { grid-template-columns: 1fr; }
+  .article-timeline { padding: 17px; }
+  .article-gallery img { height: 205px; }
   .articles-header h1 { font-size: clamp(2.9rem, 15vw, 4.6rem); }
   .articles-kicker, .profile-kicker { margin-top: 38px; }
   .profile-hero { align-items: flex-start; flex-wrap: wrap; padding: 24px 18px; }
