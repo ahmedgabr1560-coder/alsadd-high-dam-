@@ -338,6 +338,29 @@ button { font: inherit; }
 .topic-link-card small { color: rgba(255,255,255,.58); font-size: .68rem; }
 .topic-link-card > svg { color: var(--gold); }
 .topic-link-featured { border-color: rgba(216,170,97,.35); background: rgba(216,170,97,.1); }
+.highdam-research-content { width: min(900px, 100%); margin: 0 auto; padding: 30px clamp(18px, 5vw, 60px) 8px; border-radius: 1.4rem; background: rgba(8,28,42,.78); box-shadow: 0 20px 60px rgba(0,0,0,.18); }
+.highdam-research-intro { margin-bottom: 30px; padding: 16px 19px; border-right: 2px solid var(--gold); background: rgba(255,255,255,.06); }
+.highdam-research-intro span { display: block; color: var(--gold); font-size: .7rem; }
+.highdam-research-intro strong { display: block; margin-top: 4px; color: white; font-size: 1.05rem; }
+.highdam-research-intro p { margin: 5px 0 0; color: rgba(255,255,255,.65); font-size: .75rem; }
+.highdam-research-section { padding: 38px 0 44px; border-bottom: 1px solid rgba(255,255,255,.13); scroll-margin-top: 25px; }
+.highdam-research-section:last-child { border-bottom: 0; }
+.highdam-section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.highdam-section-number { color: var(--gold); font-family: ui-monospace, monospace; font-size: .78rem; }
+.highdam-section-heading > div { flex: 1; }
+.highdam-section-heading small { color: rgba(255,255,255,.55); font-size: .68rem; }
+.highdam-section-heading h2 { margin: 3px 0 0; color: white; font-family: "Amiri", Georgia, serif; font-size: clamp(1.6rem, 4vw, 2.35rem); line-height: 1.3; }
+.highdam-section-image { margin: 0 0 20px; overflow: hidden; border: 1px solid rgba(216,170,97,.24); border-radius: 1rem; background: rgba(255,255,255,.06); }
+.highdam-section-image img { display: block; width: 100%; max-height: 380px; object-fit: cover; }
+.highdam-section-image figcaption { padding: 9px 12px; color: rgba(255,255,255,.58); font-size: .68rem; }
+.highdam-section-lead { margin: 0 0 17px; color: var(--gold); font-size: 1rem; font-weight: 600; line-height: 1.9; }
+.highdam-section-body p { margin: 0 0 16px; color: rgba(255,255,255,.8); font-size: .91rem; line-height: 2.05; }
+.highdam-section-sources { margin-top: 23px; padding-top: 16px; border-top: 1px solid rgba(216,170,97,.2); }
+.highdam-section-sources strong { color: var(--gold); font-size: .8rem; }
+.highdam-section-sources ol { margin: 8px 0 0; padding-right: 21px; color: rgba(255,255,255,.58); }
+.highdam-section-sources li { padding: 3px 0; font-size: .69rem; line-height: 1.6; }
+.highdam-section-sources a { color: rgba(255,255,255,.75); }
+.highdam-back-top { position: fixed; left: 18px; bottom: 18px; z-index: 55; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(216,170,97,.65); border-radius: 50%; color: var(--gold); background: rgba(8,28,42,.9); }
 .articles-footer { display: flex; align-items: center; gap: 8px; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(16,47,69,.1); color: #86959a; font-size: .72rem; }
 .article-detail-page { min-height: 100vh; padding: 34px clamp(18px, 5vw, 80px) 56px; background: #f5f8f7; color: var(--ink); }
 .article-detail-page { background: var(--ink-deep); color: white; background-image: linear-gradient(125deg, rgba(8,28,42,.97), rgba(8,28,42,.8)), url('/assets/aswan-dam.jpg'); background-position: center top; background-size: cover; background-attachment: fixed; }
