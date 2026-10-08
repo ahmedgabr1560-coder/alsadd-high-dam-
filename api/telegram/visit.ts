@@ -60,6 +60,21 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ ok: false, error: "Method not allowed" });
   }
 
+  if (process.env.VERCEL) {
+    try {
+      const upstream = await fetch("https://alsadd-mfrgewuc.manus.space/api/telegram/visit", {
+        method: "POST",
+        headers: { "content-type": "application/json", "user-agent": String(header(req, "user-agent") || "") },
+        body: JSON.stringify(req.body || {}),
+      });
+      const body = await upstream.text();
+      res.status(upstream.status).setHeader("content-type", upstream.headers.get("content-type") || "application/json");
+      return res.send(body);
+    } catch {
+      return res.status(502).json({ ok: false, error: "Analytics upstream unavailable" });
+    }
+  }
+
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   const body = (req.body || {}) as VisitPayload;

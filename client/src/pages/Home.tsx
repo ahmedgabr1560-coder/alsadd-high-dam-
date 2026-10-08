@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import {
   ArrowDownLeft,
@@ -51,6 +51,8 @@ const videos = [
   { id: "YBbtQ72MOI0", title: "السد العالي وإنقاذ المعابد", text: "رحلة بصرية إلى أثر السد في إنقاذ معابد النوبة وأبو سمبل." },
 ];
 
+const tahyaMasrVideoId = "KiqqxNh6-Jo";
+
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -59,17 +61,8 @@ export default function Home() {
   const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
   const [menuOpen, setMenuOpen] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [activeTimeline, setActiveTimeline] = useState(2);
   const selected = timeline[activeTimeline];
-
-  useEffect(() => {
-    if (!user) return;
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.volume = 0.18;
-    audio.play().then(() => setMusicOn(true)).catch(() => setMusicOn(false));
-  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -91,16 +84,7 @@ export default function Home() {
   }
 
   const toggleMusic = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) {
-      audio.muted = false;
-      audio.volume = 0.18;
-      audio.play().then(() => setMusicOn(true)).catch(() => setMusicOn(false));
-    } else {
-      audio.pause();
-      setMusicOn(false);
-    }
+    setMusicOn((value) => !value);
   };
 
   const go = (id: string) => {
@@ -126,7 +110,7 @@ export default function Home() {
             <a className="nav-login" href="/login" onClick={() => setMenuOpen(false)}><LogIn size={14} /> دخول الزائر</a>
             <a className="nav-cta" href="#sources" onClick={() => setMenuOpen(false)}>المراجع <ArrowLeft size={15} /></a>
           </nav>
-          <button className="music-btn" type="button" onClick={toggleMusic} aria-label={musicOn ? "إيقاف الموسيقى الوطنية" : "تشغيل الموسيقى الوطنية"} title={musicOn ? "إيقاف الموسيقى الوطنية" : "تشغيل الموسيقى الوطنية"}>
+          <button className="music-btn" type="button" onClick={toggleMusic} aria-label={musicOn ? "إيقاف أغنية تحيا مصر" : "تشغيل أغنية تحيا مصر"} title={musicOn ? "إيقاف أغنية تحيا مصر" : "تشغيل أغنية تحيا مصر"}>
             {musicOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
           <button className="menu-btn" type="button" aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"} onClick={() => setMenuOpen((value) => !value)}>
@@ -136,7 +120,7 @@ export default function Home() {
       </header>
 
       <main id="top">
-        <audio ref={audioRef} src="/assets/bilady-bilady.ogg" loop preload="auto" aria-label="النشيد الوطني المصري بلادي بلادي" />
+        {musicOn && <iframe className="music-frame" src={`https://www.youtube.com/embed/${tahyaMasrVideoId}?autoplay=1&loop=1&playlist=${tahyaMasrVideoId}&controls=0&modestbranding=1&rel=0`} title="أغنية تحيا مصر الرسمية" allow="autoplay; encrypted-media" />}
         <section className="hero">
           <div className="hero-inner">
             <div className="quran-hero-verse" aria-label="آيات قرآنية عن الماء">

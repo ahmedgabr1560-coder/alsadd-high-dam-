@@ -2,5 +2,11 @@
   "framework": "vite",
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm build:static",
-  "outputDirectory": "dist/public"
+  "outputDirectory": "dist/public",
+  "rewrites": [
+    { "source": "/api/platform/:path*", "destination": "https://alsadd-mfrgewuc.manus.space/api/platform/:path*" },
+    { "source": "/api/oauth/:path*", "destination": "https://alsadd-mfrgewuc.manus.space/api/oauth/:path*" },
+    { "source": "/api/trpc/:path*", "destination": "https://alsadd-mfrgewuc.manus.space/api/trpc/:path*" },
+    { "source": "/api/health", "destination": "https://alsadd-mfrgewuc.manus.space/api/health" }
+  ]
 }
