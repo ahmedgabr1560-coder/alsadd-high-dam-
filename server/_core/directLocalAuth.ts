@@ -21,7 +21,9 @@ function setSession(res: any, userId: number) {
 }
 
 function json(res: any, status: number, payload: unknown) {
-  res.status(status).json(payload);
+  res.statusCode = status;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.end(JSON.stringify(payload));
 }
 
 export async function registerHandler(req: any, res: any) {
