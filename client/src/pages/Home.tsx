@@ -2,8 +2,11 @@ import { ArrowLeft, ArrowRight, BookOpen, Landmark, Sparkles } from "lucide-reac
 import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 
+const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine-history-1948"];
+
 export default function Home() {
   const { isEnglish } = useLanguage();
+  const independentResearch = articles.filter(article => independentResearchSlugs.includes(article.slug));
   return <main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
       <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><LanguageToggle /></div>
@@ -24,8 +27,8 @@ export default function Home() {
 
     <section className="section" id="topics">
       <div className="container"><div className="section-heading"><div><span className="eyebrow"><BookOpen size={15} /> أبواب أُفُق</span><h2 className="display">اختر موضوعًا، وافتح صفحته.</h2></div><p>لا نعرض المقال كاملًا هنا؛ كل موضوع له أيقونة ورابط يقودان إلى صفحة مستقلة مخصصة له.</p></div>
-        <div className="topic-links">{articles.map(article => { const Icon = article.icon; const title = isEnglish ? (article.titleEn || article.title) : article.title; return <a className="topic-link-card" href={`/articles/${article.slug}`} key={article.slug}><span className="topic-link-icon"><Icon size={25} /></span><span><strong>{title}</strong><small>{isEnglish ? (article.tagEn || article.tag) : article.tag}</small></span><ArrowLeft size={17} /></a>; })}</div>
-        <div className="topic-links-special"><a className="topic-link-card topic-link-featured" href="/high-dam"><span className="topic-link-icon"><Landmark size={25} /></span><span><strong>بحث السد العالي</strong><small>صفحة المشروع الكامل</small></span><ArrowLeft size={17} /></a><a className="topic-link-card topic-link-featured" href="/high-dam/articles"><span className="topic-link-icon"><BookOpen size={25} /></span><span><strong>مقالات السد العالي</strong><small>مكتبة متخصصة</small></span><ArrowLeft size={17} /></a></div>
+        <div className="topic-links-special"><a className="topic-link-card topic-link-featured" href="/high-dam/articles"><span className="topic-link-icon"><Landmark size={25} /></span><span><strong>السد العالي</strong><small>مكتبة أبحاث كاملة · {isEnglish ? "one dedicated library" : "رابط واحد لكل موضوعاته"}</small></span><ArrowLeft size={17} /></a></div>
+        <div className="topic-links">{independentResearch.map(article => { const Icon = article.icon; const title = isEnglish ? (article.titleEn || article.title) : article.title; return <a className="topic-link-card" href={`/articles/${article.slug}`} key={article.slug}><span className="topic-link-icon"><Icon size={25} /></span><span><strong>{title}</strong><small>{isEnglish ? (article.tagEn || article.tag) : article.tag} · صفحة مستقلة</small></span><ArrowLeft size={17} /></a>; })}</div>
       </div>
     </section>
 
