@@ -100,7 +100,7 @@ export default function Home() {
         <div className="container nav-inner">
           <a className="brand" href="#top" aria-label="العودة إلى بداية الموقع" onClick={() => setMenuOpen(false)}>
             <span className="brand-mark"><span /></span>
-            <span className="brand-copy"><strong>نبراس — Nibras</strong><small>{isEnglish ? "Knowledge that lights the way" : "معرفة تُضيء الطريق"}</small></span>
+            <span className="brand-copy"><strong>أُفُق | OFOQ</strong><small>{isEnglish ? "A wider horizon, knowledge that makes an impact." : "أفقٌ أوسع، ومعرفةٌ تصنع الأثر."}</small></span>
           </a>
           <nav className={`nav-links ${menuOpen ? "open" : ""}`} aria-label="التنقل الرئيسي">
             <a href="#story" onClick={() => setMenuOpen(false)}>الحكاية</a>
@@ -282,7 +282,7 @@ export default function Home() {
       <footer className="sources" id="sources">
         <div className="container">
           <div className="sources-grid"><div><span className="eyebrow">اقرأ وتحقق</span><h2 className="display">الماء قصة تحتاج إلى مصادر.</h2><p>هذا الموقع يعيد تنظيم مادة البحث في صيغة بصرية. يُنصح بمراجعة الأرقام مع أحدث إصدارات الجهات الرسمية، فقد تختلف التقديرات بحسب المنسوب والتعريف.</p></div><div><ol><li>وزارة الموارد المائية والري المصرية — <a href="https://www.mwri.gov.eg" target="_blank" rel="noreferrer">mwri.gov.eg</a></li><li>الهيئة العامة للاستعلامات — <a href="https://www.sis.gov.eg" target="_blank" rel="noreferrer">ملف السد العالي</a></li><li>اليونسكو — <a href="https://www.unesco.org/en/list/88" target="_blank" rel="noreferrer">آثار النوبة من أبو سمبل إلى فيلة</a></li><li>البنك الدولي — <a href="https://www.worldbank.org/en/country/egypt" target="_blank" rel="noreferrer">بيانات مصر وقطاع المياه والزراعة</a></li><li>منظمة الأغذية والزراعة — <a href="https://www.fao.org/aquastat" target="_blank" rel="noreferrer">قاعدة بيانات أكواستات</a></li><li>موسوعة بريتانيكا — <a href="https://www.britannica.com/topic/Aswan-High-Dam" target="_blank" rel="noreferrer">Aswan High Dam</a></li><li>مبادرة حوض النيل — <a href="https://nilebasin.org" target="_blank" rel="noreferrer">معلومات الحوض والتعاون</a></li><li>وزارة الكهرباء والطاقة المتجددة المصرية — <a href="https://www.moee.gov.eg" target="_blank" rel="noreferrer">moee.gov.eg</a></li><li>Waterbury, J. (1979). Hydropolitics of the Nile Valley.</li><li>Fahim, H. M. (1981). Dams, People and Development.</li></ol></div></div>
-          <div className="footer-bottom"><span>© السد العالي | قصة وطن وماء · بحث التربية العسكرية · 2026 / 2027</span><span>الصور: Wikimedia Commons · <a href="https://commons.wikimedia.org/wiki/Category:Aswan_High_Dam" target="_blank" rel="noreferrer">المصدر</a></span></div>
+          <div className="footer-bottom"><span>© أُفُق | OFOQ · بحث التربية العسكرية · 2026 / 2027</span><span>الصور: Wikimedia Commons · <a href="https://commons.wikimedia.org/wiki/Category:Aswan_High_Dam" target="_blank" rel="noreferrer">المصدر</a></span></div>
         </div>
       </footer>
     </div>

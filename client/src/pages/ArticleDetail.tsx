@@ -19,6 +19,6 @@ export default function ArticleDetail() {
     <header className="article-detail-header"><div className="articles-toolbar"><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to library" : "العودة إلى مكتبة المقالات"}</a><LanguageToggle /></div><span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? (article.tagEn || article.tag) : article.tag}</span><h1>{title}</h1><p>{lead}</p></header>
     {article.image && <figure className="article-detail-figure"><img src={article.image} alt={article.imageAlt || title} /><figcaption>{article.imageAlt}{article.sourceName ? ` · ${text.source}: ${article.sourceName}` : ""}</figcaption></figure>}
     <article className="article-detail-content">{body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}{article.sourceUrl && <p className="article-source"><strong>{text.source}:</strong> <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.sourceName || article.sourceUrl}</a></p>}</article>
-    <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "Nibras — knowledge built from memory and evidence." : "نبراس — معرفة تُبنى من الماء والذاكرة."}</footer>
+    <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "OFOQ — knowledge built from memory and evidence." : "أُفُق — معرفة تُبنى من الماء والذاكرة."}</footer>
   </main>;
 }

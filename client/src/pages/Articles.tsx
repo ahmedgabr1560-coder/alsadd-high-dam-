@@ -16,6 +16,6 @@ export default function Articles() {
       <p>{isEnglish ? "Long-form readings on the dam, October War, World War II and Palestine, with sources and open images." : "قراءات متعددة الصفحات تكمل البحث الرئيسي، وتضم السد وحرب أكتوبر والحرب العالمية الثانية وفلسطين، مع مراجع وصور مفتوحة."}</p>
     </header>
     <div className="articles-grid">{articles.map(({ slug, icon: Icon, tag, tagEn, title, titleEn, lead, leadEn, image, imageAlt }) => { const cardTitle = isEnglish ? (titleEn || title) : title; return <article className="article-card" key={slug}>{image && <img className="article-card-image" src={image} alt={imageAlt || cardTitle} />}<div className="article-card-top"><span className="article-icon"><Icon size={21} /></span><span>{isEnglish ? (tagEn || tag) : tag}</span></div><h2>{cardTitle}</h2><p className="article-lead">{isEnglish ? (leadEn || lead) : lead}</p><a href={`/articles/${slug}`} aria-label={`${text.read}: ${cardTitle}`}>{text.read} <ArrowLeft size={15} /></a></article>; })}</div>
-    <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "Nibras — knowledge built from memory and evidence." : "نبراس — معرفة تُبنى من الماء والذاكرة."}</footer>
+    <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "OFOQ — knowledge built from memory and evidence." : "أُفُق — معرفة تُبنى من الماء والذاكرة."}</footer>
   </main>;
 }
