@@ -4,7 +4,12 @@
   "buildCommand": "pnpm build:static",
   "outputDirectory": "dist/public",
   "functions": {
-    "api/[...path].ts": { "maxDuration": 10 }
+    "api/[...path].ts": { "maxDuration": 10 },
+    "api/auth/login.ts": { "maxDuration": 10 },
+    "api/auth/register.ts": { "maxDuration": 10 },
+    "api/auth/logout.ts": { "maxDuration": 10 },
+    "api/auth/me.ts": { "maxDuration": 10 },
+    "api/health.ts": { "maxDuration": 10 }
   },
   "rewrites": [
     { "source": "/((?!api(?:/|$)).*)", "destination": "/index.html" }
