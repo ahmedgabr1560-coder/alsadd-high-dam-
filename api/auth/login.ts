@@ -1,16 +1,16 @@
 async function loadUsers() {
-  const { list } = await import("@vercel/blob");
+  const { list, get } = await import("@vercel/blob");
   const result = await list({ prefix: "ofoq-auth/users.json" });
   const blob = result.blobs.find((item: any) => item.pathname === "ofoq-auth/users.json") ?? result.blobs[0];
   if (!blob) return [];
-  const response = await fetch(blob.url, { cache: "no-store" });
-  if (!response.ok) throw new Error(`Blob read failed: ${response.status}`);
-  const value = await response.json();
+  const stored = await get("ofoq-auth/users.json", { access: "private", useCache: false });
+  if (!stored) return [];
+  const value = await new Response(stored.stream).json();
   return Array.isArray(value) ? value : [];
 }
 async function saveUsers(users: any[]) {
   const { put } = await import("@vercel/blob");
-  await put("ofoq-auth/users.json", JSON.stringify(users), { access: "public", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json; charset=utf-8" });
+  await put("ofoq-auth/users.json", JSON.stringify(users), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json; charset=utf-8" });
 }
 
 export default async function handler(req: any, res: any) {
@@ -37,5 +37,5 @@ export default async function handler(req: any, res: any) {
     res.setHeader("Set-Cookie", `alsadd_session=${encodeURIComponent(`${encoded}.${signature}`)}; Max-Age=2592000; Path=/; HttpOnly; Secure; SameSite=None`);
     const { passwordHash: _passwordHash, ...safeUser } = updated;
     return reply(200, { ok: true, user: safeUser });
-  } catch (error) { console.error("[login]", error); return reply(500, { ok: false, error: "تعذر تسجيل الدخول الآن. تحقق من اتصال Vercel Blob.", details: error instanceof Error ? error.message : String(error) }); }
+  } catch (error) { console.error("[login]", error); return reply(500, { ok: false, error: "تعذر تسجيل الدخول الآن. تحقق من اتصال Vercel Blob." }); }
 }
