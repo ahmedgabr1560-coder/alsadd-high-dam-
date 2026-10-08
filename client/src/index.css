@@ -58,6 +58,8 @@ button { font: inherit; }
 .nav-cta { display: inline-flex; align-items: center; gap: 7px; color: var(--gold) !important; padding: 10px 14px; border: 1px solid rgba(216,170,97,.45); border-radius: 999px; }
 .music-btn { display: inline-grid; place-items: center; width: 38px; height: 38px; margin-right: auto; border: 1px solid rgba(216,170,97,.55); border-radius: 50%; color: var(--gold); background: rgba(216,170,97,.12); cursor: pointer; transition: transform .2s ease, background .2s ease; }
 .music-btn:hover { transform: scale(1.06); background: rgba(216,170,97,.22); }
+.global-music-btn { position: fixed; top: 16px; left: 18px; z-index: 60; display: inline-grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(216,170,97,.7); border-radius: 50%; color: var(--gold); background: rgba(8,28,42,.86); box-shadow: 0 8px 24px rgba(0,0,0,.22); cursor: pointer; transition: transform .2s ease, background .2s ease; }
+.global-music-btn:hover { transform: scale(1.07); background: rgba(216,170,97,.22); }
 .menu-btn { display: none; border: 0; background: transparent; color: white; padding: 8px; }
 
 .hero { min-height: 760px; display: flex; align-items: flex-end; position: relative; color: white; background: var(--ink-deep); }
@@ -286,6 +288,26 @@ button { font: inherit; }
 .profile-upload-box img { width: 31px; height: 31px; object-fit: cover; border-radius: 50%; }
 .profile-upload-box small { overflow: hidden; color: #68817d; font-size: .63rem; text-overflow: ellipsis; white-space: nowrap; }
 .articles-page { min-height: 100vh; padding: 34px clamp(18px, 5vw, 80px) 56px; background: #f5f8f7; color: var(--ink); }
+.ofoq-home { position: relative; overflow: hidden; background: var(--ink-deep); color: white; background-image: linear-gradient(115deg, rgba(8,28,42,.98), rgba(8,28,42,.84) 48%, rgba(8,28,42,.72)), url('/assets/aswan-dam.jpg'); background-position: center top; background-size: cover; background-attachment: fixed; }
+.ofoq-home::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 12%, rgba(24,182,164,.14), transparent 28%), radial-gradient(circle at 85% 38%, rgba(216,170,97,.13), transparent 26%); }
+.ofoq-home > * { position: relative; z-index: 1; }
+.ofoq-home .articles-back { color: rgba(255,255,255,.82); }
+.ofoq-home .articles-header h1 { color: white; }
+.ofoq-home .articles-header h1 em { color: var(--gold); }
+.ofoq-home .articles-header > p { color: rgba(255,255,255,.76); }
+.ofoq-home .section { background: rgba(8,28,42,.72); border-top: 1px solid rgba(255,255,255,.1); }
+.ofoq-home .intro-aside .display, .ofoq-home .section-heading h2 { color: white; }
+.ofoq-home .intro-aside p, .ofoq-home .intro-copy p, .ofoq-home .section-heading p { color: rgba(255,255,255,.7); }
+.ofoq-home .quote p { color: white; }
+.ofoq-home .articles-footer { color: rgba(255,255,255,.55); border-color: rgba(255,255,255,.15); }
+.ofoq-home-signature { display: flex; flex-direction: column; gap: 4px; width: fit-content; margin: 28px 0 25px; padding: 11px 17px 12px 23px; border-right: 2px solid var(--gold); background: linear-gradient(90deg, rgba(255,255,255,.02), rgba(255,255,255,.1)); }
+.ofoq-home-signature span { color: var(--gold); font-size: .68rem; letter-spacing: .1em; }
+.ofoq-home-signature strong { font-size: 1.05rem; font-weight: 600; }
+.ofoq-home-signature small { color: rgba(255,255,255,.72); font-size: .75rem; }
+.ofoq-home-verses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0 30px; }
+.ofoq-home-verses > div { padding: 13px 12px; border: 1px solid rgba(216,170,97,.32); border-radius: .85rem; background: rgba(8,28,42,.38); text-align: center; }
+.ofoq-home-verses p { margin: 0; color: rgba(255,255,255,.92); font-family: "Amiri", Georgia, serif; font-size: .95rem; line-height: 1.7; }
+.ofoq-home-verses small { display: block; margin-top: 5px; color: var(--gold); font-size: .65rem; }
 .articles-header, .articles-grid, .articles-footer { width: min(1180px, 100%); margin-inline: auto; }
 .articles-header { padding: 10px 0 55px; }
 .articles-back, .profile-back { display: inline-flex; align-items: center; gap: 7px; color: #178f85; font-size: .76rem; font-weight: 700; }
@@ -303,6 +325,18 @@ button { font: inherit; }
 .article-card a { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 21px; color: #178f85; font-size: .74rem; font-weight: 700; }
 .articles-footer { display: flex; align-items: center; gap: 8px; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(16,47,69,.1); color: #86959a; font-size: .72rem; }
 .article-detail-page { min-height: 100vh; padding: 34px clamp(18px, 5vw, 80px) 56px; background: #f5f8f7; color: var(--ink); }
+.article-detail-page { background: var(--ink-deep); color: white; background-image: linear-gradient(125deg, rgba(8,28,42,.97), rgba(8,28,42,.8)), url('/assets/aswan-dam.jpg'); background-position: center top; background-size: cover; background-attachment: fixed; }
+.article-detail-page .articles-back { color: rgba(255,255,255,.82); }
+.article-detail-page .article-detail-header h1 { color: white; }
+.article-detail-page .article-detail-header > p { color: rgba(255,255,255,.76); }
+.article-author { display: flex; flex-direction: column; gap: 4px; width: fit-content; margin: 28px 0 22px; padding: 11px 17px 12px 23px; border-right: 2px solid var(--gold); background: rgba(255,255,255,.08); }
+.article-author span { color: var(--gold); font-size: .68rem; }
+.article-author strong { font-size: 1rem; }
+.article-author small { color: rgba(255,255,255,.68); font-size: .72rem; }
+.article-verses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin: 12px 0 28px; }
+.article-verses > div { padding: 11px 9px; border: 1px solid rgba(216,170,97,.3); border-radius: .75rem; background: rgba(8,28,42,.36); text-align: center; }
+.article-verses p { margin: 0; color: rgba(255,255,255,.9); font-family: "Amiri", Georgia, serif; font-size: .84rem; line-height: 1.65; }
+.article-verses small { display: block; margin-top: 4px; color: var(--gold); font-size: .62rem; }
 .article-detail-header, .article-detail-content { width: min(820px, 100%); margin-inline: auto; }
 .article-detail-header { padding: 10px 0 42px; }
 .article-detail-header h1 { margin: 24px 0 16px; font-family: "Amiri", serif; font-size: clamp(2.8rem, 7vw, 5.8rem); line-height: 1.08; }
@@ -447,6 +481,7 @@ button { font: inherit; }
   .login-story-content { margin: 64px 0 30px; }
   .login-story h1 { font-size: clamp(3.2rem, 11vw, 5.4rem); }
   .articles-grid { grid-template-columns: 1fr 1fr; }
+  .ofoq-home-verses, .article-verses { grid-template-columns: 1fr 1fr; }
   .profile-grid { grid-template-columns: 1fr; }
 }
 
@@ -515,6 +550,7 @@ button { font: inherit; }
   .login-card { padding: 26px 21px; border-radius: 1.25rem; }
   .login-form-row, .articles-grid, .profile-details { grid-template-columns: 1fr; }
   .articles-page, .profile-page { padding-inline: 14px; }
+  .ofoq-home-verses, .article-verses { grid-template-columns: 1fr; }
   .articles-header h1 { font-size: clamp(2.9rem, 15vw, 4.6rem); }
   .articles-kicker, .profile-kicker { margin-top: 38px; }
   .profile-hero { align-items: flex-start; flex-wrap: wrap; padding: 24px 18px; }

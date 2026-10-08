@@ -1,16 +1,15 @@
-import { ArrowLeft, ArrowRight, BookOpen, Landmark, Sparkles, Volume2, VolumeX } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, ArrowRight, BookOpen, Landmark, Sparkles } from "lucide-react";
 import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 
 export default function Home() {
   const { isEnglish } = useLanguage();
-  const [musicOn, setMusicOn] = useState(false);
   const featured = articles.slice(0, 6);
   return <main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
-      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><div style={{ display: "flex", alignItems: "center", gap: 10 }}><button className="music-btn" type="button" onClick={() => setMusicOn(value => !value)} aria-label={musicOn ? "إيقاف أغنية تحيا مصر" : "تشغيل أغنية تحيا مصر"} title={musicOn ? "إيقاف أغنية تحيا مصر" : "تشغيل أغنية تحيا مصر"}>{musicOn ? <Volume2 size={18} /> : <VolumeX size={18} />}</button><LanguageToggle /></div></div>
-      {musicOn && <iframe className="music-frame" src="https://www.youtube.com/embed/KiqqxNh6-Jo?autoplay=1&loop=1&playlist=KiqqxNh6-Jo&controls=0&modestbranding=1&rel=0" title="أغنية تحيا مصر" allow="autoplay; encrypted-media" />}
+      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><LanguageToggle /></div>
+      <div className="ofoq-home-signature"><span>إعداد وتقديم</span><strong>أحمد حمدي عبد الونيس جبر</strong><small>رؤية تُقرأ، ومعرفة تُبنى، وأثرٌ يبقى.</small></div>
+      <div className="ofoq-home-verses" aria-label="آيات عن الماء والمعرفة"><div><p>﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾</p><small>سورة الأنبياء · ٣٠</small></div><div><p>﴿وَأَنزَلْنَا مِنَ السَّمَاءِ مَاءً طَهُورًا﴾</p><small>سورة الفرقان · ٤٨</small></div><div><p>﴿وَأَنزَلْنَا مِنَ السَّمَاءِ مَاءً بِقَدَرٍ﴾</p><small>سورة المؤمنون · ١٨</small></div><div><p>﴿وَاللَّهُ أَنزَلَ مِنَ السَّمَاءِ مَاءً فَأَحْيَا بِهِ الْأَرْضَ﴾</p><small>سورة النحل · ٦٥</small></div></div>
       <span className="articles-kicker"><Sparkles size={16} /> {isEnglish ? "A wider horizon for knowledge" : "رؤية أوسع · معرفة أعمق"}</span>
       <h1>{isEnglish ? <>Open a wider <em>horizon.</em><br />Read the world differently.</> : <>نفتح أفقًا <em>أوسع.</em><br />لنقرأ العالم بشكل مختلف.</>}</h1>
       <p>{isEnglish ? "OFOQ is a knowledge space for documented articles, stories and ideas. Each topic has its own complete page, giving you a clear path from context to meaning." : "أُفُق مساحة معرفية تجمع المقالات والقصص والأفكار الموثقة. لكل موضوع صفحته الكاملة، حتى تنتقل من السياق إلى المعنى في رحلة واضحة وهادئة."}</p>

@@ -12,6 +12,7 @@ import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
 import Profile from "./pages/Profile";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import GlobalMusicControl from "./components/GlobalMusicControl";
 
 function Router() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
         <LanguageProvider>
           <TooltipProvider>
             <Toaster />
+            <GlobalMusicControl />
             <Router />
           </TooltipProvider>
         </LanguageProvider>
