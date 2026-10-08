@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { index, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -22,7 +22,32 @@ export const users = mysqlTable("users", {
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
 });
 
+export const visitorEvents = mysqlTable(
+  "visitor_events",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    eventType: mysqlEnum("eventType", ["visit", "leave"]).notNull(),
+    occurredAt: timestamp("occurredAt").defaultNow().notNull(),
+    sessionId: varchar("sessionId", { length: 64 }).notNull(),
+    page: varchar("page", { length: 255 }).notNull().default("/"),
+    referrer: varchar("referrer", { length: 512 }),
+    language: varchar("language", { length: 64 }),
+    timezone: varchar("timezone", { length: 128 }),
+    screen: varchar("screen", { length: 32 }),
+    country: varchar("country", { length: 64 }),
+    region: varchar("region", { length: 128 }),
+    city: varchar("city", { length: 128 }),
+    browser: varchar("browser", { length: 64 }),
+    operatingSystem: varchar("operatingSystem", { length: 64 }),
+  },
+  table => ({
+    occurredAtIdx: index("visitor_events_occurred_at_idx").on(table.occurredAt),
+    eventTypeIdx: index("visitor_events_event_type_idx").on(table.eventType),
+    sessionIdx: index("visitor_events_session_idx").on(table.sessionId),
+  }),
+);
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
-
-// TODO: Add your tables here
+export type VisitorEvent = typeof visitorEvents.$inferSelect;
+export type InsertVisitorEvent = typeof visitorEvents.$inferInsert;

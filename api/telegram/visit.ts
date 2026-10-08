@@ -1,3 +1,5 @@
+import { insertVisitorEvent } from "../../server/db";
+
 type TelegramEvent = "visit" | "leave";
 
 type VisitPayload = {
@@ -39,6 +41,20 @@ function detectOperatingSystem(userAgent: string) {
   return "غير معروف";
 }
 
+function countryName(rawValue: string) {
+  const value = rawValue.trim();
+  if (!/^[a-z]{2}$/i.test(value)) return value;
+  try {
+    return new Intl.DisplayNames(["ar"], { type: "region" }).of(value.toUpperCase()) || value.toUpperCase();
+  } catch {
+    return value.toUpperCase();
+  }
+}
+
+function limit(value: string, length: number) {
+  return value.slice(0, length);
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     return res.status(405).json({ ok: false, error: "Method not allowed" });
@@ -46,31 +62,56 @@ export default async function handler(req: any, res: any) {
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) {
-    return res.status(503).json({ ok: false, error: "Telegram is not configured yet" });
-  }
-
   const body = (req.body || {}) as VisitPayload;
   const event: TelegramEvent = body.event === "leave" ? "leave" : "visit";
   const label = event === "visit" ? "🟢 زائر جديد دخل الموقع" : "⚪ زائر غادر الموقع تقريبًا";
   const now = new Intl.DateTimeFormat("ar-EG", { dateStyle: "medium", timeStyle: "medium", timeZone: "Africa/Cairo" }).format(new Date());
   const userAgent = String(header(req, "user-agent") || "");
-  // Vercel provides these anonymized geo headers; the raw IP is intentionally not collected or sent.
-  const country = String(header(req, "x-vercel-ip-country") || "غير معروف");
+  // Vercel provides anonymized geo headers; the raw IP is intentionally not collected or sent.
+  const country = countryName(String(header(req, "x-vercel-ip-country") || "غير معروف"));
   const region = String(header(req, "x-vercel-ip-country-region") || "");
   const city = String(header(req, "x-vercel-ip-city") || "");
   const location = [city, region, country].filter(Boolean).join("، ") || "غير معروف";
+  const browser = detectBrowser(userAgent);
+  const operatingSystem = detectOperatingSystem(userAgent);
+  const sessionId = limit(String(body.sessionId || "غير معروف"), 64);
+  const page = limit(String(body.page || "/"), 255);
+
+  try {
+    await insertVisitorEvent({
+      eventType: event,
+      sessionId,
+      page,
+      referrer: body.referrer ? limit(String(body.referrer), 512) : null,
+      language: body.language ? limit(String(body.language), 64) : null,
+      timezone: body.timezone ? limit(String(body.timezone), 128) : null,
+      screen: body.screen ? limit(String(body.screen), 32) : null,
+      country: limit(country, 64),
+      region: region ? limit(region, 128) : null,
+      city: city ? limit(city, 128) : null,
+      browser,
+      operatingSystem,
+    });
+  } catch (error) {
+    // Analytics persistence should not prevent the visitor notification from being attempted.
+    console.error("[Visitor analytics] Failed to save event", error);
+  }
+
+  if (!token || !chatId) {
+    return res.status(200).json({ ok: true, stored: true, telegram: false });
+  }
+
   const lines = [
     `<b>${label}</b>`,
     `الوقت: ${escapeHtml(now)}`,
     `الموقع التقريبي: ${escapeHtml(location)}`,
-    `المتصفح: ${escapeHtml(detectBrowser(userAgent))}`,
-    `النظام: ${escapeHtml(detectOperatingSystem(userAgent))}`,
+    `المتصفح: ${escapeHtml(browser)}`,
+    `النظام: ${escapeHtml(operatingSystem)}`,
     `اللغة: ${escapeHtml(String(body.language || "غير معروف"))}`,
     `المنطقة الزمنية: ${escapeHtml(String(body.timezone || "غير معروف"))}`,
     `الشاشة: ${escapeHtml(String(body.screen || "غير معروف"))}`,
-    `الصفحة: ${escapeHtml(String(body.page || "/"))}`,
-    `الجلسة: <code>${escapeHtml(String(body.sessionId || "غير معروف").slice(0, 32))}</code>`,
+    `الصفحة: ${escapeHtml(page)}`,
+    `الجلسة: <code>${escapeHtml(sessionId.slice(0, 32))}</code>`,
   ];
 
   try {

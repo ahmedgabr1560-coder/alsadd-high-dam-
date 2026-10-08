@@ -7,6 +7,7 @@ import {
   Droplets,
   Factory,
   Landmark,
+  LogIn,
   Menu,
   Mountain,
   Shield,
@@ -114,6 +115,7 @@ export default function Home() {
             <a href="#heritage" onClick={() => setMenuOpen(false)}>الذاكرة</a>
             <a href="#videos" onClick={() => setMenuOpen(false)}>فيديوهات</a>
             <a href="#future" onClick={() => setMenuOpen(false)}>2030</a>
+            <a className="nav-login" href="/login" onClick={() => setMenuOpen(false)}><LogIn size={14} /> دخول الزائر</a>
             <a className="nav-cta" href="#sources" onClick={() => setMenuOpen(false)}>المراجع <ArrowLeft size={15} /></a>
           </nav>
           <button className="music-btn" type="button" onClick={toggleMusic} aria-label={musicOn ? "إيقاف الموسيقى الوطنية" : "تشغيل الموسيقى الوطنية"} title={musicOn ? "إيقاف الموسيقى الوطنية" : "تشغيل الموسيقى الوطنية"}>
