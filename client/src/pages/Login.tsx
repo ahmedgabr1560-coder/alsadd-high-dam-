@@ -72,7 +72,7 @@ export default function Login({ initialMode = "login" }: any) {
       <div className="login-shell">
         <section className="login-story">
           <a href="/" className="login-brand" aria-label="العودة إلى الموقع"><span className="brand-mark"><span /></span><span><strong>أُفُق | OFOQ</strong><small>نفتح أفقًا أوسع للمعرفة، ونحوّل الرؤية إلى أثر.</small></span></a>
-          <div className="login-story-content"><span className="login-eyebrow"><Waves size={16} /> بوابة أُفُق المعرفية</span><h1>افتح أفقك،<br /><em>وابدأ رحلة المعرفة.</em></h1><p>أنشئ حسابك بالبريد الإلكتروني، وأضف صورتك وتاريخ ميلادك لتبدأ رحلة خاصة داخل أُفُق، حيث نقرأ السد العالي برؤية أوسع.</p><div className="login-fact"><span><Landmark size={17} /></span><div><strong>بياناتك للموقع فقط</strong><small>لا نعتمد على حساب Manus ولا نطلب كلمة مرور من أي جهة أخرى.</small></div></div></div>
+          <div className="login-story-content"><span className="login-eyebrow"><Waves size={16} /> بوابة أُفُق المعرفية</span><h1>افتح أفقك،<br /><em>وابدأ رحلة المعرفة.</em></h1><p>أنشئ حسابك بالبريد الإلكتروني، وأضف صورتك وتاريخ ميلادك لتبدأ رحلة خاصة داخل أُفُق، حيث نقرأ التاريخ برؤية أوسع.</p><div className="login-fact"><span><Landmark size={17} /></span><div><strong>بياناتك للموقع فقط</strong><small>لا نعتمد على حساب Manus ولا نطلب كلمة مرور من أي جهة أخرى.</small></div></div></div>
           <div className="login-story-foot"><span>© أُفُق | OFOQ | أحمد حمدي</span><span>جلسات آمنة ومشفّرة</span></div>
         </section>
 
