@@ -1,16 +1,26 @@
-import { authenticateLocalRequest } from "../../server/_core/localAuth";
+import { loadUsers } from "../../server/_core/blobAuthStore";
 
 export default async function handler(req: any, res: any) {
+  const reply = (body: unknown) => { res.statusCode = 200; res.setHeader("Content-Type", "application/json; charset=utf-8"); res.end(JSON.stringify(body)); };
   try {
-    const user = await authenticateLocalRequest(req);
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    if (!user) return res.end(JSON.stringify({ user: null }));
+    const crypto = await import("node:crypto");
+    const raw = String(req.headers?.cookie || "").split(";").map((item: string) => item.trim()).find((item: string) => item.startsWith("alsadd_session="))?.slice("alsadd_session=".length);
+    if (!raw) return reply({ user: null });
+    const token = decodeURIComponent(raw);
+    const dot = token.lastIndexOf(".");
+    if (dot < 1) return reply({ user: null });
+    const encoded = token.slice(0, dot);
+    const signature = token.slice(dot + 1);
+    const expected = crypto.createHmac("sha256", process.env.AUTH_SECRET || "alsadd-local-auth-development-only").update(encoded).digest("base64url");
+    if (signature.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) return reply({ user: null });
+    const session = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
+    if (!session.userId || Number(session.exp) < Date.now()) return reply({ user: null });
+    const user = (await loadUsers()).find(item => item.id === Number(session.userId));
+    if (!user) return reply({ user: null });
     const { passwordHash: _passwordHash, ...safeUser } = user;
-    return res.end(JSON.stringify({ user: safeUser }));
-  } catch {
-    res.statusCode = 500;
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    return res.end(JSON.stringify({ user: null, error: "تعذر التحقق من الجلسة مؤقتًا." }));
+    return reply({ user: safeUser });
+  } catch (error) {
+    console.error("[session]", error);
+    return reply({ user: null });
   }
 }
