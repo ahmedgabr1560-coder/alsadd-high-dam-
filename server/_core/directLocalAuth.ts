@@ -1,8 +1,21 @@
-import { randomBytes } from "node:crypto";
+import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
-import { createLocalUser, getUserByEmail, getUserById, upsertUser } from "../db";
 import { ENV } from "./env";
-import { createSession, hashPassword, verifyPassword, LOCAL_COOKIE_NAME } from "./localAuth";
+
+const LOCAL_COOKIE_NAME = "alsadd_session";
+const secret = () => process.env.AUTH_SECRET || "alsadd-local-auth-development-only";
+function hashPassword(password: string, salt = randomBytes(16).toString("hex")) { return `${salt}:${scryptSync(password, salt, 64).toString("hex")}`; }
+function verifyPassword(password: string, stored: string) {
+  const [salt, expectedHex] = stored.split(":");
+  if (!salt || !expectedHex) return false;
+  const actual = scryptSync(password, salt, 64);
+  const expected = Buffer.from(expectedHex, "hex");
+  return expected.length === actual.length && timingSafeEqual(actual, expected);
+}
+function createSession(userId: number) {
+  const encoded = encodeURIComponent(JSON.stringify({ userId, exp: Date.now() + 1000 * 60 * 60 * 24 * 30 }));
+  return `${encoded}.${createHmac("sha256", secret()).update(encoded).digest("base64url")}`;
+}
 
 const emailSchema = z.string().trim().email().max(320);
 const passwordSchema = z.string().min(8).max(128);
@@ -38,6 +51,7 @@ export async function registerHandler(req: any, res: any) {
 
   const email = parsed.data.email.toLowerCase();
   try {
+    const { createLocalUser, getUserByEmail } = await import("../db");
     if (await getUserByEmail(email)) return json(res, 409, { ok: false, error: "هذا البريد مسجل بالفعل. استخدم تسجيل الدخول." });
     const user = await createLocalUser({
       openId: `local_${randomBytes(16).toString("hex")}`,
@@ -63,6 +77,7 @@ export async function loginHandler(req: any, res: any) {
   const parsed = z.object({ email: emailSchema, password: passwordSchema }).safeParse(req.body ?? {});
   if (!parsed.success) return json(res, 400, { ok: false, error: "أدخل بريدًا إلكترونيًا وكلمة مرور صحيحة." });
   try {
+    const { getUserByEmail, getUserById, upsertUser } = await import("../db");
     const user = await getUserByEmail(parsed.data.email.toLowerCase());
     if (!user?.passwordHash || !verifyPassword(parsed.data.password, user.passwordHash)) return json(res, 401, { ok: false, error: "البريد الإلكتروني أو كلمة المرور غير صحيحة." });
     await upsertUser({ openId: user.openId, lastSignedIn: new Date(), role: ENV.adminEmail && user.email === ENV.adminEmail.toLowerCase() ? "admin" : undefined });
