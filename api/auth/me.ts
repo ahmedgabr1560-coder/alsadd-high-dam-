@@ -1,5 +1,13 @@
-import { loadUsers } from "../../server/_core/blobAuthStore";
-
+async function loadUsers() {
+  const { list } = await import("@vercel/blob");
+  const result = await list({ prefix: "ofoq-auth/users.json" });
+  const blob = result.blobs.find((item: any) => item.pathname === "ofoq-auth/users.json") ?? result.blobs[0];
+  if (!blob) return [];
+  const response = await fetch(blob.url, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Blob read failed: ${response.status}`);
+  const value = await response.json();
+  return Array.isArray(value) ? value : [];
+}
 export default async function handler(req: any, res: any) {
   const reply = (body: unknown) => { res.statusCode = 200; res.setHeader("Content-Type", "application/json; charset=utf-8"); res.end(JSON.stringify(body)); };
   try {
