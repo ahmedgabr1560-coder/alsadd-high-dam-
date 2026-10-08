@@ -37,5 +37,5 @@ export default async function handler(req: any, res: any) {
     res.setHeader("Set-Cookie", `alsadd_session=${encodeURIComponent(`${encoded}.${signature}`)}; Max-Age=2592000; Path=/; HttpOnly; Secure; SameSite=None`);
     const { passwordHash: _passwordHash, ...safeUser } = user;
     return reply(201, { ok: true, user: safeUser });
-  } catch (error) { console.error("[register]", error); return reply(500, { ok: false, error: "تعذر إنشاء الحساب الآن. تحقق من اتصال Vercel Blob." }); }
+  } catch (error) { console.error("[register]", error); return reply(500, { ok: false, error: "تعذر إنشاء الحساب الآن. تحقق من اتصال Vercel Blob.", details: error instanceof Error ? error.message : String(error) }); }
 }

@@ -37,5 +37,5 @@ export default async function handler(req: any, res: any) {
     res.setHeader("Set-Cookie", `alsadd_session=${encodeURIComponent(`${encoded}.${signature}`)}; Max-Age=2592000; Path=/; HttpOnly; Secure; SameSite=None`);
     const { passwordHash: _passwordHash, ...safeUser } = updated;
     return reply(200, { ok: true, user: safeUser });
-  } catch (error) { console.error("[login]", error); return reply(500, { ok: false, error: "تعذر تسجيل الدخول الآن. تحقق من اتصال Vercel Blob." }); }
+  } catch (error) { console.error("[login]", error); return reply(500, { ok: false, error: "تعذر تسجيل الدخول الآن. تحقق من اتصال Vercel Blob.", details: error instanceof Error ? error.message : String(error) }); }
 }
