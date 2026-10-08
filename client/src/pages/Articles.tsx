@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, BookOpen, Landmark } from "lucide-react";
 import { articles } from "@/data/articles";
 import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
+import ProfileAvatar from "@/components/ProfileAvatar";
 
 const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine-history-1948"];
 
@@ -10,7 +11,7 @@ export default function Articles() {
   const researchArticles = articles.filter(article => independentResearchSlugs.includes(article.slug));
   return <main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
-      <div className="articles-toolbar"><a href="/" className="articles-back"><ArrowRight size={16} /> {text.back}</a><LanguageToggle /></div>
+      <div className="articles-toolbar"><a href="/" className="articles-back"><ArrowRight size={16} /> {text.back}</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div>
       <span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? "Independent research" : "أبحاث مستقلة"} · {researchArticles.length} {isEnglish ? "researches" : "أبحاث"}</span>
       <h1>{isEnglish ? <>Three subjects,<br /><em>three complete pages.</em></> : <>كل بحث في صفحة،<br /><em>وكل موضوع له مساره.</em></>}</h1>
       <p>{isEnglish ? "Independent long-form research on the October War, World War II and Palestine. Each OFOQ subject has its own dedicated page." : "أبحاث مستقلة كاملة عن حرب أكتوبر والحرب العالمية الثانية وفلسطين. لكل بحث من أبحاث أُفُق صفحته الخاصة المنفصلة."}</p>

@@ -1,6 +1,7 @@
 import { ArrowRight, BookOpen, Landmark } from "lucide-react";
 import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
+import ProfileAvatar from "@/components/ProfileAvatar";
 
 const highDamSlugs = ["water-security", "engineering", "hydropower", "abu-simbel", "critical-infrastructure", "lake-nasser", "1956", "future-2030"];
 
@@ -9,7 +10,7 @@ export default function HighDamArticles() {
   const highDamArticles = articles.filter(article => highDamSlugs.includes(article.slug));
   return <main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
-      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> {isEnglish ? "Back to OFOQ" : "العودة إلى أُفُق"}</a><LanguageToggle /></div>
+      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> {isEnglish ? "Back to OFOQ" : "العودة إلى أُفُق"}</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div>
       <span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? `High Dam · ${highDamArticles.length} researches` : `السد العالي · ${highDamArticles.length} أبحاث`}</span>
       <h1>{isEnglish ? <>One project,<br /><em>many stories.</em></> : <>السد العالي،<br /><em>حكايات متعددة.</em></>}</h1>
       <p>{isEnglish ? "A dedicated collection on water, engineering, energy, heritage, politics and the future of the High Dam." : "مجموعة مستقلة عن المياه والهندسة والطاقة والتراث والسياسة ومستقبل السد العالي، وكل موضوع في صفحة كاملة."}</p>

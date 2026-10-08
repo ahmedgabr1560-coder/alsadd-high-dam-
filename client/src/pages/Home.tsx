@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, BookOpen, Landmark, Sparkles } from "lucide-react";
 import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
+import ProfileAvatar from "@/components/ProfileAvatar";
 
 const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine-history-1948"];
 
@@ -9,7 +10,7 @@ export default function Home() {
   const independentResearch = articles.filter(article => independentResearchSlugs.includes(article.slug));
   return <main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
-      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><LanguageToggle /></div>
+      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div>
       <div className="ofoq-home-signature"><span>إعداد وتقديم</span><strong>أحمد حمدي عبد الونيس جبر</strong><small>رؤية تُقرأ، ومعرفة تُبنى، وأثرٌ يبقى.</small></div>
       <div className="ofoq-home-verses" aria-label="آيات عن القراءة والكتابة والعلم"><div><p>﴿اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ﴾</p><small>سورة العلق · ١</small></div><div><p>﴿الَّذِي عَلَّمَ بِالْقَلَمِ﴾</p><small>سورة العلق · ٤</small></div><div><p>﴿وَقُلْ رَبِّ زِدْنِي عِلْمًا﴾</p><small>سورة طه · ١١٤</small></div><div><p>﴿ن وَالْقَلَمِ وَمَا يَسْطُرُونَ﴾</p><small>سورة القلم · ١</small></div></div>
       <span className="articles-kicker"><Sparkles size={16} /> {isEnglish ? "A wider horizon for knowledge" : "رؤية أوسع · معرفة أعمق"}</span>
@@ -27,7 +28,7 @@ export default function Home() {
 
     <section className="section" id="topics">
       <div className="container"><div className="section-heading"><div><span className="eyebrow"><BookOpen size={15} /> أبواب أُفُق</span><h2 className="display">اختر موضوعًا، وافتح صفحته.</h2></div><p>لا نعرض المقال كاملًا هنا؛ كل موضوع له أيقونة ورابط يقودان إلى صفحة مستقلة مخصصة له.</p></div>
-        <div className="topic-links-special"><a className="topic-link-card topic-link-featured" href="/high-dam/articles"><span className="topic-link-icon"><Landmark size={25} /></span><span><strong>أبحاث أُفُق</strong><small>٨ أبحاث تحت مسمى واحد · {isEnglish ? "one dedicated collection" : "رابط واحد للمجموعة"}</small></span><ArrowLeft size={17} /></a></div>
+        <div className="topic-links-special"><a className="topic-link-card topic-link-featured" href="/high-dam/articles"><span className="topic-link-icon"><Landmark size={25} /></span><span><strong>السد العالي</strong><small>٨ أبحاث تحت مسمى واحد · {isEnglish ? "one dedicated collection" : "رابط واحد للمجموعة"}</small></span><ArrowLeft size={17} /></a></div>
         <div className="topic-links">{independentResearch.map(article => { const Icon = article.icon; const title = isEnglish ? (article.titleEn || article.title) : article.title; return <a className="topic-link-card" href={`/articles/${article.slug}`} key={article.slug}><span className="topic-link-icon"><Icon size={25} /></span><span><strong>{title}</strong><small>{isEnglish ? (article.tagEn || article.tag) : article.tag} · صفحة مستقلة</small></span><ArrowLeft size={17} /></a>; })}</div>
       </div>
     </section>

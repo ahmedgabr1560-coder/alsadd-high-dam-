@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
+import ProfileAvatar from "@/components/ProfileAvatar";
 import { articles } from "@/data/articles";
 
 const timeline = [
@@ -89,7 +90,8 @@ export default function Home() {
           <a className="brand" href="#top" aria-label="العودة إلى بداية الموقع" onClick={() => setMenuOpen(false)}>
             <span className="brand-mark"><span /></span>
             <span className="brand-copy"><strong>أُفُق | OFOQ</strong><small>{isEnglish ? "We open wider horizons for knowledge and turn vision into impact." : "نفتح أفقًا أوسع للمعرفة، ونحوّل الرؤية إلى أثر."}</small></span>
-          </a>
+            </a>
+          <ProfileAvatar />
           <nav className={`nav-links ${menuOpen ? "open" : ""}`} aria-label="التنقل الرئيسي">
             <a href="#story" onClick={() => setMenuOpen(false)}>الحكاية</a>
             <a href="#engineering" onClick={() => setMenuOpen(false)}>الهندسة</a>

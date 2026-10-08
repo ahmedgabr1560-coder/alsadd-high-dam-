@@ -60,6 +60,11 @@ button { font: inherit; }
 .music-btn:hover { transform: scale(1.06); background: rgba(216,170,97,.22); }
 .global-music-btn { position: fixed; top: 16px; left: 18px; z-index: 60; display: inline-grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(216,170,97,.7); border-radius: 50%; color: var(--gold); background: rgba(8,28,42,.86); box-shadow: 0 8px 24px rgba(0,0,0,.22); cursor: pointer; transition: transform .2s ease, background .2s ease; }
 .global-music-btn:hover { transform: scale(1.07); background: rgba(216,170,97,.22); }
+.articles-toolbar-actions { display: inline-flex; align-items: center; gap: 10px; }
+.profile-avatar-link { display: inline-grid; place-items: center; width: 39px; height: 39px; overflow: hidden; border: 1px solid rgba(216,170,97,.72); border-radius: 50%; color: var(--gold); background: rgba(8,28,42,.8); transition: transform .2s ease, border-color .2s ease; }
+.profile-avatar-link:hover { transform: scale(1.08); border-color: white; }
+.profile-avatar-link img { width: 100%; height: 100%; object-fit: cover; }
+.site-header .profile-avatar-link { flex: 0 0 auto; margin-inline: 10px; }
 .menu-btn { display: none; border: 0; background: transparent; color: white; padding: 8px; }
 
 .hero { min-height: 760px; display: flex; align-items: flex-end; position: relative; color: white; background: var(--ink-deep); }
@@ -402,7 +407,7 @@ button { font: inherit; }
 .login-orbit-two { right: -125px; top: -180px; width: 410px; height: 410px; border-color: rgba(216,170,97,.13); }
 .site-auth-loading { display: flex; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: var(--ink-deep); color: rgba(255,255,255,.68); font-size: .82rem; }
 .site-auth-loading .login-loader { margin: 0; }
-.music-frame { position: fixed; z-index: -1; width: 1px; height: 1px; border: 0; opacity: 0; pointer-events: none; }
+.music-frame { position: fixed; z-index: 59; right: 14px; bottom: 14px; width: 1px; height: 1px; border: 0; opacity: .01; pointer-events: none; }
 
 .dashboard-page { min-height: calc(100vh - 2rem); padding: 28px clamp(16px, 3vw, 42px) 48px; background: #f4f7f6; color: var(--ink); }
 .dashboard-header { display: flex; align-items: end; justify-content: space-between; gap: 24px; max-width: 1480px; margin: 0 auto 24px; }
