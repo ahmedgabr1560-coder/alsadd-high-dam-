@@ -18,6 +18,7 @@ import {
   VolumeX,
   X,
 } from "lucide-react";
+import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 
 const timeline = [
   { year: "1902", title: "خزان أسوان القديم", text: "بدأت أولى الخطوات العملية لتنظيم مياه النيل بإنشاء خزان أسوان بين عامي 1899 و1902، ثم تعليته في 1912 و1933. ظلت سعته محدودة أمام سنوات الفيضان والشح.", note: "الجذور الأولى لفكرة التخزين" },
@@ -59,6 +60,7 @@ function scrollToId(id: string) {
 
 export default function Home() {
   const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
+  const { isEnglish } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
   const [activeTimeline, setActiveTimeline] = useState(2);
@@ -93,12 +95,12 @@ export default function Home() {
   };
 
   return (
-    <div className="site-shell" dir="rtl">
+    <div className="site-shell" dir={isEnglish ? "ltr" : "rtl"}>
       <header className="site-header">
         <div className="container nav-inner">
           <a className="brand" href="#top" aria-label="العودة إلى بداية الموقع" onClick={() => setMenuOpen(false)}>
             <span className="brand-mark"><span /></span>
-            <span className="brand-copy"><strong>السد العالي</strong><small>قصة وطن وماء</small></span>
+            <span className="brand-copy"><strong>نبراس — Nibras</strong><small>{isEnglish ? "Knowledge that lights the way" : "معرفة تُضيء الطريق"}</small></span>
           </a>
           <nav className={`nav-links ${menuOpen ? "open" : ""}`} aria-label="التنقل الرئيسي">
             <a href="#story" onClick={() => setMenuOpen(false)}>الحكاية</a>
@@ -112,6 +114,7 @@ export default function Home() {
             <a className="nav-login" href="/login" onClick={() => setMenuOpen(false)}><LogIn size={14} /> دخول الزائر</a>
             <a className="nav-cta" href="#sources" onClick={() => setMenuOpen(false)}>المراجع <ArrowLeft size={15} /></a>
           </nav>
+          <LanguageToggle className="header-language-toggle" />
           <button className="music-btn" type="button" onClick={toggleMusic} aria-label={musicOn ? "إيقاف أغنية تحيا مصر" : "تشغيل أغنية تحيا مصر"} title={musicOn ? "إيقاف أغنية تحيا مصر" : "تشغيل أغنية تحيا مصر"}>
             {musicOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>

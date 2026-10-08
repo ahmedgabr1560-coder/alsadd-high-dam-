@@ -2,12 +2,23 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { ArrowRight, BookOpen, Landmark } from "lucide-react";
 import { useRoute } from "wouter";
 import { getArticle } from "@/data/articles";
+import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
 
 export default function ArticleDetail() {
   const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
   const [, params] = useRoute("/articles/:slug");
+  const { isEnglish } = useLanguage();
+  const text = isEnglish ? languageText.en : languageText.ar;
   const article = params?.slug ? getArticle(params.slug) : undefined;
-  if (loading || !user) return <div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ فتح المقال...</p></div>;
-  if (!article) return <main className="articles-page" dir="rtl"><a className="articles-back" href="/articles"><ArrowRight size={16} /> العودة إلى المكتبة</a><h1>المقال غير موجود</h1></main>;
-  return <main className="article-detail-page" dir="rtl"><header className="article-detail-header"><a className="articles-back" href="/articles"><ArrowRight size={16} /> العودة إلى مكتبة المقالات</a><span className="articles-kicker"><BookOpen size={16} /> {article.tag}</span><h1>{article.title}</h1><p>{article.lead}</p></header><article className="article-detail-content">{article.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</article><footer className="articles-footer"><Landmark size={18} /> السد العالي — معرفة تُبنى من الماء والذاكرة.</footer></main>;
+  if (loading || !user) return <div className="site-auth-loading" dir={isEnglish ? "ltr" : "rtl"}><span className="login-loader" /><p>{isEnglish ? "Opening the article..." : "جارٍ فتح المقال..."}</p></div>;
+  if (!article) return <main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to library" : "العودة إلى المكتبة"}</a><h1>{isEnglish ? "Article not found" : "المقال غير موجود"}</h1></main>;
+  const title = isEnglish ? (article.titleEn || article.title) : article.title;
+  const lead = isEnglish ? (article.leadEn || article.lead) : article.lead;
+  const body = isEnglish ? (article.bodyEn || article.body) : article.body;
+  return <main className="article-detail-page" dir={isEnglish ? "ltr" : "rtl"}>
+    <header className="article-detail-header"><div className="articles-toolbar"><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to library" : "العودة إلى مكتبة المقالات"}</a><LanguageToggle /></div><span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? (article.tagEn || article.tag) : article.tag}</span><h1>{title}</h1><p>{lead}</p></header>
+    {article.image && <figure className="article-detail-figure"><img src={article.image} alt={article.imageAlt || title} /><figcaption>{article.imageAlt}{article.sourceName ? ` · ${text.source}: ${article.sourceName}` : ""}</figcaption></figure>}
+    <article className="article-detail-content">{body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}{article.sourceUrl && <p className="article-source"><strong>{text.source}:</strong> <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.sourceName || article.sourceUrl}</a></p>}</article>
+    <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "Nibras — knowledge built from memory and evidence." : "نبراس — معرفة تُبنى من الماء والذاكرة."}</footer>
+  </main>;
 }
