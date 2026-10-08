@@ -25,12 +25,12 @@ function sign(value: string) {
   return createHmac("sha256", secret()).update(value).digest("base64url");
 }
 
-function hashPassword(password: string, salt = randomBytes(16).toString("hex")) {
+export function hashPassword(password: string, salt = randomBytes(16).toString("hex")) {
   const hash = scryptSync(password, salt, 64).toString("hex");
   return `${salt}:${hash}`;
 }
 
-function verifyPassword(password: string, stored: string) {
+export function verifyPassword(password: string, stored: string) {
   const [salt, expectedHex] = stored.split(":");
   if (!salt || !expectedHex) return false;
   const actual = scryptSync(password, salt, 64);
@@ -38,7 +38,7 @@ function verifyPassword(password: string, stored: string) {
   return expected.length === actual.length && timingSafeEqual(actual, expected);
 }
 
-function createSession(userId: number) {
+export function createSession(userId: number) {
   const payload = JSON.stringify({ userId, exp: Date.now() + SESSION_TTL_MS });
   const encoded = encode(payload);
   return `${encoded}.${sign(encoded)}`;

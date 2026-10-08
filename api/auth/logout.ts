@@ -1,3 +1,3 @@
-import authApp from "../../server/_core/vercelAuthApp";
+import { logoutHandler } from "../../server/_core/directLocalAuth";
 
-export default authApp;
+export default logoutHandler;
