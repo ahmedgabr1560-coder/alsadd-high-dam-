@@ -10,6 +10,7 @@ import HighDam from "./pages/HighDam";
 import Login, { Register } from "./pages/Login";
 import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
+import HighDamArticles from "./pages/HighDamArticles";
 import Profile from "./pages/Profile";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import GlobalMusicControl from "./components/GlobalMusicControl";
@@ -19,6 +20,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/high-dam" component={HighDam} />
+      <Route path="/high-dam/articles" component={HighDamArticles} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/dashboard" component={Dashboard} />

@@ -30,7 +30,7 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="section" id="high-dam-preview"><div className="container intro-grid"><div className="intro-aside"><span className="eyebrow">المشروع الرئيسي</span><h2 className="display">السد العالي في صفحة مستقلة.</h2></div><div className="intro-copy"><p>للسد العالي مساحة كاملة داخل أُفُق: من الفكرة والهندسة إلى الماء والذاكرة وأسئلة المستقبل.</p><a className="text-link" href="/high-dam">افتح صفحة السد العالي <ArrowLeft size={16} /></a></div></div></section>
+    <section className="section" id="high-dam-preview"><div className="container intro-grid"><div className="intro-aside"><span className="eyebrow">المشروع الرئيسي</span><h2 className="display">السد العالي في صفحة مستقلة.</h2></div><div className="intro-copy"><p>للسد العالي مساحة كاملة داخل أُفُق: من الفكرة والهندسة إلى الماء والذاكرة وأسئلة المستقبل.</p><p><a className="text-link" href="/high-dam">افتح صفحة السد العالي <ArrowLeft size={16} /></a></p><a className="text-link" href="/high-dam/articles">مكتبة مقالات السد العالي <ArrowLeft size={16} /></a></div></div></section>
     <footer className="articles-footer"><Landmark size={18} /> أُفُق — نقرأ الذاكرة لنرى المستقبل بوضوح.</footer>
   </main>;
 }
