@@ -1,6 +1,4 @@
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
-import { z } from "zod";
-import { ENV } from "./env";
 
 const LOCAL_COOKIE_NAME = "alsadd_session";
 const secret = () => process.env.AUTH_SECRET || "alsadd-local-auth-development-only";
@@ -17,10 +15,9 @@ function createSession(userId: number) {
   return `${encoded}.${createHmac("sha256", secret()).update(encoded).digest("base64url")}`;
 }
 
-const emailSchema = z.string().trim().email().max(320);
-const passwordSchema = z.string().min(8).max(128);
-const nameSchema = z.string().trim().min(2).max(120);
-const birthDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+function text(value: unknown) { return typeof value === "string" ? value.trim() : ""; }
+function validEmail(value: string) { return value.length <= 320 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); }
+function validPassword(value: string) { return value.length >= 8 && value.length <= 128; }
 
 function publicUser(user: any) {
   if (!user) return null;
@@ -40,29 +37,28 @@ function json(res: any, status: number, payload: unknown) {
 }
 
 export async function registerHandler(req: any, res: any) {
-  const parsed = z.object({
-    name: nameSchema,
-    email: emailSchema,
-    password: passwordSchema,
-    birthDate: birthDateSchema,
-    profileImage: z.string().min(1).max(200_000),
-  }).safeParse(req.body ?? {});
-  if (!parsed.success) return json(res, 400, { ok: false, error: "تحقق من الاسم والبريد وكلمة المرور وتاريخ الميلاد وصورة الملف الشخصي." });
-
-  const email = parsed.data.email.toLowerCase();
+  const body = req.body ?? {};
+  const name = text(body.name);
+  const email = text(body.email).toLowerCase();
+  const password = typeof body.password === "string" ? body.password : "";
+  const birthDate = text(body.birthDate);
+  const profileImage = typeof body.profileImage === "string" ? body.profileImage : "";
+  if (name.length < 2 || name.length > 120 || !validEmail(email) || !validPassword(password) || !/^\d{4}-\d{2}-\d{2}$/.test(birthDate) || profileImage.length < 1 || profileImage.length > 200_000) {
+    return json(res, 400, { ok: false, error: "تحقق من الاسم والبريد وكلمة المرور وتاريخ الميلاد وصورة الملف الشخصي." });
+  }
   try {
     const { createLocalUser, getUserByEmail } = await import("../db");
     if (await getUserByEmail(email)) return json(res, 409, { ok: false, error: "هذا البريد مسجل بالفعل. استخدم تسجيل الدخول." });
     const user = await createLocalUser({
       openId: `local_${randomBytes(16).toString("hex")}`,
-      name: parsed.data.name,
+      name,
       email,
-      passwordHash: hashPassword(parsed.data.password),
-      profileImage: parsed.data.profileImage,
-      birthDate: parsed.data.birthDate,
+      passwordHash: hashPassword(password),
+      profileImage,
+      birthDate,
       loginMethod: "email",
       lastSignedIn: new Date(),
-      role: ENV.adminEmail && email === ENV.adminEmail.toLowerCase() ? "admin" : "user",
+      role: process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : "user",
     });
     if (!user) return json(res, 500, { ok: false, error: "تعذر إنشاء الحساب." });
     setSession(res, user.id);
@@ -74,13 +70,14 @@ export async function registerHandler(req: any, res: any) {
 }
 
 export async function loginHandler(req: any, res: any) {
-  const parsed = z.object({ email: emailSchema, password: passwordSchema }).safeParse(req.body ?? {});
-  if (!parsed.success) return json(res, 400, { ok: false, error: "أدخل بريدًا إلكترونيًا وكلمة مرور صحيحة." });
+  const email = text(req.body?.email).toLowerCase();
+  const password = typeof req.body?.password === "string" ? req.body.password : "";
+  if (!validEmail(email) || !validPassword(password)) return json(res, 400, { ok: false, error: "أدخل بريدًا إلكترونيًا وكلمة مرور صحيحة." });
   try {
     const { getUserByEmail, getUserById, upsertUser } = await import("../db");
-    const user = await getUserByEmail(parsed.data.email.toLowerCase());
-    if (!user?.passwordHash || !verifyPassword(parsed.data.password, user.passwordHash)) return json(res, 401, { ok: false, error: "البريد الإلكتروني أو كلمة المرور غير صحيحة." });
-    await upsertUser({ openId: user.openId, lastSignedIn: new Date(), role: ENV.adminEmail && user.email === ENV.adminEmail.toLowerCase() ? "admin" : undefined });
+    const user = await getUserByEmail(email);
+    if (!user?.passwordHash || !verifyPassword(password, user.passwordHash)) return json(res, 401, { ok: false, error: "البريد الإلكتروني أو كلمة المرور غير صحيحة." });
+    await upsertUser({ openId: user.openId, lastSignedIn: new Date(), role: process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : undefined });
     const freshUser = await getUserById(user.id);
     setSession(res, user.id);
     return json(res, 200, { ok: true, user: publicUser(freshUser) });
