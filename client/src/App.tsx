@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Articles from "./pages/Articles";
+import ArticleDetail from "./pages/ArticleDetail";
 import Profile from "./pages/Profile";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/admin" component={Dashboard} />
       <Route path="/articles" component={Articles} />
+      <Route path="/articles/:slug" component={ArticleDetail} />
       <Route path="/profile" component={Profile} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

@@ -18,7 +18,6 @@ import {
   VolumeX,
   X,
 } from "lucide-react";
-import TelegramChat from "@/components/TelegramChat";
 
 const timeline = [
   { year: "1902", title: "خزان أسوان القديم", text: "بدأت أولى الخطوات العملية لتنظيم مياه النيل بإنشاء خزان أسوان بين عامي 1899 و1902، ثم تعليته في 1912 و1933. ظلت سعته محدودة أمام سنوات الفيضان والشح.", note: "الجذور الأولى لفكرة التخزين" },
@@ -71,10 +70,10 @@ export default function Home() {
     const sessionId = sessionStorage.getItem(key) || crypto.randomUUID();
     sessionStorage.setItem(key, sessionId);
     const details = { sessionId, page: window.location.pathname, referrer: document.referrer, language: navigator.language, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, screen: `${window.innerWidth}x${window.innerHeight}` };
-    fetch("/api/telegram/visit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...details, event: "visit" }), keepalive: true }).catch(() => undefined);
+    fetch("/api/analytics/visit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...details, event: "visit" }), keepalive: true }).catch(() => undefined);
     const notifyLeave = () => {
       const body = JSON.stringify({ ...details, event: "leave" });
-      if (navigator.sendBeacon) navigator.sendBeacon("/api/telegram/visit", new Blob([body], { type: "application/json" }));
+      if (navigator.sendBeacon) navigator.sendBeacon("/api/analytics/visit", new Blob([body], { type: "application/json" }));
     };
     window.addEventListener("pagehide", notifyLeave);
     return () => window.removeEventListener("pagehide", notifyLeave);
@@ -283,7 +282,6 @@ export default function Home() {
           <div className="footer-bottom"><span>© السد العالي | قصة وطن وماء · بحث التربية العسكرية · 2026 / 2027</span><span>الصور: Wikimedia Commons · <a href="https://commons.wikimedia.org/wiki/Category:Aswan_High_Dam" target="_blank" rel="noreferrer">المصدر</a></span></div>
         </div>
       </footer>
-      <TelegramChat />
     </div>
   );
 }

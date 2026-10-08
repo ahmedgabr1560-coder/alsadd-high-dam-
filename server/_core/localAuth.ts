@@ -11,7 +11,7 @@ const emailSchema = z.string().trim().email().max(320);
 const passwordSchema = z.string().min(8).max(128);
 const nameSchema = z.string().trim().min(2).max(120);
 const birthDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
-const secret = () => process.env.AUTH_SECRET || process.env.MANUS_JWT_SECRET || "alsadd-local-auth-fallback";
+const secret = () => process.env.AUTH_SECRET || "alsadd-local-auth-development-only";
 
 function encode(value: string) {
   return Buffer.from(value).toString("base64url");
