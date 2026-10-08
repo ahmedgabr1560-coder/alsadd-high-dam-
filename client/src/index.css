@@ -354,6 +354,12 @@ button { font: inherit; }
 .article-detail-content { padding: clamp(24px, 5vw, 58px); border: 1px solid rgba(16,47,69,.1); border-radius: 1.3rem; background: white; box-shadow: 0 20px 50px rgba(16,47,69,.06); }
 .article-detail-content p { margin: 0 0 28px; color: #405d68; font-size: 1.12rem; line-height: 2.15; }
 .article-detail-content p:last-child { margin-bottom: 0; }
+.article-sources { margin-top: 42px; padding-top: 24px; border-top: 1px solid rgba(16,47,69,.12); }
+.article-sources h2 { margin: 0 0 15px; color: var(--ink); font-family: "Amiri", Georgia, serif; font-size: 1.6rem; }
+.article-sources ol { margin: 0; padding-right: 22px; color: #687783; }
+.article-sources li { padding: 6px 0; line-height: 1.7; font-size: .8rem; }
+.article-sources a { color: #178f85; }
+.article-sources a:hover { color: var(--clay); text-decoration: underline; }
 .profile-page { min-height: 100vh; padding: 36px 20px 70px; background: #f5f8f7; color: var(--ink); }
 .profile-wrap { width: min(1000px, 100%); margin: auto; }
 .profile-hero { display: flex; align-items: center; gap: 23px; margin: 42px 0 28px; padding: 32px; border-radius: 1.4rem; background: linear-gradient(120deg, #102f45, #145c68); color: white; box-shadow: 0 18px 50px rgba(16,47,69,.15); }

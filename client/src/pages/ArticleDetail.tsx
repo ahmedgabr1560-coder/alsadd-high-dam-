@@ -16,6 +16,7 @@ const verseSets: Record<string, Array<[string, string]>> = {
   "world-war-ii": [["﴿وَلَا تَعْتَدُوا إِنَّ اللَّهَ لَا يُحِبُّ الْمُعْتَدِينَ﴾", "البقرة · ١٩٠"], ["﴿وَلَا تَنَازَعُوا فَتَفْشَلُوا﴾", "الأنفال · ٤٦"], ["﴿وَإِن جَنَحُوا لِلسَّلْمِ فَاجْنَحْ لَهَا﴾", "الأنفال · ٦١"], ["﴿مِنْ أَجْلِ ذَٰلِكَ كَتَبْنَا﴾", "المائدة · ٣٢"]],
   "palestine-history-1948": [["﴿وَلَا تَعْتَدُوا إِنَّ اللَّهَ لَا يُحِبُّ الْمُعْتَدِينَ﴾", "البقرة · ١٩٠"], ["﴿وَلَا تَبْخَسُوا النَّاسَ أَشْيَاءَهُمْ﴾", "الأعراف · ٨٥"], ["﴿إِنَّ اللَّهَ يَأْمُرُ بِالْعَدْلِ وَالْإِحْسَانِ﴾", "النحل · ٩٠"], ["﴿وَلَا تَهِنُوا وَلَا تَحْزَنُوا﴾", "آل عمران · ١٣٩"]]
 };
+const highDamSlugs = ["water-security", "engineering", "hydropower", "abu-simbel", "critical-infrastructure", "lake-nasser", "1956", "future-2030"];
 
 export default function ArticleDetail() {
   const [, params] = useRoute("/articles/:slug");
@@ -27,10 +28,11 @@ export default function ArticleDetail() {
   const lead = isEnglish ? (article.leadEn || article.lead) : article.lead;
   const body = isEnglish ? (article.bodyEn || article.body) : article.body;
   const verses = verseSets[article.slug] || verseSets["water-security"];
+  const libraryPath = highDamSlugs.includes(article.slug) ? "/high-dam/articles" : "/articles";
   return <main className="article-detail-page" dir={isEnglish ? "ltr" : "rtl"}>
-    <header className="article-detail-header"><div className="articles-toolbar"><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to library" : "العودة إلى مكتبة المقالات"}</a><LanguageToggle /></div><div className="article-author"><span>إعداد وتقديم</span><strong>أحمد حمدي عبد الونيس جبر</strong><small>أُفُق | OFOQ · معرفة تُقرأ وأثرٌ يبقى</small></div><div className="article-verses">{verses.map(([verse, reference]) => <div key={reference + verse}><p>{verse}</p><small>{reference}</small></div>)}</div><span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? (article.tagEn || article.tag) : article.tag}</span><h1>{title}</h1><p>{lead}</p></header>
+    <header className="article-detail-header"><div className="articles-toolbar"><a className="articles-back" href={libraryPath}><ArrowRight size={16} /> {isEnglish ? "Back to library" : "العودة إلى مكتبة المقالات"}</a><LanguageToggle /></div><div className="article-author"><span>إعداد وتقديم</span><strong>أحمد حمدي عبد الونيس جبر</strong><small>أُفُق | OFOQ · معرفة تُقرأ وأثرٌ يبقى</small></div><div className="article-verses">{verses.map(([verse, reference]) => <div key={reference + verse}><p>{verse}</p><small>{reference}</small></div>)}</div><span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? (article.tagEn || article.tag) : article.tag}</span><h1>{title}</h1><p>{lead}</p></header>
     <figure className="article-detail-figure"><img src={article.image || "/assets/aswan-dam.jpg"} alt={article.imageAlt || (isEnglish ? "Aswan High Dam — reference image" : "السد العالي — صورة مرجعية")} /><figcaption>{article.imageAlt || (isEnglish ? "OFOQ reference image" : "صورة مرجعية من أُفُق")}{article.sourceName ? ` · ${text.source}: ${article.sourceName}` : ""}</figcaption></figure>
-    <article className="article-detail-content">{body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}{article.sourceUrl && <p className="article-source"><strong>{text.source}:</strong> <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.sourceName || article.sourceUrl}</a></p>}</article>
+    <article className="article-detail-content">{body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}{article.sourceUrl && !article.sources && <p className="article-source"><strong>{text.source}:</strong> <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.sourceName || article.sourceUrl}</a></p>}{article.sources && <section className="article-sources"><h2>{isEnglish ? "References" : "المصادر والمراجع"}</h2><ol>{article.sources.map(source => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.name}</a></li>)}</ol></section>}</article>
     <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "OFOQ — knowledge built from memory and evidence." : "أُفُق — نقرأ الذاكرة لنرى المستقبل بوضوح."}</footer>
   </main>;
 }
