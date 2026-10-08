@@ -18,7 +18,8 @@ app.use((req, _res, next) => {
 
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 app.post("/analytics/visit", visitHandler);
-registerLocalAuthRoutes(app);
+// The catch-all function strips `/api`; register routes relative to the normalized path.
+registerLocalAuthRoutes(app, "");
 app.use(
   "/trpc",
   createHTTPHandler({

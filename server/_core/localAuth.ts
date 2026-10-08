@@ -82,8 +82,10 @@ function publicUser(user: any) {
   return safeUser;
 }
 
-export function registerLocalAuthRoutes(app: Express) {
-  app.post("/api/auth/register", async (req: Request, res: Response) => {
+export function registerLocalAuthRoutes(app: Express, routePrefix = "/api") {
+  const authPath = (path: string) => `${routePrefix}/auth/${path}`.replace(/\/+/g, "/");
+
+  app.post(authPath("register"), async (req: Request, res: Response) => {
     const parsed = z.object({
       name: nameSchema,
       email: emailSchema,
@@ -116,7 +118,7 @@ export function registerLocalAuthRoutes(app: Express) {
     }
   });
 
-  app.post("/api/auth/login", async (req: Request, res: Response) => {
+  app.post(authPath("login"), async (req: Request, res: Response) => {
     const parsed = z.object({ email: emailSchema, password: passwordSchema }).safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ ok: false, error: "أدخل بريدًا إلكترونيًا وكلمة مرور صحيحة." });
     try {
@@ -132,7 +134,7 @@ export function registerLocalAuthRoutes(app: Express) {
     }
   });
 
-  app.post("/api/auth/logout", (_req: Request, res: Response) => {
+  app.post(authPath("logout"), (_req: Request, res: Response) => {
     res.clearCookie(LOCAL_COOKIE_NAME, { ...cookieOptions(), maxAge: 0 });
     return res.json({ ok: true });
   });
