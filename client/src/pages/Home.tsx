@@ -15,7 +15,7 @@ export default function Home() {
       <span className="articles-kicker"><Sparkles size={16} /> {isEnglish ? "A wider horizon for knowledge" : "رؤية أوسع · معرفة أعمق"}</span>
       <h1>{isEnglish ? <>Open a wider <em>horizon.</em><br />Read the world differently.</> : <>نفتح أفقًا <em>أوسع.</em><br />لنقرأ العالم بشكل مختلف.</>}</h1>
       <p>{isEnglish ? "OFOQ is a knowledge space for documented articles, stories and ideas. Each topic has its own complete page, giving you a clear path from context to meaning." : "أُفُق مساحة معرفية تجمع المقالات والقصص والأفكار الموثقة. لكل موضوع صفحته الكاملة، حتى تنتقل من السياق إلى المعنى في رحلة واضحة وهادئة."}</p>
-      <div className="hero-actions" style={{ marginTop: 28 }}><a className="primary-btn" href="/articles">{isEnglish ? "Explore the articles" : "استكشف المقالات"} <ArrowLeft size={17} /></a><a className="ghost-btn" href="/high-dam">{isEnglish ? "Read the High Dam research" : "اقرأ بحث السد العالي"} <ArrowRight size={17} /></a></div>
+      <div className="hero-actions" style={{ marginTop: 28 }}><a className="primary-btn" href="/articles">{isEnglish ? "Explore the articles" : "استكشف المقالات"} <ArrowLeft size={17} /></a><a className="ghost-btn" href="#topics">{isEnglish ? "Explore the subjects" : "استكشف الموضوعات"} <ArrowRight size={17} /></a></div>
     </header>
 
     <section className="section intro" id="about-ofoq">
@@ -32,7 +32,6 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="section" id="high-dam-preview"><div className="container intro-grid"><div className="intro-aside"><span className="eyebrow">المشروع الرئيسي</span><h2 className="display">السد العالي في صفحة مستقلة.</h2></div><div className="intro-copy"><p>للسد العالي مساحة كاملة داخل أُفُق: من الفكرة والهندسة إلى الماء والذاكرة وأسئلة المستقبل.</p><p><a className="text-link" href="/high-dam">افتح صفحة السد العالي <ArrowLeft size={16} /></a></p><a className="text-link" href="/high-dam/articles">مكتبة مقالات السد العالي <ArrowLeft size={16} /></a></div></div></section>
     <footer className="articles-footer"><Landmark size={18} /> أُفُق — نقرأ الذاكرة لنرى المستقبل بوضوح.</footer>
   </main>;
 }
