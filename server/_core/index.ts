@@ -8,6 +8,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import telegramVisitHandler from "../../api/telegram/visit";
+import { registerLocalAuthRoutes } from "./localAuth";
 
 async function startServer() {
   const app = express();
@@ -20,6 +21,7 @@ async function startServer() {
   app.get("/api/platform/config.js", (_req, res) => {
     res.set("Cache-Control", "no-store").type("application/javascript").send(publicPlatformScript());
   });
+  registerLocalAuthRoutes(app);
   registerOAuthRoutes(app);
   // tRPC API
   app.use(

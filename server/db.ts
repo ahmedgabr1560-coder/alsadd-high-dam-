@@ -34,7 +34,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     };
     const updateSet: Record<string, unknown> = {};
 
-    const textFields = ["name", "email", "loginMethod"] as const;
+    const textFields = ["name", "email", "passwordHash", "profileImage", "birthDate", "loginMethod"] as const;
     type TextField = (typeof textFields)[number];
 
     const assignNullable = (field: TextField) => {
@@ -74,6 +74,27 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     console.error("[Database] Failed to upsert user:", error);
     throw error;
   }
+}
+
+export async function getUserByEmail(email: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  const rows = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  return rows[0] ?? null;
+}
+
+export async function getUserById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  const rows = await db.select().from(users).where(eq(users.id, id)).limit(1);
+  return rows[0] ?? null;
+}
+
+export async function createLocalUser(input: InsertUser) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.insert(users).values(input);
+  return getUserByEmail(String(input.email));
 }
 
 export async function getUserByOpenId(openId: string) {

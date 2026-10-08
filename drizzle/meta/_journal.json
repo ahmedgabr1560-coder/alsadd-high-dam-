@@ -15,6 +15,13 @@
       "when": 1791346936697,
       "tag": "0001_long_devos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1791486854051,
+      "tag": "0002_gorgeous_magik",
+      "breakpoints": true
     }
   ]
 }

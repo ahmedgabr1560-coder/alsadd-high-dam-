@@ -19,7 +19,6 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { startLogin } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { LayoutDashboard, LogOut, PanelLeft, Waves } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
@@ -30,6 +29,8 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: LayoutDashboard, label: "الإدارة", path: "/admin" },
   { icon: Waves, label: "إحصائيات الزوار", path: "/dashboard" },
+  { icon: Waves, label: "المقالات", path: "/articles" },
+  { icon: Waves, label: "ملفي الشخصي", path: "/profile" },
   { icon: Waves, label: "الموقع العام", path: "/" },
 ];
 
@@ -66,11 +67,11 @@ export default function DashboardLayout({
               سجّل الدخول للمتابعة
             </h1>
             <p className="text-sm text-muted-foreground text-center max-w-sm">
-              هذه اللوحة خاصة وتتطلب تسجيل الدخول بحساب Manus.
+              هذه اللوحة خاصة وتتطلب تسجيل الدخول بحساب الموقع.
             </p>
           </div>
           <Button
-            onClick={() => startLogin()}
+            onClick={() => { window.location.href = "/login"; }}
             size="lg"
             className="w-full shadow-lg hover:shadow-xl transition-all"
           >

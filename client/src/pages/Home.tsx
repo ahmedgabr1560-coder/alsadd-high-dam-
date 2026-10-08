@@ -108,6 +108,8 @@ export default function Home() {
             <a href="#heritage" onClick={() => setMenuOpen(false)}>الذاكرة</a>
             <a href="#videos" onClick={() => setMenuOpen(false)}>فيديوهات</a>
             <a href="#future" onClick={() => setMenuOpen(false)}>2030</a>
+            <a href="/articles" onClick={() => setMenuOpen(false)}>مقالات</a>
+            <a href="/profile" onClick={() => setMenuOpen(false)}>ملفي</a>
             <a className="nav-login" href="/login" onClick={() => setMenuOpen(false)}><LogIn size={14} /> دخول الزائر</a>
             <a className="nav-cta" href="#sources" onClick={() => setMenuOpen(false)}>المراجع <ArrowLeft size={15} /></a>
           </nav>
