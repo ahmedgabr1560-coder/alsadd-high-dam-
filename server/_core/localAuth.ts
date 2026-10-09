@@ -138,4 +138,17 @@ export function registerLocalAuthRoutes(app: Express, routePrefix = "/api") {
     res.clearCookie(LOCAL_COOKIE_NAME, { ...cookieOptions(), maxAge: 0 });
     return res.json({ ok: true });
   });
+
+  app.post(authPath("delete"), async (req: Request, res: Response) => {
+    const user = await authenticateLocalRequest(req);
+    if (!user) return res.status(401).json({ ok: false, error: "يجب تسجيل الدخول أولًا." });
+    try {
+      await db.deleteUserById(user.id);
+      res.clearCookie(LOCAL_COOKIE_NAME, { ...cookieOptions(), maxAge: 0 });
+      return res.json({ ok: true });
+    } catch (error) {
+      console.error("[LocalAuth] Delete account failed", error);
+      return res.status(500).json({ ok: false, error: "تعذر حذف الحساب الآن." });
+    }
+  });
 }

@@ -103,6 +103,12 @@ export async function getUserById(id: number) {
   return rows[0] ?? null;
 }
 
+export async function deleteUserById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.delete(usersTable!).where(eq(usersTable!.id, id));
+}
+
 export async function createLocalUser(input: InsertUser) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
