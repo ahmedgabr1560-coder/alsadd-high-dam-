@@ -8,4 +8,4 @@ Disallow: /login
 Disallow: /register
 Disallow: /quran
 
-Sitemap: https://alsadd-high-dam.vercel.app/sitemap.xml
+Sitemap: https://ofoq-egypt.vercel.app/sitemap.xml
