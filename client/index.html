@@ -21,6 +21,11 @@
     <meta name="twitter:image" content="https://ofoq-egypt.vercel.app/assets/aswan-dam.jpg" />
     <link rel="canonical" href="https://ofoq-egypt.vercel.app/" />
     <title>أُفُق | OFOQ | السد العالي والتاريخ</title>
+    <script>
+      if (window.location.hostname === "alsadd-high-dam.vercel.app") {
+        window.location.replace("https://ofoq-egypt.vercel.app" + window.location.pathname + window.location.search + window.location.hash);
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
