@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, BookOpen, Landmark, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookMarked, BookOpen, Landmark, Sparkles } from "lucide-react";
 import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 import ProfileAvatar from "@/components/ProfileAvatar";
@@ -10,7 +10,7 @@ export default function Home() {
   const independentResearch = articles.filter(article => independentResearchSlugs.includes(article.slug));
   return <main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
-      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div>
+      <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><div className="articles-toolbar-actions"><a className="quran-nav-icon" href="/quran" aria-label="القرآن الكريم" title="القرآن الكريم"><BookMarked size={18} /></a><ProfileAvatar /><LanguageToggle /></div></div>
       <div className="ofoq-home-signature"><span>إعداد وتقديم</span><strong>أحمد حمدي عبد الونيس جبر</strong><small>رؤية تُقرأ، ومعرفة تُبنى، وأثرٌ يبقى.</small></div>
       <div className="ofoq-home-verses" aria-label="آيات عن القراءة والكتابة والعلم"><div><p>﴿اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ﴾</p><small>سورة العلق · ١</small></div><div><p>﴿الَّذِي عَلَّمَ بِالْقَلَمِ﴾</p><small>سورة العلق · ٤</small></div><div><p>﴿وَقُلْ رَبِّ زِدْنِي عِلْمًا﴾</p><small>سورة طه · ١١٤</small></div><div><p>﴿ن وَالْقَلَمِ وَمَا يَسْطُرُونَ﴾</p><small>سورة القلم · ١</small></div></div>
       <span className="articles-kicker"><Sparkles size={16} /> {isEnglish ? "A wider horizon for knowledge" : "رؤية أوسع · معرفة أعمق"}</span>

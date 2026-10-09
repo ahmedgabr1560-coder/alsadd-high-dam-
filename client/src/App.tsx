@@ -12,6 +12,7 @@ import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
 import HighDamArticles from "./pages/HighDamArticles";
 import Profile from "./pages/Profile";
+import Quran from "./pages/Quran";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import GlobalMusicControl from "./components/GlobalMusicControl";
 
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/articles" component={Articles} />
       <Route path="/articles/:slug" component={ArticleDetail} />
       <Route path="/profile" component={Profile} />
+      <Route path="/quran" component={Quran} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
