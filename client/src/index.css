@@ -291,6 +291,12 @@ button { font: inherit; }
 .profile-upload-box { display: flex; align-items: center; gap: 7px; min-height: 42px; padding: 5px 8px; border: 1px dashed #a9ccc7; border-radius: .65rem; background: #f3fbfa; color: #178f85; cursor: pointer; overflow: hidden; }
 .profile-upload-box img { width: 31px; height: 31px; object-fit: cover; border-radius: 50%; }
 .profile-upload-box small { overflow: hidden; color: #68817d; font-size: .63rem; text-overflow: ellipsis; white-space: nowrap; }
+.register-avatar-picker { display: flex !important; flex-direction: column; align-items: center; justify-content: center; gap: 5px !important; margin: -4px 0 18px; padding: 0 0 5px; color: #536b75 !important; text-align: center; cursor: pointer; }
+.register-avatar-circle { display: grid; place-items: center; width: 92px; height: 92px; overflow: hidden; margin-bottom: 3px; border: 3px solid #d8aa61; border-radius: 50%; background: linear-gradient(145deg, #e6f8f5, #f9f4e9); color: #178f85; box-shadow: 0 9px 22px rgba(16,47,69,.14); transition: transform .2s ease, box-shadow .2s ease; }
+.register-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.register-avatar-picker:hover .register-avatar-circle { transform: translateY(-2px); box-shadow: 0 13px 27px rgba(16,47,69,.2); }
+.register-avatar-picker strong { color: #178f85; font-size: .78rem; }
+.register-avatar-picker small { color: #8a9a9d; font-size: .64rem; font-weight: 400; }
 .articles-page { min-height: 100vh; padding: 34px clamp(18px, 5vw, 80px) 56px; background: #f5f8f7; color: var(--ink); }
 .ofoq-home { position: relative; overflow: hidden; background: #071c2b; color: white; background-image: linear-gradient(120deg, rgba(5,22,36,.98), rgba(6,48,62,.86) 46%, rgba(11,37,54,.82)), url('/assets/aswan-dam.jpg'); background-position: center top; background-size: cover; background-attachment: fixed; }
 .ofoq-home::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 12% 8%, rgba(216,170,97,.25), transparent 26%), radial-gradient(ellipse at 88% 24%, rgba(24,182,164,.22), transparent 31%), linear-gradient(180deg, transparent 0 58%, rgba(3,18,29,.62) 100%); mix-blend-mode: screen; }
