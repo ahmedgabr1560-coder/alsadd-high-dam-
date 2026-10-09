@@ -715,3 +715,8 @@ button { font: inherit; }
 .quran-nav-icon:hover { background:rgba(216,170,97,.15); border-radius:50%; }
 @media (max-width:900px) { .quran-reader-shell { grid-template-columns:1fr; } .quran-index { position:static; max-height:none; } .quran-chapter-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); max-height:300px; } }
 @media (max-width:560px) { .quran-audio-title { align-items:flex-start; flex-wrap:wrap; } .quran-audio-title select { width:100%; margin-inline-start:0; } .quran-mushaf { padding:14px; } .quran-verses { line-height:2.15; } }
+
+
+@font-face { font-family: "Aref Ruqaa"; src: url("/fonts/aref-ruqaa-regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Aref Ruqaa"; src: url("/fonts/aref-ruqaa-bold.ttf") format("truetype"); font-style: normal; font-weight: 700; font-display: swap; }
+.quran-title { font-family: "Aref Ruqaa", var(--serif); font-size: 1.35em; font-weight: 700; letter-spacing: 0; }
