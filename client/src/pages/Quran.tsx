@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, BookMarked, ChevronLeft, ChevronRight, ExternalLink, Headphones, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, BookMarked, ChevronLeft, ChevronRight, ExternalLink, Headphones } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 
@@ -23,7 +23,6 @@ export default function Quran() {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [quran, setQuran] = useState<QuranChapter[]>([]);
   const [selectedId, setSelectedId] = useState(1);
-  const [query, setQuery] = useState("");
   const [dataLoading, setDataLoading] = useState(true);
   const [reciter, setReciter] = useState(reciters[0]);
   const [currentVerse, setCurrentVerse] = useState<number | null>(null);
@@ -37,7 +36,6 @@ export default function Quran() {
 
   const selected = chapters.find(chapter => chapter.id === selectedId);
   const selectedQuran = quran.find(chapter => chapter.id === selectedId);
-  const filteredChapters = useMemo(() => chapters.filter(chapter => `${chapter.name} ${chapter.transliteration} ${chapter.translation}`.toLowerCase().includes(query.trim().toLowerCase())), [chapters, query]);
   const choose = (id: number) => { setSelectedId(id); setCurrentVerse(null); window.scrollTo({ top: 0, behavior: "smooth" }); };
   const prev = selectedId > 1 ? selectedId - 1 : 114;
   const next = selectedId < 114 ? selectedId + 1 : 1;
@@ -64,8 +62,7 @@ export default function Quran() {
     <section className="quran-reader-shell">
       <aside className="quran-index" aria-label={isEnglish ? "Surah index" : "فهرس السور"}>
         <div className="quran-index-title"><strong>{isEnglish ? "Surah index" : "فهرس السور"}</strong><span>114</span></div>
-        <label className="quran-search"><Search size={16} /><input value={query} onChange={event => setQuery(event.target.value)} placeholder={isEnglish ? "Search surah..." : "ابحث عن سورة..."} /></label>
-        <div className="quran-chapter-list">{filteredChapters.map(chapter => <button key={chapter.id} className={`quran-chapter-item ${chapter.id === selectedId ? "active" : ""}`} onClick={() => choose(chapter.id)}><span className="quran-chapter-number">{chapter.id}</span><span className="quran-chapter-name"><b>{isEnglish ? chapter.transliteration : chapter.name}</b><small>{isEnglish ? chapter.name : chapter.transliteration}</small></span><small>{chapter.total_verses} {isEnglish ? "verses" : "آيات"}</small></button>)}</div>
+        <div className="quran-chapter-list">{chapters.map(chapter => <button key={chapter.id} className={`quran-chapter-item ${chapter.id === selectedId ? "active" : ""}`} onClick={() => choose(chapter.id)}><span className="quran-chapter-number">{chapter.id}</span><span className="quran-chapter-name"><b>{isEnglish ? chapter.transliteration : chapter.name}</b><small>{isEnglish ? chapter.name : chapter.transliteration}</small></span><small>{chapter.total_verses} {isEnglish ? "verses" : "آيات"}</small></button>)}</div>
       </aside>
 
       <article className="quran-mushaf" aria-label={selected ? (isEnglish ? selected.transliteration : selected.name) : ""}>
