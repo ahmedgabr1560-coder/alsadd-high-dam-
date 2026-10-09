@@ -7,5 +7,7 @@ Disallow: /profile
 Disallow: /login
 Disallow: /register
 Disallow: /quran
+Disallow: /high-dam
+Disallow: /articles
 
 Sitemap: https://ofoq-egypt.vercel.app/sitemap.xml
