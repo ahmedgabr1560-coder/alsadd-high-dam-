@@ -292,8 +292,9 @@ button { font: inherit; }
 .profile-upload-box img { width: 31px; height: 31px; object-fit: cover; border-radius: 50%; }
 .profile-upload-box small { overflow: hidden; color: #68817d; font-size: .63rem; text-overflow: ellipsis; white-space: nowrap; }
 .articles-page { min-height: 100vh; padding: 34px clamp(18px, 5vw, 80px) 56px; background: #f5f8f7; color: var(--ink); }
-.ofoq-home { position: relative; overflow: hidden; background: var(--ink-deep); color: white; background-image: linear-gradient(115deg, rgba(8,28,42,.98), rgba(8,28,42,.84) 48%, rgba(8,28,42,.72)), url('/assets/aswan-dam.jpg'); background-position: center top; background-size: cover; background-attachment: fixed; }
-.ofoq-home::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 12%, rgba(24,182,164,.14), transparent 28%), radial-gradient(circle at 85% 38%, rgba(216,170,97,.13), transparent 26%); }
+.ofoq-home { position: relative; overflow: hidden; background: #071c2b; color: white; background-image: linear-gradient(120deg, rgba(5,22,36,.98), rgba(6,48,62,.86) 46%, rgba(11,37,54,.82)), url('/assets/aswan-dam.jpg'); background-position: center top; background-size: cover; background-attachment: fixed; }
+.ofoq-home::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 12% 8%, rgba(216,170,97,.25), transparent 26%), radial-gradient(ellipse at 88% 24%, rgba(24,182,164,.22), transparent 31%), linear-gradient(180deg, transparent 0 58%, rgba(3,18,29,.62) 100%); mix-blend-mode: screen; }
+.ofoq-home::after { content: ""; position: absolute; left: -10%; right: -10%; top: 48%; height: 28%; pointer-events: none; opacity: .18; background: repeating-linear-gradient(175deg, transparent 0 28px, rgba(216,170,97,.5) 29px 30px, transparent 31px 54px); transform: rotate(-2deg); }
 .ofoq-home > * { position: relative; z-index: 1; }
 .ofoq-home .articles-back { color: rgba(255,255,255,.82); }
 .ofoq-home .articles-header h1 { color: white; }
@@ -435,7 +436,7 @@ button { font: inherit; }
 .login-orbit-two { right: -125px; top: -180px; width: 410px; height: 410px; border-color: rgba(216,170,97,.13); }
 .site-auth-loading { display: flex; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: var(--ink-deep); color: rgba(255,255,255,.68); font-size: .82rem; }
 .site-auth-loading .login-loader { margin: 0; }
-.music-frame { position: fixed; z-index: 59; right: 14px; bottom: 14px; width: 1px; height: 1px; border: 0; opacity: .01; pointer-events: none; }
+.music-frame { position: fixed; z-index: 59; right: 14px; bottom: 14px; width: 280px; height: 62px; border: 1px solid rgba(216,170,97,.58); border-radius: 12px; opacity: 1; pointer-events: auto; background: #081c2a; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
 
 .dashboard-page { min-height: calc(100vh - 2rem); padding: 28px clamp(16px, 3vw, 42px) 48px; background: #f4f7f6; color: var(--ink); }
 .dashboard-header { display: flex; align-items: end; justify-content: space-between; gap: 24px; max-width: 1480px; margin: 0 auto 24px; }

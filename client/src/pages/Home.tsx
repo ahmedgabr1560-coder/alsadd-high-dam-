@@ -3,7 +3,7 @@ import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 import ProfileAvatar from "@/components/ProfileAvatar";
 
-const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine-history-1948"];
+const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine-history-1948", "gaza-war"];
 
 export default function Home() {
   const { isEnglish } = useLanguage();
