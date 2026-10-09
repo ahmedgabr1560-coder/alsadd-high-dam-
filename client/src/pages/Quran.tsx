@@ -46,7 +46,7 @@ export default function Quran() {
 
   return <main className="quran-page" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="quran-header">
-      <div className="quran-toolbar"><a href="/" className="articles-back"><ArrowRight size={16} /> {isEnglish ? "Back to Nibras" : "العودة إلى نبراس"}</a><LanguageToggle /></div>
+      <div className="quran-toolbar"><a href="/" className="articles-back"><ArrowRight size={16} /> {isEnglish ? "Back to OFOQ" : "العودة إلى أُفُق | OFOQ"}</a><LanguageToggle /></div>
       <span className="articles-kicker"><BookMarked size={16} /> {isEnglish ? "The Holy Quran" : "القرآن الكريم"}</span>
       <h1>{isEnglish ? <>Read with <em>calm and presence.</em></> : <>القرآن الكريم<br /><em>قراءة بهدوء وحضور.</em></>}</h1>
       <p>{isEnglish ? "A carefully organized reader in Uthmani script, arranged by the 114 surahs of the Mushaf." : "قارئ منظم بالرسم العثماني، مرتب على سور المصحف الشريف الأربع عشرة بعد المائة."}</p>
