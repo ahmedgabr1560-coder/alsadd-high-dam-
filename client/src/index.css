@@ -438,7 +438,10 @@ button { font: inherit; }
 .login-orbit-two { right: -125px; top: -180px; width: 410px; height: 410px; border-color: rgba(216,170,97,.13); }
 .site-auth-loading { display: flex; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: var(--ink-deep); color: rgba(255,255,255,.68); font-size: .82rem; }
 .site-auth-loading .login-loader { margin: 0; }
-.music-frame { position: fixed; z-index: 59; right: 14px; bottom: 14px; width: 280px; height: 62px; border: 1px solid rgba(216,170,97,.58); border-radius: 12px; opacity: 1; pointer-events: auto; background: #081c2a; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.music-player-shell { position: fixed; z-index: 59; right: 14px; bottom: 14px; width: min(320px, calc(100vw - 28px)); overflow: hidden; border: 1px solid rgba(216,170,97,.58); border-radius: 12px; background: #081c2a; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.music-frame { display: block; width: 100%; height: 180px; border: 0; background: #081c2a; }
+.music-open-link { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 38px; color: var(--gold); background: rgba(8,28,42,.98); font-size: .76rem; text-decoration: none; }
+.music-open-link:hover { color: white; background: rgba(216,170,97,.16); }
 
 .dashboard-page { min-height: calc(100vh - 2rem); padding: 28px clamp(16px, 3vw, 42px) 48px; background: #f4f7f6; color: var(--ink); }
 .dashboard-header { display: flex; align-items: end; justify-content: space-between; gap: 24px; max-width: 1480px; margin: 0 auto 24px; }
