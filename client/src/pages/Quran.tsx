@@ -26,6 +26,7 @@ export default function Quran() {
   const [query, setQuery] = useState("");
   const [dataLoading, setDataLoading] = useState(true);
   const [reciter, setReciter] = useState(reciters[0]);
+  const [currentVerse, setCurrentVerse] = useState<number | null>(null);
 
   useEffect(() => {
     Promise.all([fetch("/data/quran/chapters.json").then(r => r.json()), fetch("/data/quran/quran.json").then(r => r.json())])
@@ -37,10 +38,18 @@ export default function Quran() {
   const selected = chapters.find(chapter => chapter.id === selectedId);
   const selectedQuran = quran.find(chapter => chapter.id === selectedId);
   const filteredChapters = useMemo(() => chapters.filter(chapter => `${chapter.name} ${chapter.transliteration} ${chapter.translation}`.toLowerCase().includes(query.trim().toLowerCase())), [chapters, query]);
-  const choose = (id: number) => { setSelectedId(id); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const choose = (id: number) => { setSelectedId(id); setCurrentVerse(null); window.scrollTo({ top: 0, behavior: "smooth" }); };
   const prev = selectedId > 1 ? selectedId - 1 : 114;
   const next = selectedId < 114 ? selectedId + 1 : 1;
   const audioUrl = reciter.url ? `${reciter.url}${String(selectedId).padStart(3, "0")}.mp3` : undefined;
+  const resetAudioHighlight = () => setCurrentVerse(null);
+  const syncAudioHighlight = (event: React.SyntheticEvent<HTMLAudioElement>) => {
+    const audio = event.currentTarget;
+    const verses = selectedQuran?.verses || [];
+    if (!audio.duration || !Number.isFinite(audio.duration) || verses.length === 0) return;
+    const verseIndex = Math.min(verses.length - 1, Math.floor((audio.currentTime / audio.duration) * verses.length));
+    setCurrentVerse(verses[verseIndex]?.id ?? null);
+  };
 
   if (loading || !user || dataLoading) return <div className="site-auth-loading" dir={isEnglish ? "ltr" : "rtl"}><span className="login-loader" /><p>{isEnglish ? "Opening the Holy Quran..." : "جارٍ فتح القرآن الكريم..."}</p></div>;
 
@@ -61,8 +70,8 @@ export default function Quran() {
 
       <article className="quran-mushaf" aria-label={selected ? (isEnglish ? selected.transliteration : selected.name) : ""}>
         <div className="quran-surah-head"><span>{selected?.type === "meccan" ? (isEnglish ? "Meccan" : "مكية") : (isEnglish ? "Medinan" : "مدنية")}</span><div className="quran-surah-ornament">۞</div><h2>{isEnglish ? selected?.transliteration : selected?.name}</h2><p>{selected?.translation} · {selected?.total_verses} {isEnglish ? "verses" : "آية"}</p></div>
-        <div className="quran-audio-box"><div className="quran-audio-title"><Headphones size={17} /><strong>{isEnglish ? "Listen to this surah" : "استمع إلى السورة"}</strong><select value={reciter.name} onChange={event => setReciter(reciters.find(item => item.name === event.target.value) || reciters[0])}>{reciters.map(item => <option value={item.name} key={item.name}>{isEnglish ? item.nameEn : item.name}</option>)}</select></div>{audioUrl ? <audio controls preload="none" src={audioUrl} aria-label={`${reciter.name} — ${selected?.name}`} /> : <a className="quran-external-audio" href={reciter.external} target="_blank" rel="noreferrer"><ExternalLink size={15} /> {isEnglish ? `Open ${reciter.source} listening page` : `فتح صفحة الاستماع عبر ${reciter.source}`}</a>}<small>{isEnglish ? `Audio source: ${reciter.source}` : `مصدر التلاوة: ${reciter.source}`}</small></div>
-        <div className="quran-verses">{selectedQuran?.verses.map(verse => <p className="quran-verse" key={verse.id}><span className="ayah-number">{verse.id}</span><span>{verse.text}</span></p>)}</div>
+        <div className="quran-audio-box"><div className="quran-audio-title"><Headphones size={17} /><strong>{isEnglish ? "Listen to this surah" : "استمع إلى السورة"}</strong><select value={reciter.name} onChange={event => { setReciter(reciters.find(item => item.name === event.target.value) || reciters[0]); resetAudioHighlight(); }}>{reciters.map(item => <option value={item.name} key={item.name}>{isEnglish ? item.nameEn : item.name}</option>)}</select></div>{audioUrl ? <audio controls preload="none" src={audioUrl} onTimeUpdate={syncAudioHighlight} onEnded={resetAudioHighlight} aria-label={`${reciter.name} — ${selected?.name}`} /> : <a className="quran-external-audio" href={reciter.external} target="_blank" rel="noreferrer"><ExternalLink size={15} /> {isEnglish ? `Open ${reciter.source} listening page` : `فتح صفحة الاستماع عبر ${reciter.source}`}</a>}<small>{isEnglish ? `Audio source: ${reciter.source}` : `مصدر التلاوة: ${reciter.source}`} · {isEnglish ? "Current verse is highlighted during playback" : "تتلوّن الآية الحالية أثناء التشغيل"}</small></div>
+        <div className="quran-verses">{selectedQuran?.verses.map(verse => <p className={`quran-verse ${currentVerse === verse.id ? "active" : ""}`} key={verse.id}><span className="ayah-number">{verse.id}</span><span>{verse.text}</span></p>)}</div>
         <div className="quran-pager"><button onClick={() => choose(prev)} aria-label={isEnglish ? "Previous surah" : "السورة السابقة"}><ChevronRight size={18} /> {isEnglish ? "Previous" : "السابقة"}</button><span>{selectedId} / 114</span><button onClick={() => choose(next)} aria-label={isEnglish ? "Next surah" : "السورة التالية"}>{isEnglish ? "Next" : "التالية"} <ChevronLeft size={18} /></button></div>
       </article>
     </section>

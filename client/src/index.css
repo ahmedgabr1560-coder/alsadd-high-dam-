@@ -720,3 +720,6 @@ button { font: inherit; }
 @font-face { font-family: "Aref Ruqaa"; src: url("/fonts/aref-ruqaa-regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
 @font-face { font-family: "Aref Ruqaa"; src: url("/fonts/aref-ruqaa-bold.ttf") format("truetype"); font-style: normal; font-weight: 700; font-display: swap; }
 .quran-title { font-family: "Aref Ruqaa", var(--serif); font-size: 1.35em; font-weight: 700; letter-spacing: 0; }
+
+.quran-verse.active { color: #9a6c08; background: linear-gradient(transparent 72%, rgba(232, 190, 61, .52) 72%); text-shadow: 0 0 14px rgba(232, 190, 61, .22); border-radius: .22em; transition: color .25s ease, background .25s ease; }
+.quran-verse.active .ayah-number { color: #fff; border-color: #b58a28; background: #c29120; }
