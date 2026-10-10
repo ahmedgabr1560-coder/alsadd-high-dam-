@@ -13,6 +13,8 @@ import ArticleDetail from "./pages/ArticleDetail";
 import HighDamArticles from "./pages/HighDamArticles";
 import Profile from "./pages/Profile";
 import Quran from "./pages/Quran";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import GlobalMusicControl from "./components/GlobalMusicControl";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -48,6 +50,8 @@ function Router() {
       <Route path="/high-dam/articles"><ProtectedPage><HighDamArticles /></ProtectedPage></Route>
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
       <Route path="/dashboard"><AdminPage><Dashboard /></AdminPage></Route>
       <Route path="/admin"><AdminPage><Dashboard /></AdminPage></Route>
       <Route path="/articles"><ProtectedPage><Articles /></ProtectedPage></Route>

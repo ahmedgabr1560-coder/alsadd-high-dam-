@@ -1,3 +1,5 @@
+import { insertBlobVisitorEvent } from "../../server/_core/blobAnalyticsStore";
+
 type VisitPayload = { event?: "visit" | "leave"; sessionId?: string; page?: string; referrer?: string; language?: string; screen?: string; timezone?: string };
 function header(req: any, name: string) { const value = req.headers?.[name] ?? req.headers?.[name.toLowerCase()]; return Array.isArray(value) ? value[0] : value; }
 function escapeHtml(value: string) { return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
@@ -19,16 +21,10 @@ export default async function handler(req: any, res: any) {
   const sessionId = limit(String(body.sessionId || "غير معروف"), 64);
   const page = limit(String(body.page || "/"), 255);
 
-  // Persist to the managed SQL database when configured, but never let a missing
-  // database stop the Telegram notification from reaching the owner.
+  // Persist to the same Vercel Blob store used by the independent auth system.
   let stored = false;
-  if (process.env.DATABASE_URL) {
-    try {
-      const { insertVisitorEvent } = await import("../../server/db");
-      await insertVisitorEvent({ eventType: event, sessionId, page, referrer: body.referrer ? limit(String(body.referrer), 512) : null, language: body.language ? limit(String(body.language), 64) : null, timezone: body.timezone ? limit(String(body.timezone), 128) : null, screen: body.screen ? limit(String(body.screen), 32) : null, country: limit(country, 64), region: region || null, city: city || null, browser, operatingSystem });
-      stored = true;
-    } catch (error) { console.error("[Visitor analytics] database unavailable", error); }
-  }
+  try { await insertBlobVisitorEvent({ eventType: event, sessionId, page, referrer: body.referrer ? limit(String(body.referrer), 512) : null, language: body.language ? limit(String(body.language), 64) : null, timezone: body.timezone ? limit(String(body.timezone), 128) : null, screen: body.screen ? limit(String(body.screen), 32) : null, country: limit(country, 64), region: region || null, city: city || null, browser, operatingSystem }); stored = true; }
+  catch (error) { console.error("[Visitor analytics] Blob storage unavailable", error); }
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
