@@ -1,6 +1,3 @@
-import { createHash, randomBytes } from "node:crypto";
-import { loadUsers } from "../../server/_core/blobAuthStore";
-
 const RESET_STORE = "ofoq-auth/reset-tokens.json";
 const RESET_TTL_MS = 15 * 60 * 1000;
 
@@ -20,10 +17,6 @@ async function saveTokens(tokens: any[]) {
   await put(RESET_STORE, JSON.stringify(tokens), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json; charset=utf-8" });
 }
 
-function tokenHash(token: string) {
-  return createHash("sha256").update(token).digest("hex");
-}
-
 function reply(res: any, status: number, body: unknown) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -37,6 +30,9 @@ export default async function handler(req: any, res: any) {
 
   const genericMessage = "إذا كان البريد مسجلًا، سيصلك رابط إعادة التعيين خلال دقائق.";
   try {
+    const crypto = await import("node:crypto");
+    const { loadUsers } = await import("../../server/_core/blobAuthStore");
+    const tokenHash = (value: string) => crypto.createHash("sha256").update(value).digest("hex");
     const users = await loadUsers();
     const user = users.find(item => item.email === email);
     if (!user) return reply(res, 200, { ok: true, message: genericMessage });
@@ -48,7 +44,7 @@ export default async function handler(req: any, res: any) {
       return reply(res, 503, { ok: false, error: "خدمة البريد غير مهيأة بعد. أضف RESEND_API_KEY في Vercel ثم أعد المحاولة." });
     }
 
-    const rawToken = randomBytes(32).toString("base64url");
+    const rawToken = crypto.randomBytes(32).toString("base64url");
     const now = Date.now();
     const tokens = (await loadTokens()).filter(item => Number(item.expiresAt) > now && item.userId !== user.id);
     tokens.push({ tokenHash: tokenHash(rawToken), userId: user.id, email, expiresAt: now + RESET_TTL_MS, createdAt: new Date(now).toISOString() });

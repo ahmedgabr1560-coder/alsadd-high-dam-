@@ -1,6 +1,3 @@
-import { createHash, randomBytes, scryptSync } from "node:crypto";
-import { loadUsers, saveUsers, type StoredUser } from "../../server/_core/blobAuthStore";
-
 const RESET_STORE = "ofoq-auth/reset-tokens.json";
 
 async function loadTokens(): Promise<any[]> {
@@ -19,7 +16,6 @@ async function saveTokens(tokens: any[]) {
   await put(RESET_STORE, JSON.stringify(tokens), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json; charset=utf-8" });
 }
 
-function tokenHash(token: string) { return createHash("sha256").update(token).digest("hex"); }
 function reply(res: any, status: number, body: unknown) { res.statusCode = status; res.setHeader("Content-Type", "application/json; charset=utf-8"); res.end(JSON.stringify(body)); }
 
 export default async function handler(req: any, res: any) {
@@ -30,6 +26,9 @@ export default async function handler(req: any, res: any) {
   if (password.length < 8 || password.length > 128) return reply(res, 400, { ok: false, error: "يجب أن تتكون كلمة المرور من 8 إلى 128 حرفًا." });
 
   try {
+    const crypto = await import("node:crypto");
+    const { loadUsers, saveUsers } = await import("../../server/_core/blobAuthStore");
+    const tokenHash = (value: string) => crypto.createHash("sha256").update(value).digest("hex");
     const now = Date.now();
     const tokens = await loadTokens();
     const target = tokens.find(item => item.tokenHash === tokenHash(token) && !item.usedAt && Number(item.expiresAt) > now);
@@ -39,9 +38,9 @@ export default async function handler(req: any, res: any) {
     const userIndex = users.findIndex(item => Number(item.id) === Number(target.userId));
     if (userIndex < 0) return reply(res, 400, { ok: false, error: "تعذر العثور على الحساب. اطلب رابطًا جديدًا." });
 
-    const salt = randomBytes(16).toString("hex");
-    const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString("hex")}`;
-    const updatedUser: StoredUser = { ...users[userIndex], passwordHash, updatedAt: new Date(now).toISOString() };
+    const salt = crypto.randomBytes(16).toString("hex");
+    const passwordHash = `${salt}:${crypto.scryptSync(password, salt, 64).toString("hex")}`;
+    const updatedUser = { ...users[userIndex], passwordHash, updatedAt: new Date(now).toISOString() };
     const updatedUsers = users.slice();
     updatedUsers[userIndex] = updatedUser;
     await saveUsers(updatedUsers);

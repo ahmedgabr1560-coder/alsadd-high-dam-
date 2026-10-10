@@ -1,5 +1,5 @@
 import express from "express";
-import { createHTTPHandler } from "@trpc/server/adapters/standalone";
+import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "../server/routers";
 import { createContext } from "../server/_core/context";
 import { registerLocalAuthRoutes } from "../server/_core/localAuth";
@@ -22,7 +22,7 @@ app.post("/analytics/visit", visitHandler);
 registerLocalAuthRoutes(app, "");
 app.use(
   "/trpc",
-  createHTTPHandler({
+  createExpressMiddleware({
     router: appRouter,
     createContext: ({ req, res }) => createContext({ req, res } as any),
   }),
