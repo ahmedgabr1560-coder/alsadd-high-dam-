@@ -21,12 +21,25 @@ export async function notifyTelegramAccount(event: "register" | "login", user: {
   ];
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text: lines.join("\n"), parse_mode: "HTML", disable_web_page_preview: true }),
-      signal: AbortSignal.timeout(8000),
-    });
+    const caption = lines.join("\n");
+    let response: Response;
+    const image = String(user.profileImage || "");
+    const dataUrl = image.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,([\s\S]+)$/);
+    if (dataUrl) {
+      const form = new FormData();
+      form.append("chat_id", chatId);
+      form.append("caption", caption);
+      form.append("parse_mode", "HTML");
+      form.append("photo", new Blob([Buffer.from(dataUrl[2], "base64")], { type: dataUrl[1] }), "profile-image");
+      response = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: "POST", body: form, signal: AbortSignal.timeout(8000) });
+    } else {
+      response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: caption, parse_mode: "HTML", disable_web_page_preview: true }),
+        signal: AbortSignal.timeout(8000),
+      });
+    }
     const result = await response.json().catch(() => ({}));
     if (!response.ok || !result.ok) {
       console.error("[Telegram] account notification rejected", { status: response.status, description: result.description });
