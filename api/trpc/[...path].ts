@@ -11,7 +11,6 @@ export default async function handler(req: any, res: any) {
   if (req.method !== "GET") return reply(res, 405, { ok: false, error: "Method not allowed" });
   try {
     const crypto = await import("node:crypto");
-    const { loadUsers } = await import("../../server/_core/blobAuthStore");
     const sessionCookie = String(req.headers?.cookie || "").split(";").map((item: string) => item.trim()).find((item: string) => item.startsWith("alsadd_session="))?.slice("alsadd_session=".length);
     let user: any = null;
     if (sessionCookie) {
@@ -23,7 +22,10 @@ export default async function handler(req: any, res: any) {
       if (encoded && signature && signature.length === expected.length && crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
         try {
           const payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
-          if (payload.userId && Number(payload.exp) > Date.now()) user = (await loadUsers()).find(item => Number(item.id) === Number(payload.userId)) ?? null;
+          if (payload.userId && Number(payload.exp) > Date.now()) {
+            const { loadUsers } = await import("../../server/_core/blobAuthStore");
+            user = (await loadUsers()).find(item => Number(item.id) === Number(payload.userId)) ?? null;
+          }
         } catch { user = null; }
       }
     }
