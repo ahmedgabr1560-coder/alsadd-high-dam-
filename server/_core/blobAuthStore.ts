@@ -9,7 +9,7 @@ export type StoredUser = {
   profileImage: string;
   birthDate: string;
   loginMethod: string;
-  role: string;
+  role: "user" | "admin";
   createdAt: string;
   updatedAt: string;
   lastSignedIn: string;

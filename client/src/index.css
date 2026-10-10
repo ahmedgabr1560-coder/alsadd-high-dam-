@@ -425,6 +425,9 @@ button { font: inherit; }
 .profile-account-actions .profile-logout { margin-top: 0; }
 .profile-delete { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border: 1px solid rgba(120,34,34,.2); border-radius: 999px; background: transparent; color: #782222; font: inherit; font-size: .78rem; font-weight: 700; cursor: pointer; transition: .2s ease; }
 .profile-delete:hover { background: #782222; color: white; }
+.login-forgot { display: block; margin: -5px 0 12px; color: #178f85; font-size: .76rem; font-weight: 700; text-align: right; }
+.login-forgot:hover { color: var(--clay); text-decoration: underline; }
+.login-success { margin: 10px 0 0; padding: 10px 12px; border: 1px solid rgba(33,182,141,.25); border-radius: .7rem; background: #f0fbf7; color: #17765e; font-size: .75rem; line-height: 1.7; }
 .profile-panel-title { display: flex; align-items: center; gap: 9px; padding-bottom: 17px; border-bottom: 1px solid #e7efed; color: #178f85; }
 .profile-panel-title h2 { margin: 0; color: var(--ink); font-size: .95rem; }
 .profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 25px; margin: 25px 0 0; }

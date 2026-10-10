@@ -3,6 +3,7 @@ import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypt
 import { parse as parseCookie } from "cookie";
 import { z } from "zod";
 import * as db from "../db";
+import { loadUsers } from "./blobAuthStore";
 import { ENV } from "./env";
 
 export const LOCAL_COOKIE_NAME = "alsadd_session";
@@ -66,7 +67,8 @@ export async function authenticateLocalRequest(req: Request) {
   const userId = readSession(req);
   if (!userId) return null;
   try {
-    return await db.getUserById(userId);
+    const users = await loadUsers();
+    return users.find(user => Number(user.id) === userId) ?? null;
   } catch {
     return null;
   }

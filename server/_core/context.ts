@@ -1,11 +1,11 @@
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
-import type { User } from "../../drizzle/schema";
+import type { StoredUser } from "./blobAuthStore";
 import { authenticateLocalRequest } from "./localAuth";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
   res: CreateExpressContextOptions["res"];
-  user: User | null;
+  user: StoredUser | null;
 };
 
 export async function createContext(opts: CreateExpressContextOptions): Promise<TrpcContext> {

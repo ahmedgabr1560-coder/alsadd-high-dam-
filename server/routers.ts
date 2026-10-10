@@ -2,7 +2,7 @@ import { z } from "zod";
 import { LOCAL_COOKIE_NAME } from "./_core/localAuth";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
-import { getAdminSummary, getVisitorDashboard } from "./db";
+import { getBlobAdminSummary, getBlobVisitorDashboard } from "./_core/blobAnalyticsStore";
 
 export const appRouter = router({
   system: systemRouter,
@@ -25,10 +25,10 @@ export const appRouter = router({
           browser: z.string().trim().min(1).max(64).optional(),
         }),
       )
-      .query(({ input }) => getVisitorDashboard(input)),
+      .query(({ input }) => getBlobVisitorDashboard(input)),
   }),
   admin: router({
-    summary: adminProcedure.query(() => getAdminSummary()),
+    summary: adminProcedure.query(() => getBlobAdminSummary()),
   }),
 });
 
