@@ -25,6 +25,17 @@ function ProtectedPage({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function AdminPage({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
+  if (loading || !user) {
+    return <div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ التحقق من صلاحية المدير...</p></div>;
+  }
+  if (user.role !== "admin") {
+    return <div className="site-auth-loading" dir="rtl"><div className="login-card-state"><h1>الدخول مرفوض</h1><p>هذه الصفحة مخصصة لحساب المدير فقط.</p><a className="login-submit" href="/">العودة إلى الموقع</a></div></div>;
+  }
+  return <>{children}</>;
+}
+
 function Router() {
   return (
     <Switch>
@@ -33,8 +44,8 @@ function Router() {
       <Route path="/high-dam/articles"><ProtectedPage><HighDamArticles /></ProtectedPage></Route>
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route path="/dashboard"><ProtectedPage><Dashboard /></ProtectedPage></Route>
-      <Route path="/admin"><ProtectedPage><Dashboard /></ProtectedPage></Route>
+      <Route path="/dashboard"><AdminPage><Dashboard /></AdminPage></Route>
+      <Route path="/admin"><AdminPage><Dashboard /></AdminPage></Route>
       <Route path="/articles"><ProtectedPage><Articles /></ProtectedPage></Route>
       <Route path="/articles/:slug"><ProtectedPage><ArticleDetail /></ProtectedPage></Route>
       <Route path="/profile"><ProtectedPage><Profile /></ProtectedPage></Route>

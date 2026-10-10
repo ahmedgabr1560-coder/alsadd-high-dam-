@@ -25,7 +25,8 @@ export default async function handler(req: any, res: any) {
     if (!session.userId || Number(session.exp) < Date.now()) return reply({ user: null });
     const user = (await loadUsers()).find(item => item.id === Number(session.userId));
     if (!user) return reply({ user: null });
-    const { passwordHash: _passwordHash, ...safeUser } = user;
+    const role = process.env.ADMIN_EMAIL && String(user.email).toLowerCase() === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : user.role;
+    const { passwordHash: _passwordHash, ...safeUser } = { ...user, role };
     return reply({ user: safeUser });
   } catch (error) {
     console.error("[session]", error);
