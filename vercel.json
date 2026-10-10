@@ -9,6 +9,8 @@
     "api/auth/register.ts": { "maxDuration": 10 },
     "api/auth/logout.ts": { "maxDuration": 10 },
     "api/auth/me.ts": { "maxDuration": 10 },
+    "api/auth/request-reset.ts": { "maxDuration": 15 },
+    "api/auth/reset-password.ts": { "maxDuration": 15 },
     "api/health.ts": { "maxDuration": 10 }
   },
   "rewrites": [

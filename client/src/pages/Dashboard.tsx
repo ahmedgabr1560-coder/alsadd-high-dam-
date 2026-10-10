@@ -135,7 +135,7 @@ function DashboardContent() {
               <Button type="button" variant="ghost" className="dashboard-refresh" onClick={() => dashboardQuery.refetch()} disabled={dashboardQuery.isFetching}><RefreshCw size={16} className={dashboardQuery.isFetching ? "dashboard-spin" : ""} /> تحديث</Button>
             </section>
 
-            {dashboardQuery.isLoading || adminSummaryQuery.isLoading ? <div className="dashboard-loading"><Activity size={20} /> جارٍ تجهيز لوحة البيانات...</div> : dashboardQuery.error || adminSummaryQuery.error ? <div className="dashboard-error">{dashboardQuery.error?.data?.code === "FORBIDDEN" || adminSummaryQuery.error?.data?.code === "FORBIDDEN" ? "هذه المنطقة مخصصة للمدير فقط. سجّل الدخول بالحساب الإداري المصرح له." : "تعذر تحميل البيانات. تأكد من اتصال قاعدة البيانات."}</div> : data ? (
+            {dashboardQuery.isLoading || adminSummaryQuery.isLoading ? <div className="dashboard-loading"><Activity size={20} /> جارٍ تجهيز لوحة البيانات...</div> : dashboardQuery.error || adminSummaryQuery.error ? <div className="dashboard-error">{dashboardQuery.error?.data?.code === "FORBIDDEN" || adminSummaryQuery.error?.data?.code === "FORBIDDEN" ? "هذه المنطقة مخصصة للمدير فقط. سجّل الدخول بالحساب الإداري المصرح له." : "تعذر الاتصال بخدمة لوحة المدير. أعد تسجيل الدخول وحاول مرة أخرى."}</div> : data ? (
               <>
                 <section className="dashboard-stat-grid">
                   <StatCard icon={Activity} label="إجمالي الأحداث" value={data.totalEvents} note={`خلال آخر ${days} يومًا`} tone="ink" />
