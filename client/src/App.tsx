@@ -16,6 +16,7 @@ import Quran from "./pages/Quran";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import GlobalMusicControl from "./components/GlobalMusicControl";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useEffect } from "react";
 
 function ProtectedPage({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
@@ -26,12 +27,15 @@ function ProtectedPage({ children }: { children: React.ReactNode }) {
 }
 
 function AdminPage({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
+  const { user, loading } = useAuth();
+  useEffect(() => {
+    if (!loading && !user && typeof window !== "undefined") window.location.href = "/register";
+  }, [loading, user]);
   if (loading || !user) {
     return <div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ التحقق من صلاحية المدير...</p></div>;
   }
   if (user.role !== "admin") {
-    return <div className="site-auth-loading" dir="rtl"><div className="login-card-state"><h1>الدخول مرفوض</h1><p>هذه الصفحة مخصصة لحساب المدير فقط.</p><a className="login-submit" href="/">العودة إلى الموقع</a></div></div>;
+    return <div className="site-auth-loading" dir="rtl"><div className="login-card-state"><h1>هذه الصفحة للمدير فقط</h1><p>يمكنك العودة إلى ملفك الشخصي أو متابعة قراءة الموقع.</p><a className="login-submit" href="/profile">العودة إلى ملفي الشخصي</a></div></div>;
   }
   return <>{children}</>;
 }
