@@ -1,6 +1,8 @@
 import { and, desc, eq, gte, sql } from "drizzle-orm";
 import type { InsertUser, InsertVisitorEvent } from "../drizzle/schema";
 import { ENV } from './_core/env';
+import { appendBlobEvent, loadBlobUsers } from './_core/blobAnalytics';
+import { getBlobVisitorDashboard } from './_core/blobDashboard';
 
 type Database = ReturnType<(typeof import("drizzle-orm/mysql2"))["drizzle"]>;
 let _db: Database | null = null;
@@ -11,7 +13,7 @@ let visitorEventsTable: VisitorEventsTable | null = null;
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
+  if (!_db && process.env.DATABASE_URL && !process.env.DATABASE_URL.startsWith("${")) {
     try {
       const { drizzle } = await import("drizzle-orm/mysql2");
       const schema = await import("../drizzle/schema");
@@ -130,13 +132,19 @@ export async function getUserByOpenId(openId: string) {
 
 export async function insertVisitorEvent(event: InsertVisitorEvent) {
   const db = await getDb();
-  if (!db) throw new Error("Database is not available");
+  if (!db) {
+    await appendBlobEvent({ ...event, occurredAt: new Date().toISOString(), page: event.page || "/", sessionId: event.sessionId || "غير معروف", eventType: event.eventType });
+    return;
+  }
   await db.insert(visitorEventsTable!).values(event);
 }
 
 export async function getAdminSummary() {
   const db = await getDb();
-  if (!db) throw new Error("Database is not available");
+  if (!db) {
+    const users = await loadBlobUsers();
+    return { totalUsers: users.length, registeredUsers: users.slice().sort((a, b) => String(b.lastSignedIn || "").localeCompare(String(a.lastSignedIn || ""))).slice(0, 100).map(({ passwordHash: _passwordHash, ...user }) => user) };
+  }
 
   const countRows = await db.select({ value: sql<number>`count(*)` }).from(usersTable!);
   const registeredUsers = await db
@@ -181,7 +189,7 @@ function asNumber(value: unknown) {
 
 export async function getVisitorDashboard(filters: DashboardFilters) {
   const db = await getDb();
-  if (!db) throw new Error("Database is not available");
+  if (!db) return getBlobVisitorDashboard(filters);
 
   const conditions = buildVisitorConditions(filters);
   const visitsConditions = and(conditions, eq(visitorEventsTable!.eventType, "visit"));
