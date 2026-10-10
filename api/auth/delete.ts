@@ -1,9 +1,9 @@
 async function loadUsers() {
   const { list, get } = await import("@vercel/blob");
-  const result = await list({ prefix: "ofoq-auth/users.json" });
+  const result = await list({ prefix: "ofoq-auth/users.json", token: process.env.BLOB_READ_WRITE_TOKEN });
   const blob = result.blobs.find((item: any) => item.pathname === "ofoq-auth/users.json") ?? result.blobs[0];
   if (!blob) return [];
-  const stored = await get("ofoq-auth/users.json", { access: "private", useCache: false });
+  const stored = await get("ofoq-auth/users.json", { access: "private", useCache: false, token: process.env.BLOB_READ_WRITE_TOKEN });
   if (!stored) return [];
   const value = await new Response(stored.stream).json();
   return Array.isArray(value) ? value : [];
@@ -11,7 +11,7 @@ async function loadUsers() {
 
 async function saveUsers(users: any[]) {
   const { put } = await import("@vercel/blob");
-  await put("ofoq-auth/users.json", JSON.stringify(users), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json; charset=utf-8" });
+  await put("ofoq-auth/users.json", JSON.stringify(users), { access: "private", addRandomSuffix: false, allowOverwrite: true, token: process.env.BLOB_READ_WRITE_TOKEN, contentType: "application/json; charset=utf-8" });
 }
 
 export default async function handler(req: any, res: any) {

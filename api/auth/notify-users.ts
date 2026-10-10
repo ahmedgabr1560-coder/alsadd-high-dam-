@@ -1,9 +1,9 @@
 async function loadUsers() {
   const { list, get } = await import("@vercel/blob");
-  const result = await list({ prefix: "ofoq-auth/users.json" });
+  const result = await list({ prefix: "ofoq-auth/users.json", token: process.env.BLOB_READ_WRITE_TOKEN });
   const blob = result.blobs.find((item: any) => item.pathname === "ofoq-auth/users.json") ?? result.blobs[0];
   if (!blob) return [];
-  const stored = await get("ofoq-auth/users.json", { access: "private", useCache: false });
+  const stored = await get("ofoq-auth/users.json", { access: "private", useCache: false, token: process.env.BLOB_READ_WRITE_TOKEN });
   if (!stored) return [];
   const value = await new Response(stored.stream).json();
   return Array.isArray(value) ? value : [];

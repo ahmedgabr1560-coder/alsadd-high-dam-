@@ -17,10 +17,10 @@ export type StoredUser = {
 
 export async function loadUsers(): Promise<StoredUser[]> {
   const { list, get } = await import("@vercel/blob");
-  const result = await list({ prefix: STORE_PATH });
+  const result = await list({ prefix: STORE_PATH, token: process.env.BLOB_READ_WRITE_TOKEN });
   const blob = result.blobs.find(item => item.pathname === STORE_PATH) ?? result.blobs[0];
   if (!blob) return [];
-  const stored = await get("ofoq-auth/users.json", { access: "private", useCache: false });
+  const stored = await get("ofoq-auth/users.json", { access: "private", useCache: false, token: process.env.BLOB_READ_WRITE_TOKEN });
   if (!stored) return [];
   const value = await new Response(stored.stream).json();
   return Array.isArray(value) ? value : [];
@@ -32,6 +32,7 @@ export async function saveUsers(users: StoredUser[]) {
     access: "private",
     addRandomSuffix: false,
     allowOverwrite: true,
+    token: process.env.BLOB_READ_WRITE_TOKEN,
     contentType: "application/json; charset=utf-8",
   });
 }

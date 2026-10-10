@@ -2,10 +2,10 @@ const RESET_STORE = "ofoq-auth/reset-tokens.json";
 
 async function loadTokens(): Promise<any[]> {
   const { list, get } = await import("@vercel/blob");
-  const result = await list({ prefix: RESET_STORE });
+  const result = await list({ prefix: RESET_STORE, token: process.env.BLOB_READ_WRITE_TOKEN });
   const blob = result.blobs.find(item => item.pathname === RESET_STORE) ?? result.blobs[0];
   if (!blob) return [];
-  const stored = await get(RESET_STORE, { access: "private", useCache: false });
+  const stored = await get(RESET_STORE, { access: "private", useCache: false, token: process.env.BLOB_READ_WRITE_TOKEN });
   if (!stored) return [];
   const value = await new Response(stored.stream).json();
   return Array.isArray(value) ? value : [];
@@ -13,7 +13,7 @@ async function loadTokens(): Promise<any[]> {
 
 async function saveTokens(tokens: any[]) {
   const { put } = await import("@vercel/blob");
-  await put(RESET_STORE, JSON.stringify(tokens), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json; charset=utf-8" });
+  await put(RESET_STORE, JSON.stringify(tokens), { access: "private", addRandomSuffix: false, allowOverwrite: true, token: process.env.BLOB_READ_WRITE_TOKEN, contentType: "application/json; charset=utf-8" });
 }
 
 function reply(res: any, status: number, body: unknown) { res.statusCode = status; res.setHeader("Content-Type", "application/json; charset=utf-8"); res.end(JSON.stringify(body)); }
