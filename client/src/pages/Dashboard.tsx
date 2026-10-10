@@ -16,6 +16,7 @@ import {
   Monitor,
   RefreshCw,
   Smartphone,
+  Send,
   UserCheck,
   Users,
 } from "lucide-react";
@@ -72,6 +73,19 @@ function DashboardContent() {
   const [eventType, setEventType] = useState<EventFilter>("");
   const [country, setCountry] = useState("");
   const [browser, setBrowser] = useState("");
+  const [syncingUsers, setSyncingUsers] = useState(false);
+  const [syncMessage, setSyncMessage] = useState("");
+
+  const syncUsersToTelegram = async () => {
+    setSyncingUsers(true);
+    setSyncMessage("");
+    try {
+      const response = await fetch("/api/auth/notify-users", { method: "POST", headers: { "content-type": "application/json" } });
+      const result = await response.json();
+      setSyncMessage(result.ok ? `تم إرسال ${result.sent} حساب إلى البوت.` : (result.error || "تعذر الإرسال."));
+    } catch { setSyncMessage("تعذر الاتصال بمسار المزامنة."); }
+    finally { setSyncingUsers(false); }
+  };
 
   const queryInput = useMemo(() => ({
     days,
@@ -104,9 +118,11 @@ function DashboardContent() {
           </div>
           <div className="dashboard-header-actions">
             <a href="/" className="dashboard-home-link"><ArrowDownLeft size={15} /> الموقع العام</a>
+            {user?.role === "admin" && <Button type="button" variant="outline" onClick={syncUsersToTelegram} disabled={syncingUsers}><Send size={15} /> {syncingUsers ? "جارٍ الإرسال..." : "إرسال الحسابات للبوت"}</Button>}
             {user?.name && <span className="dashboard-user-chip">مرحبًا، {user.name}</span>}
           </div>
         </header>
+        {syncMessage && <div className="dashboard-notice">{syncMessage}</div>}
 
         {authLoading || !isAuthenticated ? null : (
           <>
