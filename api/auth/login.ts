@@ -13,6 +13,8 @@ async function saveUsers(users: any[]) {
   await put("ofoq-auth/users.json", JSON.stringify(users), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json; charset=utf-8" });
 }
 
+import { notifyTelegramAccount } from "../../server/_core/telegram";
+
 export default async function handler(req: any, res: any) {
   const reply = (status: number, body: unknown) => { res.statusCode = status; res.setHeader("Content-Type", "application/json; charset=utf-8"); res.end(JSON.stringify(body)); };
   if (req.method !== "POST") return reply(405, { ok: false, error: "Method not allowed" });
@@ -32,6 +34,7 @@ export default async function handler(req: any, res: any) {
     const role = process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : user.role;
     const updated = { ...user, role, lastSignedIn: now, updatedAt: now };
     await saveUsers(users.map(item => item.id === user.id ? updated : item));
+    await notifyTelegramAccount("login", updated);
     const encoded = Buffer.from(JSON.stringify({ userId: user.id, exp: Date.now() + 2592000000 })).toString("base64url");
     const signature = crypto.createHmac("sha256", process.env.AUTH_SECRET || "alsadd-local-auth-development-only").update(encoded).digest("base64url");
     res.setHeader("Set-Cookie", `alsadd_session=${encodeURIComponent(`${encoded}.${signature}`)}; Max-Age=2592000; Path=/; HttpOnly; Secure; SameSite=None`);
