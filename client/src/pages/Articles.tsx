@@ -1,22 +1,22 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { ArrowLeft, ArrowRight, BookOpen, Droplets, Factory, Landmark, Mountain, Shield, Sprout, Waves } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Landmark } from "lucide-react";
+import { articles } from "@/data/articles";
+import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
+import ProfileAvatar from "@/components/ProfileAvatar";
 
-const articles = [
-  { id: "water", icon: Droplets, tag: "المياه", title: "الأمن المائي من خزان أسوان إلى بحيرة ناصر", lead: "كيف نقل السد العالي مصر من انتظار الفيضان إلى إدارة مائية ممتدة على مدار العام؟", text: "تقدم بحيرة ناصر مخزونًا استراتيجيًا يساعد على عبور سنوات الجفاف وتنظيم التصرفات المائية، مع مسؤولية مستمرة في تقليل الفاقد وتحسين كفاءة الري وإعادة استخدام المياه." },
-  { id: "engineering", icon: Factory, tag: "هندسة", title: "كيف يعمل السد العالي؟", lead: "كتلة صخرية وترابية ضخمة تتعامل مع ضغط الماء والزمن والجيولوجيا.", text: "يعتمد السد على جسم هائل من الردميات وطبقات الحماية وقلب مانع للمياه، بينما تمر المياه عبر مآخذ وأنفاق إلى محطة التوليد، وتراقب أجهزة القياس سلوك المنشأ باستمرار." },
-  { id: "energy", icon: Waves, tag: "طاقة", title: "الكهرباء المائية والتحول الأخضر", lead: "من توربينات أسوان إلى مزيج الطاقة المصري الجديد.", text: "وفرت محطة السد كهرباء مائية مستقرة لعقود، واليوم تتكامل مع الطاقة الشمسية في أسوان ومجمع بنبان لتقليل الانبعاثات وبناء شبكة أكثر مرونة." },
-  { id: "heritage", icon: Mountain, tag: "تراث", title: "إنقاذ أبو سمبل وذاكرة النوبة", lead: "عملية دولية نقلت معابد كاملة وأنقذت تاريخًا من الغرق.", text: "قاد المشروع إلى واحدة من أشهر حملات حماية التراث في القرن العشرين؛ فُككت الكتل الحجرية ورُقمت ثم أعيد تركيبها في موقع أعلى يحافظ على المشهد والاتجاه." },
-  { id: "security", icon: Shield, tag: "استراتيجية", title: "المنشآت الحيوية في عصر البيانات", lead: "حماية المياه والكهرباء تعني اليوم حماية الأنظمة الرقمية أيضًا.", text: "تحتاج المنشآت المائية إلى دفاع متعدد الطبقات: إنذار مبكر، خطط طوارئ، صيانة دقيقة، حماية للاتصالات، وأمن سيبراني يضمن استمرار التحكم في الأزمات." },
-  { id: "future", icon: Sprout, tag: "تنمية", title: "بحيرة ناصر: اقتصاد محلي مستدام", lead: "الصيد والسياحة والزراعة والطاقة في مسار تنمية واحد.", text: "تستطيع البحيرة أن تكون منصة لتنمية جنوبية متوازنة عبر سلاسل قيمة للصيد، سياحة بيئية، نقل نهري، مراقبة بيئية، ومشاركة حقيقية للمجتمعات المحلية." },
-  { id: "israeli-plan", icon: Shield, tag: "ملف استراتيجي", title: "المخطط الإسرائيلي واستهداف العمق المائي", lead: "قراءة تاريخية نقدية في محاولات الضغط على الأمن المائي المصري.", text: "تكشف دراسة الصراع أن السد العالي لم يكن مشروع ري فقط؛ فقد ارتبط بحسابات الردع وحماية العمق، وتتعامل القراءة مع الادعاءات المتداولة عبر التفريق بين الوثيقة التاريخية والتحليل السياسي غير الموثق." },
-  { id: "october-war", icon: Landmark, tag: "حرب أكتوبر", title: "السد العالي في حرب أكتوبر 1973", lead: "الماء والكهرباء والصناعة في اختبار الحرب والسلام.", text: "كان الحفاظ على تشغيل المنشآت الحيوية وتأمين الطاقة والمياه جزءًا من صمود الدولة، بينما أظهرت الحرب قيمة البنية التحتية الوطنية في دعم القوات والمجتمع والاقتصاد." },
-  { id: "1953", icon: BookOpen, tag: "1953", title: "1953: الثورة وبناء قرار المشروع", lead: "عام مفصلي انتقلت فيه فكرة السد من الدراسات إلى مشروع دولة.", text: "تكثفت في هذه المرحلة الدراسات الفنية والسياسية، وأصبح التخزين طويل المدى جزءًا من تصور أوسع للاستقلال والتنمية وإعادة توزيع فرص العمل والإنتاج في الوادي." },
-  { id: "1956", icon: Waves, tag: "1956", title: "العدوان الثلاثي وتأميم القناة", lead: "حين تحولت عائدات قناة السويس إلى تمويل لمشروع قومي.", text: "أظهر عام 1956 تداخل الاقتصاد بالسيادة؛ فبعد سحب التمويل الغربي، جاء قرار التأميم ليضع القناة وعائداتها في قلب معركة تمويل السد ومواجهة العدوان." },
-  { id: "palestine", icon: Mountain, tag: "فلسطين", title: "فلسطين: من الانتداب إلى النكبة وما بعدها", lead: "خط زمني تمهيدي لفهم التحولات السياسية والإنسانية في فلسطين.", text: "يتناول المقال مرحلة الانتداب البريطاني، تصاعد الهجرة والاستيطان والصراع على الأرض، ثم إعلان قيام إسرائيل عام 1948 وما رافقه من تهجير واسع للفلسطينيين، مرورًا بالاحتلال بعد 1967، واتفاقيات أوسلو، واستمرار قضية اللاجئين والقدس والاستيطان حتى الحاضر. تُعرض الوقائع من منظور تاريخي وإنساني مع الإشارة إلى أن التفاصيل السياسية والقانونية محل بحث ومصادر متعددة." },
-];
+const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine-history-1948", "gaza-war"];
 
 export default function Articles() {
-  const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
-  if (loading || !user) return <div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ فتح مكتبة المقالات...</p></div>;
-  return <main className="articles-page" dir="rtl"><header className="articles-header"><a href="/" className="articles-back"><ArrowRight size={16} /> العودة للموقع</a><span className="articles-kicker"><BookOpen size={16} /> مكتبة السد العالي</span><h1>مقالات تفتح <em>نوافذ جديدة</em><br />على قصة الماء.</h1><p>قراءات قصيرة ومركزة تكمل البحث الرئيسي، وتربط بين السد والهندسة والمجتمع والبيئة والمستقبل.</p></header><div className="articles-grid">{articles.map(({ id, icon: Icon, tag, title, lead, text }) => <article className="article-card" id={id} key={id}><div className="article-card-top"><span className="article-icon"><Icon size={21} /></span><span>{tag}</span></div><h2>{title}</h2><p className="article-lead">{lead}</p><p>{text}</p><a href={`#${id}`} aria-label={`قراءة ${title}`}>اقرأ المقال <ArrowLeft size={15} /></a></article>)}</div><footer className="articles-footer"><Landmark size={18} /> السد العالي — معرفة تُبنى من الماء والذاكرة.</footer></main>;
+  const { isEnglish } = useLanguage();
+  const text = isEnglish ? languageText.en : languageText.ar;
+  const researchArticles = articles.filter(article => independentResearchSlugs.includes(article.slug));
+  return <main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}>
+    <header className="articles-header">
+      <div className="articles-toolbar"><a href="/" className="articles-back"><ArrowRight size={16} /> {text.back}</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div>
+      <span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? "Independent research" : "أبحاث مستقلة"} · {researchArticles.length} {isEnglish ? "researches" : "أبحاث"}</span>
+      <h1>{isEnglish ? <>Four subjects,<br /><em>four complete pages.</em></> : <>كل بحث في صفحة،<br /><em>وكل موضوع له مساره.</em></>}</h1>
+      <p>{isEnglish ? "Independent long-form research on the October War, World War II, Palestine and the Gaza War. Each subject has its own dedicated page." : "أبحاث مستقلة كاملة عن حرب أكتوبر والحرب العالمية الثانية وفلسطين وحرب غزة. لكل بحث صفحته الخاصة المنفصلة."}</p>
+    </header>
+    <div className="articles-grid">{researchArticles.map(({ slug, icon: Icon, tag, tagEn, title, titleEn, lead, leadEn, image, imageAlt }) => { const cardTitle = isEnglish ? (titleEn || title) : title; return <article className="article-card" key={slug}>{image && <img className="article-card-image" src={image} alt={imageAlt || cardTitle} />}<div className="article-card-top"><span className="article-icon"><Icon size={21} /></span><span>{isEnglish ? (tagEn || tag) : tag}</span></div><h2>{cardTitle}</h2><p className="article-lead">{isEnglish ? (leadEn || lead) : lead}</p><a href={`/articles/${slug}`} aria-label={`${text.read}: ${cardTitle}`}>{text.read} <ArrowLeft size={15} /></a></article>; })}</div>
+    <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "OFOQ — knowledge built from memory and evidence." : "أُفُق — نقرأ الذاكرة لنرى المستقبل بوضوح."}</footer>
+  </main>;
 }

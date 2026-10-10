@@ -11,7 +11,7 @@ const emailSchema = z.string().trim().email().max(320);
 const passwordSchema = z.string().min(8).max(128);
 const nameSchema = z.string().trim().min(2).max(120);
 const birthDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
-const secret = () => process.env.AUTH_SECRET || process.env.MANUS_JWT_SECRET || "alsadd-local-auth-fallback";
+const secret = () => process.env.AUTH_SECRET || "alsadd-local-auth-development-only";
 
 function encode(value: string) {
   return Buffer.from(value).toString("base64url");
@@ -25,12 +25,12 @@ function sign(value: string) {
   return createHmac("sha256", secret()).update(value).digest("base64url");
 }
 
-function hashPassword(password: string, salt = randomBytes(16).toString("hex")) {
+export function hashPassword(password: string, salt = randomBytes(16).toString("hex")) {
   const hash = scryptSync(password, salt, 64).toString("hex");
   return `${salt}:${hash}`;
 }
 
-function verifyPassword(password: string, stored: string) {
+export function verifyPassword(password: string, stored: string) {
   const [salt, expectedHex] = stored.split(":");
   if (!salt || !expectedHex) return false;
   const actual = scryptSync(password, salt, 64);
@@ -38,7 +38,7 @@ function verifyPassword(password: string, stored: string) {
   return expected.length === actual.length && timingSafeEqual(actual, expected);
 }
 
-function createSession(userId: number) {
+export function createSession(userId: number) {
   const payload = JSON.stringify({ userId, exp: Date.now() + SESSION_TTL_MS });
   const encoded = encode(payload);
   return `${encoded}.${sign(encoded)}`;
@@ -82,8 +82,10 @@ function publicUser(user: any) {
   return safeUser;
 }
 
-export function registerLocalAuthRoutes(app: Express) {
-  app.post("/api/auth/register", async (req: Request, res: Response) => {
+export function registerLocalAuthRoutes(app: Express, routePrefix = "/api") {
+  const authPath = (path: string) => `${routePrefix}/auth/${path}`.replace(/\/+/g, "/");
+
+  app.post(authPath("register"), async (req: Request, res: Response) => {
     const parsed = z.object({
       name: nameSchema,
       email: emailSchema,
@@ -116,7 +118,7 @@ export function registerLocalAuthRoutes(app: Express) {
     }
   });
 
-  app.post("/api/auth/login", async (req: Request, res: Response) => {
+  app.post(authPath("login"), async (req: Request, res: Response) => {
     const parsed = z.object({ email: emailSchema, password: passwordSchema }).safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ ok: false, error: "أدخل بريدًا إلكترونيًا وكلمة مرور صحيحة." });
     try {
@@ -132,8 +134,21 @@ export function registerLocalAuthRoutes(app: Express) {
     }
   });
 
-  app.post("/api/auth/logout", (_req: Request, res: Response) => {
+  app.post(authPath("logout"), (_req: Request, res: Response) => {
     res.clearCookie(LOCAL_COOKIE_NAME, { ...cookieOptions(), maxAge: 0 });
     return res.json({ ok: true });
+  });
+
+  app.post(authPath("delete"), async (req: Request, res: Response) => {
+    const user = await authenticateLocalRequest(req);
+    if (!user) return res.status(401).json({ ok: false, error: "يجب تسجيل الدخول أولًا." });
+    try {
+      await db.deleteUserById(user.id);
+      res.clearCookie(LOCAL_COOKIE_NAME, { ...cookieOptions(), maxAge: 0 });
+      return res.json({ ok: true });
+    } catch (error) {
+      console.error("[LocalAuth] Delete account failed", error);
+      return res.status(500).json({ ok: false, error: "تعذر حذف الحساب الآن." });
+    }
   });
 }

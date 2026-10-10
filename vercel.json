@@ -3,10 +3,18 @@
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm build:static",
   "outputDirectory": "dist/public",
+  "functions": {
+    "api/[...path].ts": { "maxDuration": 10 },
+    "api/auth/login.ts": { "maxDuration": 10 },
+    "api/auth/register.ts": { "maxDuration": 10 },
+    "api/auth/logout.ts": { "maxDuration": 10 },
+    "api/auth/me.ts": { "maxDuration": 10 },
+    "api/health.ts": { "maxDuration": 10 }
+  },
   "rewrites": [
-    { "source": "/api/platform/:path*", "destination": "https://alsadd-mfrgewuc.manus.space/api/platform/:path*" },
-    { "source": "/api/oauth/:path*", "destination": "https://alsadd-mfrgewuc.manus.space/api/oauth/:path*" },
-    { "source": "/api/trpc/:path*", "destination": "https://alsadd-mfrgewuc.manus.space/api/trpc/:path*" },
-    { "source": "/api/health", "destination": "https://alsadd-mfrgewuc.manus.space/api/health" }
+    { "source": "/((?!api(?:/|$)).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    { "source": "/api/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
   ]
 }
