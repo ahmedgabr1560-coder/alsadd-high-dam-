@@ -112,7 +112,7 @@ function DashboardContent() {
       if (queryInput.country) params.set("country", queryInput.country);
       if (queryInput.browser) params.set("browser", queryInput.browser);
       try {
-        const response = await fetch(`/api/admin/dashboard?${params.toString()}`, { credentials: "include", cache: "no-store" });
+        const response = await fetch(`/api/trpc/admin-dashboard?${params.toString()}`, { credentials: "include", cache: "no-store" });
         const result = await response.json().catch(() => ({}));
         if (!response.ok) throw Object.assign(new Error(result.error || "تعذر تحميل لوحة المدير."), { code: result.code });
         if (!cancelled) setDashboardData(result);

@@ -20,7 +20,7 @@ app.get("/health", (_req, res) => res.json({ status: "ok" }));
 app.post("/analytics/visit", visitHandler);
 // The catch-all function strips `/api`; register routes relative to the normalized path.
 registerLocalAuthRoutes(app, "");
-app.get("/admin/dashboard", async (req, res) => {
+app.get(["/admin/dashboard", "/trpc/admin-dashboard"], async (req, res) => {
   try {
     const { authenticateLocalRequest } = await import("../server/_core/localAuth");
     const user = await authenticateLocalRequest(req as any);
