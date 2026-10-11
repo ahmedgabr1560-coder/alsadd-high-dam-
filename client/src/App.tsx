@@ -31,13 +31,16 @@ function ProtectedPage({ children }: { children: React.ReactNode }) {
 function AdminPage({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   useEffect(() => {
-    if (!loading && !user && typeof window !== "undefined") window.location.href = "/register";
+    if (!loading && typeof window !== "undefined") {
+      if (!user) window.location.replace("/register");
+      else if (user.role !== "admin") window.location.replace("/");
+    }
   }, [loading, user]);
   if (loading || !user) {
     return <div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ التحقق من صلاحية المدير...</p></div>;
   }
   if (user.role !== "admin") {
-    return <div className="site-auth-loading" dir="rtl"><div className="login-card-state"><h1>هذه الصفحة للمدير فقط</h1><p>يمكنك العودة إلى ملفك الشخصي أو متابعة قراءة الموقع.</p><a className="login-submit" href="/profile">العودة إلى ملفي الشخصي</a></div></div>;
+    return <div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ إعادتك إلى الموقع...</p></div>;
   }
   return <>{children}</>;
 }
