@@ -3,6 +3,7 @@ import { useRoute } from "wouter";
 import { getArticle } from "@/data/articles";
 import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import SeoHead from "@/components/SeoHead";
 
 const verseSets: Record<string, Array<[string, string]>> = {
   "water-security": [["﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾", "الأنبياء · ٣٠"], ["﴿وَأَنزَلْنَا مِنَ السَّمَاءِ مَاءً بِقَدَرٍ﴾", "المؤمنون · ١٨"], ["﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾", "الأنبياء · ٣٠"], ["﴿وَاللَّهُ أَنزَلَ مِنَ السَّمَاءِ مَاءً فَأَحْيَا بِهِ الْأَرْضَ﴾", "النحل · ٦٥"]],
@@ -31,19 +32,19 @@ export default function ArticleDetail() {
   const { isEnglish } = useLanguage();
   const text = isEnglish ? languageText.en : languageText.ar;
   const article = params?.slug ? getArticle(params.slug) : undefined;
-  if (!article) return <main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to articles" : "العودة إلى المقالات"}</a><h1>{isEnglish ? "Article not found" : "المقال غير موجود"}</h1></main>;
+  if (!article) return <><SeoHead title="المقال غير موجود | أُفُق" description="الصفحة المطلوبة غير موجودة في بوابة أُفُق." path={`/articles/${params?.slug || "unknown"}`} /><main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to articles" : "العودة إلى المقالات"}</a><h1>{isEnglish ? "Article not found" : "المقال غير موجود"}</h1></main></>;
   const title = isEnglish ? (article.titleEn || article.title) : article.title;
   const lead = isEnglish ? (article.leadEn || article.lead) : article.lead;
   const body = isEnglish ? (article.bodyEn || article.body) : article.body;
   const verses = verseSets[article.slug] || verseSets["water-security"];
   const libraryPath = highDamSlugs.includes(article.slug) ? "/high-dam/articles" : "/articles";
   const timeline = warTimelines[article.slug];
-  return <main className="article-detail-page" dir={isEnglish ? "ltr" : "rtl"}>
+  return <><SeoHead title={`${title} | أُفُق`} description={lead.slice(0, 155)} path={`/articles/${article.slug}`} image={article.image || "/assets/aswan-dam.jpg"} type="article" /><main className="article-detail-page" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="article-detail-header"><div className="articles-toolbar"><a className="articles-back" href={libraryPath}><ArrowRight size={16} /> {isEnglish ? "Back to articles" : "العودة إلى المقالات"}</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div><div className="article-author"><span>إعداد وتقديم</span><strong>أحمد حمدي عبد الونيس جبر</strong><small>أُفُق | OFOQ · معرفة تُقرأ وأثرٌ يبقى</small></div><div className="article-verses">{verses.map(([verse, reference]) => <div key={reference + verse}><p>{verse}</p><small>{reference}</small></div>)}</div><span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? (article.tagEn || article.tag) : article.tag}</span><h1>{title}</h1><p>{lead}</p></header>
     {timeline && <section className="article-timeline"><h2>{isEnglish ? "Timeline from the beginning" : "الخط الزمني من البداية"}</h2><div>{timeline.map(([date, event]) => <article key={date}><strong>{date}</strong><p>{event}</p></article>)}</div></section>}
     <figure className="article-detail-figure"><img src={article.image || "/assets/aswan-dam.jpg"} alt={article.imageAlt || (isEnglish ? "OFOQ reference image" : "صورة مرجعية من أُفُق")} /><figcaption>{article.imageAlt || (isEnglish ? "OFOQ reference image" : "صورة مرجعية من أُفُق")}{article.sourceName ? ` · ${text.source}: ${article.sourceName}` : ""}</figcaption></figure>
     {article.gallery && <section className="article-gallery"><h2>{isEnglish ? "Historical images and sources" : "صور تاريخية موثقة"}</h2><div>{article.gallery.map(image => <figure key={image.src}><img src={image.src} alt={image.caption} /><figcaption>{image.caption} · <a href={image.url} target="_blank" rel="noreferrer">{image.source}</a></figcaption></figure>)}</div></section>}
     <article className="article-detail-content">{body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}{article.sourceUrl && !article.sources && <p className="article-source"><strong>{text.source}:</strong> <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.sourceName || article.sourceUrl}</a></p>}{article.sources && <section className="article-sources"><h2>{isEnglish ? "References" : "المصادر والمراجع"}</h2><ol>{article.sources.map(source => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.name}</a></li>)}</ol></section>}</article>
     <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "OFOQ — knowledge built from memory and evidence." : "أُفُق — نقرأ الذاكرة لنرى المستقبل بوضوح."}</footer>
-  </main>;
+  </main></>;
 }

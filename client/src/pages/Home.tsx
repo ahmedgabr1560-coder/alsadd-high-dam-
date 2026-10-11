@@ -2,13 +2,14 @@ import { ArrowLeft, ArrowRight, BookMarked, BookOpen, Landmark, Sparkles } from 
 import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import SeoHead from "@/components/SeoHead";
 
 const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine-history-1948", "gaza-war"];
 
 export default function Home() {
   const { isEnglish } = useLanguage();
   const independentResearch = articles.filter(article => independentResearchSlugs.includes(article.slug));
-  return <main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
+  return <><SeoHead title={isEnglish ? "OFOQ | Research, History and Wider Horizons" : "أُفُق | أبحاث موثقة عن السد العالي والتاريخ"} description={isEnglish ? "OFOQ is an Arabic and English research portal covering the High Dam, October War, World War II, Palestine and Gaza through documented long-form articles." : "أُفُق بوابة بحثية عربية وإنجليزية تقدم أبحاثًا موثقة عن السد العالي وحرب أكتوبر والحرب العالمية الثانية وفلسطين وغزة."} path="/" /><main className="articles-page ofoq-home" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
       <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> أُفُق | OFOQ</a><div className="articles-toolbar-actions"><a className="quran-nav-icon" href="/quran" aria-label="القرآن الكريم" title="القرآن الكريم"><BookMarked size={18} /></a><ProfileAvatar /><LanguageToggle /></div></div>
       <div className="ofoq-home-signature"><span>إعداد وتقديم</span><strong>أحمد حمدي عبد الونيس جبر</strong><small>رؤية تُقرأ، ومعرفة تُبنى، وأثرٌ يبقى.</small></div>
@@ -33,5 +34,5 @@ export default function Home() {
     </section>
 
     <footer className="articles-footer"><Landmark size={18} /> أُفُق — نقرأ الذاكرة لنرى المستقبل بوضوح.</footer>
-  </main>;
+  </main></>;
 }

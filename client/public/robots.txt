@@ -1,13 +1,17 @@
 User-agent: *
 Allow: /
+Allow: /articles
+Allow: /articles/
+Allow: /high-dam/articles
 Disallow: /api/
 Disallow: /dashboard
 Disallow: /admin
 Disallow: /profile
 Disallow: /login
 Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
 Disallow: /quran
-Disallow: /high-dam
-Disallow: /articles
+Disallow: /high-dam$
 
 Sitemap: https://ofoq-egypt.vercel.app/sitemap.xml

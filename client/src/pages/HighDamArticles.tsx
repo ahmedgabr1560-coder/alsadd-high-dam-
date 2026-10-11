@@ -2,13 +2,14 @@ import { BookOpen, Landmark, ArrowUpLeft } from "lucide-react";
 import { articles } from "@/data/articles";
 import { LanguageToggle, useLanguage } from "@/contexts/LanguageContext";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import SeoHead from "@/components/SeoHead";
 
 const highDamSlugs = ["water-security", "engineering", "hydropower", "abu-simbel", "critical-infrastructure", "lake-nasser", "1956", "future-2030"];
 
 export default function HighDamArticles() {
   const { isEnglish } = useLanguage();
   const highDamArticles = articles.filter(article => highDamSlugs.includes(article.slug));
-  return <main id="top" className="articles-page ofoq-home highdam-research-page" dir={isEnglish ? "ltr" : "rtl"}>
+  return <><SeoHead title={isEnglish ? "The High Dam in Egypt | Complete OFOQ Research" : "السد العالي وتاريخه | بحث شامل من أُفُق"} description={isEnglish ? "A complete research guide to Egypt's High Dam, Lake Nasser, water security, hydropower, Nubian heritage, the Suez Crisis and the project's future." : "بحث شامل عن السد العالي في مصر وبحيرة ناصر والأمن المائي والكهرباء المائية وإنقاذ آثار النوبة وأزمة السويس ومستقبل المشروع."} path="/high-dam/articles" image="/assets/aswan-dam.jpg" type="article" /><main id="top" className="articles-page ofoq-home highdam-research-page" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
       <div className="articles-toolbar"><a href="/" className="articles-back"><Landmark size={16} /> {isEnglish ? "Back to OFOQ" : "العودة إلى أُفُق"}</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div>
       <span className="articles-kicker"><BookOpen size={16} /> {isEnglish ? `High Dam · one complete research · ${highDamArticles.length} chapters` : `السد العالي · بحث واحد متكامل · ${highDamArticles.length} محاور`}</span>
@@ -34,5 +35,5 @@ export default function HighDamArticles() {
     </article>
     <a className="highdam-back-top" href="#top" aria-label="العودة إلى بداية البحث"><ArrowUpLeft size={18} /></a>
     <footer className="articles-footer"><Landmark size={18} /> {isEnglish ? "OFOQ — The High Dam, one complete research." : "أُفُق — السد العالي، بحث واحد متكامل."}</footer>
-  </main>;
+  </main></>;
 }

@@ -50,15 +50,15 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/high-dam"><ProtectedPage><HighDam /></ProtectedPage></Route>
-      <Route path="/high-dam/articles"><ProtectedPage><HighDamArticles /></ProtectedPage></Route>
+      <Route path="/high-dam/articles" component={HighDamArticles} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/dashboard"><AdminPage><Dashboard /></AdminPage></Route>
       <Route path="/admin"><AdminPage><Dashboard /></AdminPage></Route>
-      <Route path="/articles"><ProtectedPage><Articles /></ProtectedPage></Route>
-      <Route path="/articles/:slug"><ProtectedPage><ArticleDetail /></ProtectedPage></Route>
+      <Route path="/articles" component={Articles} />
+      <Route path="/articles/:slug" component={ArticleDetail} />
       <Route path="/profile"><ProtectedPage><Profile /></ProtectedPage></Route>
       <Route path="/quran"><ProtectedPage><Quran /></ProtectedPage></Route>
       <Route path="/404" component={NotFound} />
