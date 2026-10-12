@@ -7,7 +7,7 @@ function reply(res: any, status: number, body: unknown) {
 
 export default async function handler(req: any, res: any) {
   const path = String(req.url || "").split("?")[0];
-  if (!path.endsWith("/admin-dashboard")) return reply(res, 404, { ok: false, error: "Route not found" });
+  if (!path.endsWith("/admin-dashboard") && !path.endsWith("/admin/dashboard")) return reply(res, 404, { ok: false, error: "Route not found" });
   if (req.method !== "GET") return reply(res, 405, { ok: false, error: "Method not allowed" });
   try {
     const crypto = await import("node:crypto");
