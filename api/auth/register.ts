@@ -30,7 +30,8 @@ export default async function handler(req: any, res: any) {
     const now = new Date().toISOString();
     const salt = crypto.randomBytes(16).toString("hex");
     const passwordHash = `${salt}:${crypto.scryptSync(password, salt, 64).toString("hex")}`;
-    const user = { id: users.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1, openId: `local_${crypto.randomBytes(16).toString("hex")}`, name, email, passwordHash, profileImage, birthDate, loginMethod: "email", role: process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : "user", createdAt: now, updatedAt: now, lastSignedIn: now };
+    const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+    const user = { id: users.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1, openId: `local_${crypto.randomBytes(16).toString("hex")}`, name, email, passwordHash, profileImage, birthDate, loginMethod: "email", role: adminEmail && email === adminEmail ? "admin" : "user", createdAt: now, updatedAt: now, lastSignedIn: now };
     await saveUsers([...users, user]);
     try { const { notifyTelegramAccount } = await import("../../server/_core/telegram"); await notifyTelegramAccount("register", user); } catch (notificationError) { console.error("[Telegram] registration notification skipped", notificationError); }
     const encoded = Buffer.from(JSON.stringify({ userId: user.id, exp: Date.now() + 2592000000 })).toString("base64url");

@@ -82,6 +82,18 @@ export default function DashboardLayout({
     );
   }
 
+  if (user.role !== "admin") {
+    return (
+      <div dir="rtl" className="flex min-h-screen items-center justify-center bg-background p-6">
+        <div className="flex max-w-md flex-col items-center gap-4 text-center">
+          <h1 className="text-2xl font-semibold">لوحة المدير فقط</h1>
+          <p className="text-sm text-muted-foreground">لا يملك هذا الحساب صلاحية الوصول إلى بيانات الزوار.</p>
+          <Button onClick={() => { window.location.replace("/"); }}>العودة إلى الموقع</Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div dir="rtl" className="min-h-screen">
       <SidebarProvider

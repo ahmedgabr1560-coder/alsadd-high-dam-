@@ -56,7 +56,8 @@ export async function registerHandler(req: any, res: any) {
     connection = await openDb();
     if (await getUser(connection, email)) return json(res, 409, { ok: false, error: "هذا البريد مسجل بالفعل. استخدم تسجيل الدخول." });
     const openId = `local_${randomBytes(16).toString("hex")}`;
-    const role = process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : "user";
+    const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+    const role = adminEmail && email === adminEmail ? "admin" : "user";
     const [result] = await connection.execute("INSERT INTO users (openId, name, email, passwordHash, profileImage, birthDate, loginMethod, role, lastSignedIn) VALUES (?, ?, ?, ?, ?, ?, 'email', ?, NOW())", [openId, name, email, hashPassword(password), profileImage, birthDate, role]);
     const user = await getUser(connection, email);
     if (!(result as any).insertId || !user) return json(res, 500, { ok: false, error: "تعذر إنشاء الحساب." });
@@ -79,7 +80,8 @@ export async function loginHandler(req: any, res: any) {
     connection = await openDb();
     const user = await getUser(connection, email);
     if (!user?.passwordHash || !verifyPassword(password, user.passwordHash)) return json(res, 401, { ok: false, error: "البريد الإلكتروني أو كلمة المرور غير صحيحة." });
-    const role = process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : user.role;
+    const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+    const role = adminEmail && email === adminEmail ? "admin" : user.role;
     await connection.execute("UPDATE users SET lastSignedIn = NOW(), role = ? WHERE id = ?", [role, user.id]);
     setSession(res, Number(user.id));
     return json(res, 200, { ok: true, user: publicUser({ ...user, role, lastSignedIn: new Date() }) });

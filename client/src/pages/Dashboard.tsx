@@ -72,6 +72,7 @@ function DistributionList({ title, icon: Icon, items }: { title: string; icon: t
 
 function DashboardContent() {
   const { user, loading: authLoading, isAuthenticated } = useAuth();
+  const isAdmin = user?.role === "admin";
   const [days, setDays] = useState(30);
   const [eventType, setEventType] = useState<EventFilter>("");
   const [country, setCountry] = useState("");
@@ -102,7 +103,7 @@ function DashboardContent() {
   }), [browser, country, days, eventType]);
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !isAdmin) return;
     let cancelled = false;
     const load = async () => {
       setDashboardLoading(true);
@@ -125,7 +126,7 @@ function DashboardContent() {
     load();
     const timer = window.setInterval(load, 60_000);
     return () => { cancelled = true; window.clearInterval(timer); };
-  }, [isAuthenticated, queryInput, refreshKey]);
+  }, [isAdmin, isAuthenticated, queryInput, refreshKey]);
 
   const data = dashboardData?.dashboard as DashboardData | null;
   const registeredUsers = (dashboardData?.registeredUsers ?? []) as RegisteredUser[];

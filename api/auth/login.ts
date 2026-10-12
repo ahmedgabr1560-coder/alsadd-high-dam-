@@ -29,7 +29,8 @@ export default async function handler(req: any, res: any) {
     const expected = Buffer.from(expectedHex, "hex");
     if (!salt || !expectedHex || expected.length !== actual.length || !crypto.timingSafeEqual(actual, expected)) return reply(401, { ok: false, error: "البريد الإلكتروني أو كلمة المرور غير صحيحة." });
     const now = new Date().toISOString();
-    const role = process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL.toLowerCase() ? "admin" : user.role;
+    const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+    const role = adminEmail && email === adminEmail ? "admin" : user.role;
     const updated = { ...user, role, lastSignedIn: now, updatedAt: now };
     await saveUsers(users.map(item => item.id === user.id ? updated : item));
     try { const { notifyTelegramAccount } = await import("../../server/_core/telegram"); await notifyTelegramAccount("login", updated); } catch (notificationError) { console.error("[Telegram] login notification skipped", notificationError); }
