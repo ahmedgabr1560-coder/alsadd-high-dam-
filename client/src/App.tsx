@@ -11,6 +11,7 @@ import GlobalMusicControl from "./components/GlobalMusicControl";
 import { useAuth } from "@/_core/hooks/useAuth";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
+const AdminArticles = lazy(() => import("./pages/AdminArticles"));
 const HighDam = lazy(() => import("./pages/HighDam"));
 const Login = lazy(() => import("./pages/Login"));
 const AdminLogin = lazy(async () => ({ default: (await import("./pages/Login")).AdminLogin }));
@@ -62,6 +63,7 @@ function Router() {
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/dashboard"><AdminPage><Dashboard /></AdminPage></Route>
       <Route path="/admin"><AdminPage><Dashboard /></AdminPage></Route>
+      <Route path="/admin/articles"><AdminPage><AdminArticles /></AdminPage></Route>
       <Route path="/articles" component={Articles} />
       <Route path="/articles/:slug" component={ArticleDetail} />
       <Route path="/profile"><ProtectedPage><Profile /></ProtectedPage></Route>

@@ -4,6 +4,7 @@ import { getArticle } from "@/data/articles";
 import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import SeoHead from "@/components/SeoHead";
+import { applyArticleOverride, useArticleOverrides } from "@/data/useArticleOverrides";
 
 const verseSets: Record<string, Array<[string, string]>> = {
   "water-security": [["﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾", "الأنبياء · ٣٠"], ["﴿وَأَنزَلْنَا مِنَ السَّمَاءِ مَاءً بِقَدَرٍ﴾", "المؤمنون · ١٨"], ["﴿وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ﴾", "الأنبياء · ٣٠"], ["﴿وَاللَّهُ أَنزَلَ مِنَ السَّمَاءِ مَاءً فَأَحْيَا بِهِ الْأَرْضَ﴾", "النحل · ٦٥"]],
@@ -31,8 +32,11 @@ export default function ArticleDetail() {
   const [, params] = useRoute("/articles/:slug");
   const { isEnglish } = useLanguage();
   const text = isEnglish ? languageText.en : languageText.ar;
-  const article = params?.slug ? getArticle(params.slug) : undefined;
-  if (!article) return <><SeoHead title="المقال غير موجود | أُفُق" description="الصفحة المطلوبة غير موجودة في بوابة أُفُق." path={`/articles/${params?.slug || "unknown"}`} /><main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to articles" : "العودة إلى المقالات"}</a><h1>{isEnglish ? "Article not found" : "المقال غير موجود"}</h1></main></>;
+  const overrides = useArticleOverrides();
+  const baseArticle = params?.slug ? getArticle(params.slug) : undefined;
+  const publishedArticle = baseArticle ? applyArticleOverride(baseArticle, overrides) : undefined;
+  if (!publishedArticle || overrides[publishedArticle.slug]?.status === "draft") return <><SeoHead title="المقال غير موجود | أُفُق" description="الصفحة المطلوبة غير موجودة في بوابة أُفُق." path={`/articles/${params?.slug || "unknown"}`} /><main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}><a className="articles-back" href="/articles"><ArrowRight size={16} /> {isEnglish ? "Back to articles" : "العودة إلى المقالات"}</a><h1>{isEnglish ? "Article not found" : "المقال غير موجود"}</h1></main></>;
+  const article = publishedArticle;
   const title = isEnglish ? (article.titleEn || article.title) : article.title;
   const lead = isEnglish ? (article.leadEn || article.lead) : article.lead;
   const body = isEnglish ? (article.bodyEn || article.body) : article.body;

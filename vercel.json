@@ -17,6 +17,7 @@
     { "source": "/api/admin/dashboard", "destination": "/api/trpc/admin-dashboard" },
     { "source": "/login", "destination": "/index.html" },
     { "source": "/admin/login", "destination": "/index.html" },
+    { "source": "/admin/articles", "destination": "/index.html" },
     { "source": "/register", "destination": "/index.html" },
     { "source": "/forgot-password", "destination": "/index.html" },
     { "source": "/reset-password", "destination": "/index.html" },

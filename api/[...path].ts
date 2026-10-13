@@ -44,6 +44,38 @@ app.get(["/admin/dashboard", "/trpc/admin-dashboard"], async (req, res) => {
     return res.status(503).json({ ok: false, code: "SERVICE_UNAVAILABLE", error: "تعذر تحميل بيانات لوحة المدير من مخزن البيانات." });
   }
 });
+app.get("/content/articles", async (req, res) => {
+  try {
+    const { loadArticleOverrides } = await import("../server/_core/blobContentStore");
+    const overrides = await loadArticleOverrides();
+    return res.json({ ok: true, overrides: Object.fromEntries(Object.entries(overrides).filter(([, value]) => value.status === "published")) });
+  } catch (error) {
+    console.error("[Content] public read failed", error);
+    return res.status(503).json({ ok: false, error: "تعذر تحميل تحديثات المحتوى." });
+  }
+});
+app.get("/admin/content/articles", async (req, res) => {
+  const { authenticateLocalRequest } = await import("../server/_core/localAuth");
+  const user = await authenticateLocalRequest(req as any);
+  if (!user || user.role !== "admin") return res.status(403).json({ ok: false, error: "هذه المنطقة مخصصة للمدير فقط." });
+  const { loadArticleOverrides } = await import("../server/_core/blobContentStore");
+  return res.json({ ok: true, overrides: await loadArticleOverrides() });
+});
+app.put("/admin/content/articles/:slug", async (req, res) => {
+  const { authenticateLocalRequest } = await import("../server/_core/localAuth");
+  const user = await authenticateLocalRequest(req as any);
+  if (!user || user.role !== "admin") return res.status(403).json({ ok: false, error: "هذه المنطقة مخصصة للمدير فقط." });
+  const slug = String(req.params.slug || "").trim();
+  if (!/^[a-z0-9-]{2,80}$/.test(slug)) return res.status(400).json({ ok: false, error: "معرّف المقال غير صالح." });
+  const body = req.body || {};
+  const clean = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : undefined;
+  const status = body.status === "draft" ? "draft" : "published";
+  const { loadArticleOverrides, saveArticleOverrides } = await import("../server/_core/blobContentStore");
+  const overrides = await loadArticleOverrides();
+  overrides[slug] = { slug, title: clean(body.title, 220), titleEn: clean(body.titleEn, 220), lead: clean(body.lead, 600), leadEn: clean(body.leadEn, 600), seoTitle: clean(body.seoTitle, 220), seoDescription: clean(body.seoDescription, 320), status, updatedAt: new Date().toISOString(), updatedBy: user.email };
+  await saveArticleOverrides(overrides);
+  return res.json({ ok: true, override: overrides[slug] });
+});
 app.use(
   "/trpc",
   createExpressMiddleware({

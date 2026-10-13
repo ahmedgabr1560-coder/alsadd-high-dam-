@@ -29,7 +29,7 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: LayoutDashboard, label: "الإدارة", path: "/admin" },
   { icon: Waves, label: "إحصائيات الزوار", path: "/dashboard" },
-  { icon: Waves, label: "المقالات", path: "/articles" },
+  { icon: Waves, label: "إدارة المقالات", path: "/admin/articles" },
   { icon: Waves, label: "ملفي الشخصي", path: "/profile" },
   { icon: Waves, label: "الموقع العام", path: "/" },
 ];

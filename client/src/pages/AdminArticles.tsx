@@ -1,0 +1,17 @@
+import { useEffect, useState } from "react";
+import { articles } from "@/data/articles";
+import { useAuth } from "@/_core/hooks/useAuth";
+
+export default function AdminArticles() {
+  const { user, loading } = useAuth();
+  const [items, setItems] = useState<Record<string, any>>({});
+  const [selected, setSelected] = useState(articles[0]?.slug || "");
+  const [form, setForm] = useState<any>({});
+  const [message, setMessage] = useState("");
+  useEffect(() => { if (user?.role === "admin") fetch("/api/admin/content/articles", { credentials: "include" }).then(r => r.json()).then(data => setItems(data.overrides || {})).catch(() => undefined); }, [user]);
+  useEffect(() => { const article = articles.find(item => item.slug === selected); setForm({ ...article, ...(items[selected] || {}) }); }, [selected, items]);
+  if (loading) return <main className="dashboard-page" dir="rtl"><p>جارٍ التحقق...</p></main>;
+  if (!user || user.role !== "admin") return <main className="dashboard-page" dir="rtl"><h1>هذه الصفحة للمدير فقط</h1><a href="/admin/login">دخول المدير</a></main>;
+  const save = async (event: React.FormEvent) => { event.preventDefault(); setMessage("جارٍ الحفظ..."); const response = await fetch(`/api/admin/content/articles/${selected}`, { method: "PUT", headers: { "content-type": "application/json" }, credentials: "include", body: JSON.stringify(form) }); const data = await response.json(); if (!response.ok) return setMessage(data.error || "تعذر الحفظ"); setItems(previous => ({ ...previous, [selected]: data.override })); setMessage("تم حفظ التعديل بنجاح، وسيظهر في الموقع العام."); };
+  return <main className="dashboard-page" dir="rtl"><header className="dashboard-header"><div><span className="dashboard-eyebrow">إدارة المحتوى</span><h1>إدارة المقالات</h1><p>تعديلات محفوظة في مخزن دائم، مع إبقاء النص الأصلي محفوظًا.</p></div><a className="dashboard-logout" href="/admin">العودة للوحة المدير</a></header><section className="dashboard-content"><div className="dashboard-card"><h2>اختر مقالًا</h2>{articles.map(article => <button className={`admin-article-row ${selected === article.slug ? "active" : ""}`} key={article.slug} onClick={() => setSelected(article.slug)}><strong>{article.title}</strong><small>{items[article.slug]?.status === "draft" ? "مسودة" : "منشور"}</small></button>)}</div><form className="dashboard-card admin-editor" onSubmit={save}><h2>تحرير بيانات المقال</h2><label>العنوان العربي<input value={form.title || ""} onChange={e => setForm({ ...form, title: e.target.value })} /></label><label>العنوان الإنجليزي<input value={form.titleEn || ""} onChange={e => setForm({ ...form, titleEn: e.target.value })} /></label><label>الملخص العربي<textarea value={form.lead || ""} onChange={e => setForm({ ...form, lead: e.target.value })} /></label><label>الملخص الإنجليزي<textarea value={form.leadEn || ""} onChange={e => setForm({ ...form, leadEn: e.target.value })} /></label><label>وصف SEO<textarea value={form.seoDescription || ""} onChange={e => setForm({ ...form, seoDescription: e.target.value })} /></label><label>الحالة<select value={form.status || "published"} onChange={e => setForm({ ...form, status: e.target.value })}><option value="published">منشور</option><option value="draft">مسودة</option></select></label><button className="dashboard-primary" type="submit">حفظ ونشر التعديل</button>{message && <p role="status">{message}</p>}</form></section></main>;
+}

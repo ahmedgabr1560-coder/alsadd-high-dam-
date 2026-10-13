@@ -1,5 +1,6 @@
 import { ArrowLeft, ArrowRight, BookOpen, Landmark } from "lucide-react";
 import { articles } from "@/data/articles";
+import { applyArticleOverride, useArticleOverrides } from "@/data/useArticleOverrides";
 import { LanguageToggle, languageText, useLanguage } from "@/contexts/LanguageContext";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import SeoHead from "@/components/SeoHead";
@@ -9,7 +10,8 @@ const independentResearchSlugs = ["october-war-1973", "world-war-ii", "palestine
 export default function Articles() {
   const { isEnglish } = useLanguage();
   const text = isEnglish ? languageText.en : languageText.ar;
-  const researchArticles = articles.filter(article => independentResearchSlugs.includes(article.slug));
+  const overrides = useArticleOverrides();
+  const researchArticles = articles.filter(article => independentResearchSlugs.includes(article.slug)).map(article => applyArticleOverride(article, overrides)).filter(article => overrides[article.slug]?.status !== "draft");
   return <><SeoHead title={isEnglish ? "OFOQ Research Articles | History and Current Affairs" : "أبحاث أُفُق | حرب أكتوبر وفلسطين وغزة"} description={isEnglish ? "Explore complete research pages on the October War, World War II, Palestine and the Gaza War, with timelines, images and reliable sources." : "استكشف أبحاث أُفُق الكاملة عن حرب أكتوبر والحرب العالمية الثانية وفلسطين وحرب غزة، مع الخطوط الزمنية والصور والمصادر الموثوقة."} path="/articles" /><main className="articles-page" dir={isEnglish ? "ltr" : "rtl"}>
     <header className="articles-header">
       <div className="articles-toolbar"><a href="/" className="articles-back"><ArrowRight size={16} /> {text.back}</a><div className="articles-toolbar-actions"><ProfileAvatar /><LanguageToggle /></div></div>
