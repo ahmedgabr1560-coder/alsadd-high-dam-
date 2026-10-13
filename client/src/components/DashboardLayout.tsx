@@ -1,4 +1,4 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAdminAuth } from "@/_core/hooks/useAdminAuth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -48,7 +48,7 @@ export default function DashboardLayout({
     const saved = localStorage.getItem(SIDEBAR_WIDTH_KEY);
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
-  const { loading, user } = useAuth();
+  const { loading, user } = useAdminAuth();
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
@@ -67,11 +67,11 @@ export default function DashboardLayout({
               سجّل الدخول للمتابعة
             </h1>
             <p className="text-sm text-muted-foreground text-center max-w-sm">
-              هذه اللوحة خاصة وتتطلب تسجيل الدخول بحساب الموقع.
+              هذه اللوحة خاصة وتتطلب دخول المدير المستقل.
             </p>
           </div>
           <Button
-            onClick={() => { window.location.href = "/login"; }}
+            onClick={() => { window.location.href = "/admin/login"; }}
             size="lg"
             className="w-full shadow-lg hover:shadow-xl transition-all"
           >
@@ -120,7 +120,7 @@ function DashboardLayoutContent({
   children,
   setSidebarWidth,
 }: DashboardLayoutContentProps) {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAdminAuth();
   const [location, setLocation] = useLocation();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { articles } from "@/data/articles";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAdminAuth } from "@/_core/hooks/useAdminAuth";
 
 export default function AdminArticles() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAdminAuth();
   const [items, setItems] = useState<Record<string, any>>({});
   const [selected, setSelected] = useState(articles[0]?.slug || "");
   const [form, setForm] = useState<any>({});

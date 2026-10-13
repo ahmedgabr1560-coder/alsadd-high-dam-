@@ -101,5 +101,18 @@ export function Register() {
 }
 
 export function AdminLogin() {
-  return <Login adminOnly />;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const submit = async (event: FormEvent) => {
+    event.preventDefault(); setBusy(true); setError("");
+    try {
+      const response = await fetch("/api/trpc/admin-login", { method: "POST", headers: { "content-type": "application/json" }, credentials: "include", body: JSON.stringify({ email, password }) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "تعذر دخول لوحة المدير");
+      window.location.replace("/admin");
+    } catch (value) { setError(value instanceof Error ? value.message : "تعذر تسجيل الدخول"); } finally { setBusy(false); }
+  };
+  return <main className="login-page" dir="rtl"><div className="login-shell"><section className="login-card"><div className="login-card-icon"><ShieldCheck size={22} /></div><span className="login-kicker"><ShieldCheck size={15} /> دخول إداري مستقل</span><h1 id="login-title">لوحة إدارة<br /><strong>أُفُق | OFOQ</strong></h1><p className="login-card-copy">هذه الصفحة مخصصة للمدير فقط، وتستخدم جلسة إدارية منفصلة عن حسابات زوار الموقع.</p><form onSubmit={submit} className="login-form"><label>البريد الإلكتروني<input required type="email" dir="ltr" value={email} onChange={event => setEmail(event.target.value)} placeholder="admin@example.com" /></label><label>كلمة المرور<input required minLength={8} type="password" dir="ltr" value={password} onChange={event => setPassword(event.target.value)} /></label><button className="login-primary login-button" disabled={busy}>{busy ? "جارٍ التحقق..." : "دخول لوحة المدير"} <ArrowLeft size={16} /></button>{error && <p className="login-error" role="alert">{error}</p>}</form><a className="login-back" href="/">العودة إلى الموقع العام</a></section></div></main>;
 }

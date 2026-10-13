@@ -7,15 +7,38 @@ function reply(res: any, status: number, body: unknown) {
 
 export default async function handler(req: any, res: any) {
   const path = String(req.url || "").split("?")[0];
+  if (path.endsWith("/admin-session")) {
+    const { authenticateAdminRequest } = await import("../../server/_core/adminAuth");
+    const user = await authenticateAdminRequest(req);
+    if (!user) return reply(res, 401, { ok: false, user: null });
+    const { passwordHash: _passwordHash, ...safeUser } = user;
+    return reply(res, 200, { ok: true, user: safeUser });
+  }
+  if (path.endsWith("/admin-logout")) {
+    res.setHeader("Set-Cookie", "ofoq_admin_session=; HttpOnly; Path=/; SameSite=Lax; Secure; Max-Age=0");
+    return reply(res, 200, { ok: true });
+  }
+  if (path.endsWith("/admin-login")) {
+    if (req.method !== "POST") return reply(res, 405, { ok: false, error: "Method not allowed" });
+    const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
+    const email = String(body.email || "").trim().toLowerCase();
+    const password = String(body.password || "");
+    if (!email || password.length < 8) return reply(res, 400, { ok: false, error: "أدخل بريد المدير وكلمة المرور." });
+    const { adminLogin, createAdminSession } = await import("../../server/_core/adminAuth");
+    const user = await adminLogin(email, password);
+    if (!user) return reply(res, 401, { ok: false, error: "بيانات دخول المدير غير صحيحة." });
+    res.setHeader("Set-Cookie", `ofoq_admin_session=${createAdminSession(user.id)}; HttpOnly; Path=/; SameSite=Lax; Secure; Max-Age=28800`);
+    const { passwordHash: _passwordHash, ...safeUser } = user;
+    return reply(res, 200, { ok: true, user: safeUser });
+  }
   if (path.endsWith("/content-articles") || path.includes("/admin-content-articles")) {
     try {
       const { loadArticleOverrides, saveArticleOverrides } = await import("../../server/_core/blobContentStore");
       const overrides = await loadArticleOverrides();
       if (req.method === "GET" && path.endsWith("/content-articles")) return reply(res, 200, { ok: true, overrides: Object.fromEntries(Object.entries(overrides).filter(([, value]) => value.status === "published")) });
-      const { authenticateLocalRequest } = await import("../../server/_core/localAuth");
-      const user = await authenticateLocalRequest(req as any);
-      const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
-      if (!user || !(user.role === "admin" || (adminEmail && String(user.email).toLowerCase() === adminEmail))) return reply(res, 403, { ok: false, error: "هذه المنطقة مخصصة للمدير فقط." });
+      const { authenticateAdminRequest } = await import("../../server/_core/adminAuth");
+      const user = await authenticateAdminRequest(req as any);
+      if (!user) return reply(res, 403, { ok: false, error: "هذه المنطقة مخصصة للمدير فقط." });
       if (req.method === "GET") return reply(res, 200, { ok: true, overrides });
       if (req.method !== "PUT") return reply(res, 405, { ok: false, error: "Method not allowed" });
       const slug = String(path.split("/").pop() || "").trim();
@@ -30,29 +53,9 @@ export default async function handler(req: any, res: any) {
   if (!path.endsWith("/admin-dashboard") && !path.endsWith("/admin/dashboard")) return reply(res, 404, { ok: false, error: "Route not found" });
   if (req.method !== "GET") return reply(res, 405, { ok: false, error: "Method not allowed" });
   try {
-    const crypto = await import("node:crypto");
-    const sessionCookie = String(req.headers?.cookie || "").split(";").map((item: string) => item.trim()).find((item: string) => item.startsWith("alsadd_session="))?.slice("alsadd_session=".length);
-    let user: any = null;
-    if (sessionCookie) {
-      const token = decodeURIComponent(sessionCookie);
-      const separator = token.lastIndexOf(".");
-      const encoded = separator > 0 ? token.slice(0, separator) : "";
-      const signature = separator > 0 ? token.slice(separator + 1) : "";
-      const expected = crypto.createHmac("sha256", process.env.AUTH_SECRET || "alsadd-local-auth-development-only").update(encoded).digest("base64url");
-      if (encoded && signature && signature.length === expected.length && crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
-        try {
-          const payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
-          if (payload.userId && Number(payload.exp) > Date.now()) {
-            const { loadUsers } = await import("../../server/_core/blobAuthStore");
-            user = (await loadUsers()).find(item => Number(item.id) === Number(payload.userId)) ?? null;
-          }
-        } catch { user = null; }
-      }
-    }
-    const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
-    const isAdmin = Boolean(user && (user.role === "admin" || (adminEmail && String(user.email).toLowerCase() === adminEmail)));
-    if (!user) return reply(res, 401, { ok: false, code: "UNAUTHORIZED", error: "يجب تسجيل الدخول أولًا." });
-    if (!isAdmin) return reply(res, 403, { ok: false, code: "FORBIDDEN", error: "هذه المنطقة مخصصة للمدير فقط." });
+    const { authenticateAdminRequest } = await import("../../server/_core/adminAuth");
+    const user = await authenticateAdminRequest(req);
+    if (!user) return reply(res, 401, { ok: false, code: "UNAUTHORIZED", error: "يجب تسجيل دخول المدير أولًا." });
 
     const url = new URL(req.url || "/api/trpc/admin-dashboard", "https://ofoq-egypt.vercel.app");
     const rawDays = Number(url.searchParams.get("days") || 30);

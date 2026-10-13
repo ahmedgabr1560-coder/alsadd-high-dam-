@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import GlobalMusicControl from "./components/GlobalMusicControl";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useAdminAuth } from "./_core/hooks/useAdminAuth";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const AdminArticles = lazy(() => import("./pages/AdminArticles"));
@@ -33,7 +34,7 @@ function ProtectedPage({ children }: { children: React.ReactNode }) {
 }
 
 function AdminPage({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAdminAuth();
   useEffect(() => {
     if (!loading && typeof window !== "undefined") {
       if (!user) window.location.replace("/admin/login");
