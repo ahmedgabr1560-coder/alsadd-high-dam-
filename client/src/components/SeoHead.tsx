@@ -6,6 +6,7 @@ type SeoHeadProps = {
   path: string;
   image?: string;
   type?: "website" | "article";
+  section?: string;
 };
 
 const siteName = "أُفُق | OFOQ";
@@ -23,7 +24,7 @@ function setMeta(name: string, content: string, property = false) {
   element.content = content;
 }
 
-export default function SeoHead({ title, description, path, image = "/assets/aswan-dam.jpg", type = "website" }: SeoHeadProps) {
+export default function SeoHead({ title, description, path, image = "/assets/aswan-dam.jpg", type = "website", section }: SeoHeadProps) {
   useEffect(() => {
     const canonical = `${origin}${path}`;
     document.title = title;
@@ -37,6 +38,7 @@ export default function SeoHead({ title, description, path, image = "/assets/asw
     setMeta("og:url", canonical, true);
     setMeta("og:type", type, true);
     setMeta("og:image", `${origin}${image.startsWith("/") ? image : `/${image}`}`, true);
+    setMeta("og:locale", "ar_EG", true);
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", title);
     setMeta("twitter:description", description);
@@ -55,7 +57,7 @@ export default function SeoHead({ title, description, path, image = "/assets/asw
     const schema = document.createElement("script");
     schema.id = schemaId;
     schema.type = "application/ld+json";
-    schema.textContent = JSON.stringify({
+    const pageSchema: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": type === "article" ? "Article" : "WebPage",
       name: title,
@@ -65,11 +67,19 @@ export default function SeoHead({ title, description, path, image = "/assets/asw
       image: `${origin}${image.startsWith("/") ? image : `/${image}`}`,
       inLanguage: "ar",
       isPartOf: { "@type": "WebSite", name: siteName, url: origin },
-      publisher: { "@type": "Person", name: "أحمد حمدي عبد الونيس جبر" },
-    });
+      author: { "@type": "Person", name: "أحمد حمدي عبد الونيس جبر" },
+      publisher: { "@type": "Organization", name: siteName, url: origin },
+      mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+      breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: siteName, item: origin },
+        { "@type": "ListItem", position: 2, name: title, item: canonical },
+      ] },
+    };
+    if (section) pageSchema.articleSection = section;
+    schema.textContent = JSON.stringify(pageSchema);
     document.head.appendChild(schema);
     return () => document.getElementById(schemaId)?.remove();
-  }, [description, image, path, title, type]);
+  }, [description, image, path, section, title, type]);
 
   return null;
 }

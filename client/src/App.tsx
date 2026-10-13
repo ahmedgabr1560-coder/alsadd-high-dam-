@@ -2,23 +2,25 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
+import { lazy, Suspense, useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import HighDam from "./pages/HighDam";
-import Login, { Register } from "./pages/Login";
-import Articles from "./pages/Articles";
-import ArticleDetail from "./pages/ArticleDetail";
-import HighDamArticles from "./pages/HighDamArticles";
-import Profile from "./pages/Profile";
-import Quran from "./pages/Quran";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import GlobalMusicControl from "./components/GlobalMusicControl";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { useEffect } from "react";
+
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const HighDam = lazy(() => import("./pages/HighDam"));
+const Login = lazy(() => import("./pages/Login"));
+const Articles = lazy(() => import("./pages/Articles"));
+const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
+const HighDamArticles = lazy(() => import("./pages/HighDamArticles"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Quran = lazy(() => import("./pages/Quran"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const Register = lazy(async () => ({ default: (await import("./pages/Login")).Register }));
 
 function ProtectedPage({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/login" });
@@ -47,6 +49,7 @@ function AdminPage({ children }: { children: React.ReactNode }) {
 
 function Router() {
   return (
+    <Suspense fallback={<div className="site-auth-loading" dir="rtl"><span className="login-loader" /><p>جارٍ فتح الصفحة...</p></div>}>
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/high-dam"><ProtectedPage><HighDam /></ProtectedPage></Route>
@@ -64,6 +67,7 @@ function Router() {
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
+    </Suspense>
   );
 }
 
