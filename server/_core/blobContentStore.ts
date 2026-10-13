@@ -15,13 +15,18 @@ export type ArticleOverride = {
 
 export async function loadArticleOverrides(): Promise<Record<string, ArticleOverride>> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return {};
-  const { list, get } = await import("@vercel/blob");
-  const result = await list({ prefix: STORE_PATH, token: process.env.BLOB_READ_WRITE_TOKEN });
-  if (!result.blobs.find(item => item.pathname === STORE_PATH)) return {};
-  const stored = await get(STORE_PATH, { access: "private", useCache: false, token: process.env.BLOB_READ_WRITE_TOKEN });
-  if (!stored) return {};
-  const value = await new Response(stored.stream).json();
-  return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  try {
+    const { list, get } = await import("@vercel/blob");
+    const result = await list({ prefix: STORE_PATH, token: process.env.BLOB_READ_WRITE_TOKEN });
+    if (!result.blobs.find(item => item.pathname === STORE_PATH)) return {};
+    const stored = await get(STORE_PATH, { access: "private", useCache: false, token: process.env.BLOB_READ_WRITE_TOKEN });
+    if (!stored) return {};
+    const value = await new Response(stored.stream).json();
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  } catch (error) {
+    console.error("[Content store] read unavailable", error);
+    return {};
+  }
 }
 
 export async function saveArticleOverrides(overrides: Record<string, ArticleOverride>) {
