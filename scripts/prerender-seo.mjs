@@ -17,7 +17,11 @@ const pages = [
 ];
 
 const escape = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
-const template = fs.readFileSync(path.join(dist, "index.html"), "utf8");
+const template = fs.readFileSync(path.join(dist, "index.html"), "utf8")
+  .replace(/\s*<meta name="description"[^>]*\/>/g, "")
+  .replace(/\s*<meta property="og-[^"]+"[^>]*\/>/g, "")
+  .replace(/\s*<meta name="twitter:[^"]+"[^>]*\/>/g, "")
+  .replace(/\s*<link rel="canonical"[^>]*\/>/g, "");
 
 for (const page of pages) {
   const url = `${origin}${page.path}`;
@@ -27,7 +31,7 @@ for (const page of pages) {
   const paragraphs = page.paragraphs.map(paragraph => `<p>${escape(paragraph)}</p>`).join("");
   const links = page.links.map(([label, href]) => `<li><a href="${href}">${escape(label)}</a></li>`).join("");
   const content = `<main lang="ar" dir="rtl"><article><p>أُفُق | OFOQ · إعداد وتقديم ${author}</p><h1>${escape(page.heading)}</h1>${paragraphs}<nav aria-label="روابط البحث"><ul>${links}</ul></nav><p><a href="/">العودة إلى الصفحة الرئيسية</a></p></article></main>`;
-  const html = template.replace(/<title>[^<]*<\/title>/, `<title>${escape(page.title)}</title>`).replace(/\s*<meta name="description"[^>]*\/>/, `\n    ${meta}`).replace(/<div id="root">[\s\S]*?<\/div>/, `<div id="root">${content}</div>`).replace("</head>", `${schema}\n  </head>`);
+  const html = template.replace(/<title>[^<]*<\/title>/, `<title>${escape(page.title)}</title>`).replace("</head>", `\n    ${meta}\n    ${schema}\n  </head>`).replace(/<div id="root">[\s\S]*?<\/div>/, `<div id="root">${content}</div>`);
   const output = path.join(dist, page.path.replace(/^\//, ""), "index.html");
   fs.mkdirSync(path.dirname(output), { recursive: true });
   fs.writeFileSync(output, html);
