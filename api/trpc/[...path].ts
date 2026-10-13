@@ -7,6 +7,26 @@ function reply(res: any, status: number, body: unknown) {
 
 export default async function handler(req: any, res: any) {
   const path = String(req.url || "").split("?")[0];
+  if (path.endsWith("/content-articles") || path.includes("/admin-content-articles")) {
+    try {
+      const { loadArticleOverrides, saveArticleOverrides } = await import("../../server/_core/blobContentStore");
+      const overrides = await loadArticleOverrides();
+      if (req.method === "GET" && path.endsWith("/content-articles")) return reply(res, 200, { ok: true, overrides: Object.fromEntries(Object.entries(overrides).filter(([, value]) => value.status === "published")) });
+      const { authenticateLocalRequest } = await import("../../server/_core/localAuth");
+      const user = await authenticateLocalRequest(req as any);
+      const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+      if (!user || !(user.role === "admin" || (adminEmail && String(user.email).toLowerCase() === adminEmail))) return reply(res, 403, { ok: false, error: "هذه المنطقة مخصصة للمدير فقط." });
+      if (req.method === "GET") return reply(res, 200, { ok: true, overrides });
+      if (req.method !== "PUT") return reply(res, 405, { ok: false, error: "Method not allowed" });
+      const slug = String(path.split("/").pop() || "").trim();
+      if (!/^[a-z0-9-]{2,80}$/.test(slug)) return reply(res, 400, { ok: false, error: "معرّف المقال غير صالح." });
+      const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
+      const clean = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : undefined;
+      overrides[slug] = { slug, title: clean(body.title, 220), titleEn: clean(body.titleEn, 220), lead: clean(body.lead, 600), leadEn: clean(body.leadEn, 600), seoTitle: clean(body.seoTitle, 220), seoDescription: clean(body.seoDescription, 320), status: body.status === "draft" ? "draft" : "published", updatedAt: new Date().toISOString(), updatedBy: user.email };
+      await saveArticleOverrides(overrides);
+      return reply(res, 200, { ok: true, override: overrides[slug] });
+    } catch (error) { console.error("[CMS] request failed", error); return reply(res, 503, { ok: false, error: "تعذر الوصول إلى مخزن المحتوى." }); }
+  }
   if (!path.endsWith("/admin-dashboard") && !path.endsWith("/admin/dashboard")) return reply(res, 404, { ok: false, error: "Route not found" });
   if (req.method !== "GET") return reply(res, 405, { ok: false, error: "Method not allowed" });
   try {
