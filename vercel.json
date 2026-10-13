@@ -15,7 +15,16 @@
   },
   "rewrites": [
     { "source": "/api/admin/dashboard", "destination": "/api/trpc/admin-dashboard" },
-    { "source": "/((?!api(?:/|$)).*)", "destination": "/index.html" }
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/register", "destination": "/index.html" },
+    { "source": "/forgot-password", "destination": "/index.html" },
+    { "source": "/reset-password", "destination": "/index.html" },
+    { "source": "/high-dam", "destination": "/index.html" },
+    { "source": "/dashboard", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/profile", "destination": "/index.html" },
+    { "source": "/quran", "destination": "/index.html" },
+    { "source": "/404", "destination": "/index.html" }
   ],
   "headers": [
     { "source": "/api/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
