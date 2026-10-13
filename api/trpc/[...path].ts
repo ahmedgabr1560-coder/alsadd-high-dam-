@@ -25,7 +25,7 @@ export default async function handler(req: any, res: any) {
       overrides[slug] = { slug, title: clean(body.title, 220), titleEn: clean(body.titleEn, 220), lead: clean(body.lead, 600), leadEn: clean(body.leadEn, 600), seoTitle: clean(body.seoTitle, 220), seoDescription: clean(body.seoDescription, 320), status: body.status === "draft" ? "draft" : "published", updatedAt: new Date().toISOString(), updatedBy: user.email };
       await saveArticleOverrides(overrides);
       return reply(res, 200, { ok: true, override: overrides[slug] });
-    } catch (error) { console.error("[CMS] request failed", error); return reply(res, 503, { ok: false, error: "تعذر الوصول إلى مخزن المحتوى." }); }
+    } catch (error) { console.error("[CMS] request failed", error); if (req.method === "GET" && path.endsWith("/content-articles")) return reply(res, 200, { ok: true, overrides: {} }); return reply(res, 503, { ok: false, error: "تعذر الوصول إلى مخزن المحتوى." }); }
   }
   if (!path.endsWith("/admin-dashboard") && !path.endsWith("/admin/dashboard")) return reply(res, 404, { ok: false, error: "Route not found" });
   if (req.method !== "GET") return reply(res, 405, { ok: false, error: "Method not allowed" });
