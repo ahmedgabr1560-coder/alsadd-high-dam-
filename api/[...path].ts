@@ -44,7 +44,7 @@ app.get(["/admin/dashboard", "/trpc/admin-dashboard"], async (req, res) => {
     return res.status(503).json({ ok: false, code: "SERVICE_UNAVAILABLE", error: "تعذر تحميل بيانات لوحة المدير من مخزن البيانات." });
   }
 });
-app.get("/content/articles", async (req, res) => {
+app.get(["/content/articles", "/trpc/content-articles"], async (req, res) => {
   try {
     const { loadArticleOverrides } = await import("../server/_core/blobContentStore");
     const overrides = await loadArticleOverrides();
@@ -54,14 +54,14 @@ app.get("/content/articles", async (req, res) => {
     return res.status(503).json({ ok: false, error: "تعذر تحميل تحديثات المحتوى." });
   }
 });
-app.get("/admin/content/articles", async (req, res) => {
+app.get(["/admin/content/articles", "/trpc/admin-content-articles"], async (req, res) => {
   const { authenticateLocalRequest } = await import("../server/_core/localAuth");
   const user = await authenticateLocalRequest(req as any);
   if (!user || user.role !== "admin") return res.status(403).json({ ok: false, error: "هذه المنطقة مخصصة للمدير فقط." });
   const { loadArticleOverrides } = await import("../server/_core/blobContentStore");
   return res.json({ ok: true, overrides: await loadArticleOverrides() });
 });
-app.put("/admin/content/articles/:slug", async (req, res) => {
+app.put(["/admin/content/articles/:slug", "/trpc/admin-content-articles/:slug"], async (req, res) => {
   const { authenticateLocalRequest } = await import("../server/_core/localAuth");
   const user = await authenticateLocalRequest(req as any);
   if (!user || user.role !== "admin") return res.status(403).json({ ok: false, error: "هذه المنطقة مخصصة للمدير فقط." });

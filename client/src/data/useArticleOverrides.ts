@@ -5,7 +5,7 @@ export type ArticleOverride = Partial<Pick<Article, "title" | "titleEn" | "lead"
 
 export function useArticleOverrides() {
   const [overrides, setOverrides] = useState<Record<string, ArticleOverride>>({});
-  useEffect(() => { fetch("/api/content/articles").then(response => response.ok ? response.json() : null).then(data => data?.overrides && setOverrides(data.overrides)).catch(() => undefined); }, []);
+  useEffect(() => { fetch("/api/trpc/content-articles").then(response => response.ok ? response.json() : null).then(data => data?.overrides && setOverrides(data.overrides)).catch(() => undefined); }, []);
   return overrides;
 }
 

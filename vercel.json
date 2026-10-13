@@ -11,7 +11,6 @@
     "api/auth/me.ts": { "maxDuration": 10 },
     "api/auth/request-reset.ts": { "maxDuration": 15 },
     "api/auth/reset-password.ts": { "maxDuration": 15 },
-    "api/content/articles.ts": { "maxDuration": 15 },
     "api/health.ts": { "maxDuration": 10 }
   },
   "rewrites": [
