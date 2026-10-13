@@ -14,6 +14,7 @@ export type ArticleOverride = {
 };
 
 export async function loadArticleOverrides(): Promise<Record<string, ArticleOverride>> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return {};
   const { list, get } = await import("@vercel/blob");
   const result = await list({ prefix: STORE_PATH, token: process.env.BLOB_READ_WRITE_TOKEN });
   if (!result.blobs.find(item => item.pathname === STORE_PATH)) return {};
@@ -24,6 +25,7 @@ export async function loadArticleOverrides(): Promise<Record<string, ArticleOver
 }
 
 export async function saveArticleOverrides(overrides: Record<string, ArticleOverride>) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("BLOB_READ_WRITE_TOKEN is not configured");
   const { put } = await import("@vercel/blob");
   await put(STORE_PATH, JSON.stringify(overrides), { access: "private", addRandomSuffix: false, allowOverwrite: true, token: process.env.BLOB_READ_WRITE_TOKEN, contentType: "application/json; charset=utf-8" });
 }
