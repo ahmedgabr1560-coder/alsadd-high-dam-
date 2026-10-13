@@ -23,7 +23,8 @@ async function compressProfileImage(file: File) {
   return canvas.toDataURL("image/jpeg", 0.72);
 }
 
-export default function Login({ initialMode = "login" }: any) {
+export default function Login(props: any) {
+  const { initialMode = "login", adminOnly = false } = props;
   const { user, loading, isAuthenticated, logout } = useAuth();
   const [mode] = useState<"login" | "register">(initialMode);
   const [name, setName] = useState("");
@@ -58,7 +59,11 @@ export default function Login({ initialMode = "login" }: any) {
       const response = await fetch(endpoint, { method: "POST", headers: { "content-type": "application/json" }, credentials: "include", body: JSON.stringify(payload) });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "تعذر تنفيذ الطلب");
-      window.location.href = "/";
+      if (adminOnly && result.user?.role !== "admin") {
+        await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+        throw new Error("هذا الحساب لا يملك صلاحية دخول لوحة المدير.");
+      }
+      window.location.href = adminOnly ? "/admin" : "/";
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "حدث خطأ غير متوقع");
     } finally {
@@ -79,7 +84,7 @@ export default function Login({ initialMode = "login" }: any) {
         <section className="login-card" aria-labelledby="login-title">
           <div className="login-card-icon">{mode === "register" ? <UserPlus size={22} /> : <LogIn size={22} />}</div>
           {loading ? <div className="login-card-state"><div className="login-loader" /><p>جارٍ التحقق من الحساب...</p></div> : isAuthenticated ? (
-            <><span className="login-kicker"><CheckCircle2 size={15} /> تم تسجيل الدخول</span><h2 id="login-title">مرحبًا بك،<br /><strong>{user?.name || "زائر الموقع"}</strong></h2><p className="login-card-copy">حسابك جاهز. يمكنك العودة إلى الموقع أو فتح لوحة الإدارة إذا كان حسابك مصرحًا له.</p><div className="login-actions"><a className="login-primary" href="/"><ArrowRight size={17} /> العودة إلى الموقع</a>{user?.role === "admin" && <a className="login-secondary" href="/admin">فتح لوحة الإدارة <ArrowLeft size={16} /></a>}</div><button type="button" className="login-logout" onClick={() => logout().catch(() => undefined)}><LogOut size={15} /> تسجيل الخروج</button></>
+            <><span className="login-kicker"><CheckCircle2 size={15} /> تم تسجيل الدخول</span><h2 id="login-title">مرحبًا بك،<br /><strong>{user?.name || "زائر الموقع"}</strong></h2><p className="login-card-copy">حسابك جاهز. يمكنك العودة إلى الموقع أو فتح لوحة الإدارة إذا كان حسابك مصرحًا له.</p><div className="login-actions"><a className="login-primary" href={adminOnly && user?.role === "admin" ? "/admin" : "/"}><ArrowRight size={17} /> {adminOnly && user?.role === "admin" ? "فتح لوحة الإدارة" : "العودة إلى الموقع"}</a>{user?.role === "admin" && !adminOnly && <a className="login-secondary" href="/admin">فتح لوحة الإدارة <ArrowLeft size={16} /></a>}</div><button type="button" className="login-logout" onClick={() => logout().catch(() => undefined)}><LogOut size={15} /> تسجيل الخروج</button></>
           ) : (
             <><span className="login-kicker"><ShieldCheck size={15} /> {mode === "register" ? "إنشاء حساب مستقل" : "دخول مستقل وآمن"}</span><h2 id="login-title">{mode === "register" ? <>أنشئ حسابك في<br /><strong>بوابة أُفُق</strong></> : <>مرحبًا بك في<br /><strong>بوابة أُفُق</strong></>}</h2><form onSubmit={submit} className="login-form">
               {mode === "register" && <><label className="profile-upload-label register-avatar-picker"><span className="register-avatar-circle">{profileImage ? <img src={profileImage} alt="معاينة الصورة الشخصية" /> : <ImagePlus size={27} />}</span><strong>{imageName ? "تغيير صورة البروفايل" : "أضف صورة البروفايل"}</strong><small>ستظهر أعلى ملفك الشخصي بشكل دائري</small><input required type="file" accept="image/*" onChange={handleImage} /></label><label>الاسم الكامل<input required value={name} onChange={e => setName(e.target.value)} placeholder="اكتب اسمك" /></label><div className="login-form-row"><label>تاريخ الميلاد<input required type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} /></label></div></>}
@@ -93,4 +98,8 @@ export default function Login({ initialMode = "login" }: any) {
 
 export function Register() {
   return <Login initialMode="register" />;
+}
+
+export function AdminLogin() {
+  return <Login adminOnly />;
 }

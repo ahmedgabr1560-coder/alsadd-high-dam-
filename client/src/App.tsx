@@ -13,6 +13,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const HighDam = lazy(() => import("./pages/HighDam"));
 const Login = lazy(() => import("./pages/Login"));
+const AdminLogin = lazy(async () => ({ default: (await import("./pages/Login")).AdminLogin }));
 const Articles = lazy(() => import("./pages/Articles"));
 const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
 const HighDamArticles = lazy(() => import("./pages/HighDamArticles"));
@@ -34,7 +35,7 @@ function AdminPage({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   useEffect(() => {
     if (!loading && typeof window !== "undefined") {
-      if (!user) window.location.replace("/register");
+      if (!user) window.location.replace("/admin/login");
       else if (user.role !== "admin") window.location.replace("/");
     }
   }, [loading, user]);
@@ -55,6 +56,7 @@ function Router() {
       <Route path="/high-dam"><ProtectedPage><HighDam /></ProtectedPage></Route>
       <Route path="/high-dam/articles" component={HighDamArticles} />
       <Route path="/login" component={Login} />
+      <Route path="/admin/login" component={AdminLogin} />
       <Route path="/register" component={Register} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
